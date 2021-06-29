@@ -42,6 +42,7 @@ const canvas = document.getElementById("canvas");
 const seedContainer = document.getElementById('seed');
 const c = canvas.getContext("2d");
 const config = randomizer(R);
+let timeout = false; // holder for timeout id
 
 
 let render;
@@ -76,10 +77,18 @@ function resize() {
   seedContainer.innerText = `SEED: ${tokenData.hash}`;
   canvas.style.background = `#${currentBackground}`;
   document.body.style.background = `#${currentBackground}`;
+  
   if (render) draw();
 }
 
-window.addEventListener("resize", resize);
+// window.resize event listener // debounce for perf
+window.addEventListener('resize', () => {
+  c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  clearTimeout(timeout);
+  timeout = setTimeout(resize, 250);
+});
+
+// window.addEventListener("resize", resize);
 
 window.onload = () => {
   resize();
