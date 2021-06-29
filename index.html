@@ -8,16 +8,14 @@
     <div id="controls">
     </div>
     <canvas id="canvas"></canvas>
-    <div id="poem"></div>
     <div id="seed" hidden></div>
   </div>
   <style>
-      body { background: #FFF; margin: 0; font-family: 'Courier New', 'Courier', monospace; }
-      #wrapper { display: flex; align-items: center; justify-content: center; }
-      #controls { z-index: 1; background:#fff; position: absolute; top: 0; left: 0; padding:20px; }
+      body { background: #FFF; margin: 0; }
+      /* Remove controls past test */
+      #controls { z-index: 1; background:#fff; position: absolute; top: 0; left: 0; padding:20px;  font-family: 'Courier New', 'Courier', monospace; }
       #controls span { display: block; }
       #seed { position: absolute; color: #ccc; bottom: 0; left: 0; margin:20px; font-size: 16px; }
-      #poem { position: absolute; margin:auto; left: 0; right: 0; top:80vh; text-align: center;}
   </style>
   <script type="module" src="./js/index.js"></script>
 </body>

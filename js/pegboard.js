@@ -199,9 +199,8 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     <span>All: ${allDots}</span>
     <span>Columns: ${columnCount}</span>
     <span>Rows: ${rowCount}</span>
-    <span>Animation: ${((points.length * 5 + 500 % 60000) / 1000).toFixed(0)}s</span>
+    <span>Animation: ${((allDots * 5 + 500 % 60000) / 1000).toFixed(0)}s</span>
     <span>Font Size: bold ${Math.floor(fontSize)}px serif</span>
-    <span>Randomizer:</span>
     <span>Scheme:${config.schemeName}</span>
     <span>Colors:</span>
     ${pallete.toString().replaceAll(',', '')}
@@ -483,6 +482,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
       }
     // fill event for all
     ctx.fill();
+    // run until out of points or the window resizes
     if (i < points.length - 1 && window.innerWidth === width){
       await new Promise(resolve => setTimeout(resolve, 5));
       myLoop(i);
