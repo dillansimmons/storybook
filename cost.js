@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import getFolderSize from 'get-folder-size';
 
 

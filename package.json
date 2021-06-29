@@ -2,11 +2,11 @@
   "name": "pegboard-drivein",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
-    "start": "parcel serve index.html --no-source-maps",
+    "start": "parcel serve index.html",
     "build": "parcel build index.html --no-source-maps --detailed-report --no-scope-hoist && npm run cost",
-    "cost": "node cost.js"
+    "cost": "node cost.js",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
