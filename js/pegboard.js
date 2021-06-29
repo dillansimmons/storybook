@@ -10,7 +10,7 @@ export function randomizer(R) {
   // peg sizes
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   // outputs
-  const outputs = ['dumbbell'] //, 'ringer', 'starburst', 'abacus', 'multiply', 'gas', 'block', 'puzzle'];
+  const outputs = ['dumbbell', 'ringer', 'starburst', 'abacus', 'multiply', 'gas', 'block', 'puzzle'];
     // colors
   const schemes = [
     { mono: ['ffffff', '111111', '222222'] },
@@ -113,7 +113,7 @@ export function randomizer(R) {
     cropped = 'mundi'
   }
   if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['puzzle','gas','block','starburst'].includes(output)) {
-    cropped = R.random_between(0,1) > 0
+    cropped = R.random_int(0,1) === 1
       ? 'cross'
       : 'sando'
   }
@@ -190,7 +190,6 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
   `
     <span>Output: ${config.output}</span>
     <span>Size: ${config.size}</span>
-    <span>Dim: ${width}, ${height}</span>
     <span>Cropped: ${config.cropped}</span>
     <span>Behind: ${config.output !== 'multiply' && config.output !== 'ringer' && config.behind === 1}</span>
     <span>Hyper: ${config.hyper}</span>
@@ -485,15 +484,17 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     ctx.fill();
     // run until out of points or the window resizes
     if (i < points.length - 1 && window.innerWidth === width){
-      await new Promise(resolve => setTimeout(resolve, 5));
+      // Testing Only : allow no animate
+      if (!window.localStorage.getItem('no-animate')) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+      }
       myLoop(i);
     }
   }
 }
 
 // Utilities
-
-// Used for dumbell, only return x/y point if it's good / bad, don't jump to next row
+// Used for dumbbell, only return x/y point if it's good / bad, don't jump to next row
 function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
   if (array[numOg].y !== array[num].y) {
     return {x: (array[numOg]).x + halfBase, y:(array[numOg]).y + halfBase }

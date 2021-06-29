@@ -95,8 +95,16 @@ window.onload = () => {
   draw();
 }
 
+
+// TEST CODE ZONE
+const storage = window.localStorage;
+const control = document.getElementById('controls');
+if (storage.getItem('control')) {
+  control.hidden = false;
+}
+
 // keypress
-document.body.onkeyup = function (e){
+document.body.onkeyup = e => {
   if(e.keyCode === 32){
     const isShift = !!window.event.shiftKey;
     const index = fullBackgrounds.indexOf(currentBackground);
@@ -118,24 +126,27 @@ document.body.onkeyup = function (e){
     return;
   }
 
-  if (e.key === 'D') {
-    fadeOut();
+  if (e.key === 'n') {
+    if (storage.getItem('no-animate')) {
+      storage.removetItem('no-animate');
+      return;
+    }
+    storage.setItem('no-animate', true);
   }
 
-  if (e.key === 'c'){
-    const control = document.getElementById('controls');
-    return control.hidden === true ? control.hidden = false : control.hidden = true;
+  if (e.key === 'c') {
+    if (control.hidden === false) {
+      storage.removeItem('control');
+      control.hidden = true;
+      return;
+    }
+    storage.setItem('control', true);
+    control.hidden = false;
   }
 
-  if (e.key === 's'){
+  if (e.key === 's') {
     return seedContainer.hidden === true ? seedContainer.hidden = false : seedContainer.hidden = true;
   }
 
   return;
 }
-
-function fadeOut() {
-  canvas.style.transition = `${R.random_int(1, 30)}s`;
-  canvas.style.opacity = 0;
-}
-
