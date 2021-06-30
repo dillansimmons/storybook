@@ -45,8 +45,9 @@ const config = randomizer(R);
 let timeout = false; // holder for timeout id
 
 
-let render;
-let canvasWidth; let canvasHeight; let pixelRatio;
+let canvasWidth;
+let canvasHeight;
+// let pixelRatio;
 let currentBackground = R.random_choice(backgrounds);
 let fullBackgrounds = [...backgrounds, ...config.scheme];
 fullBackgrounds = [...new Set(fullBackgrounds)];
@@ -59,26 +60,25 @@ window.onclick = () => {
 // functions -------------------------------------------
 
 const draw = () => {
+  c.clearRect(0, 0, window.innerWidth, window.innerHeight);
   c.save();
-  c.scale(pixelRatio, pixelRatio);
-  render = drillPegs(c, config, canvasWidth, canvasHeight);
+  // c.scale(pixelRatio, pixelRatio);
+  drillPegs(c, config, canvasWidth, canvasHeight);
   c.restore();
 };
 
 function resize() {
-  c.clearRect(0, 0, window.innerWidth, window.innerHeight);
   canvasWidth = window.innerWidth;
   canvasHeight = window.innerHeight;
-  pixelRatio = window.devicePixelRatio;
-  canvas.width = ~~(canvasWidth * pixelRatio);
-  canvas.height = ~~(canvasHeight * pixelRatio);
+  // pixelRatio = window.devicePixelRatio;
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
   canvas.style.width = `${canvasWidth}px`;
   canvas.style.height = `${canvasHeight}px`;
   seedContainer.innerText = `SEED: ${tokenData.hash}`;
   canvas.style.background = `#${currentBackground}`;
   document.body.style.background = `#${currentBackground}`;
-
-  if (render) draw();
+  draw();
 }
 
 // window.resize event listener // debounce for perf
@@ -88,13 +88,9 @@ window.addEventListener('resize', () => {
 });
 
 // window.addEventListener("resize", resize);
-
-window.onload = () => {
+window.onload = async () => {
   resize();
-  render = drillPegs(c, config, canvasWidth, canvasHeight);
-  draw();
-}
-
+};
 
 // TEST CODE ZONE
 const storage = window.localStorage;
@@ -105,6 +101,7 @@ if (storage.getItem('control')) {
 
 // keypress
 document.body.onkeyup = e => {
+  // space bar
   if(e.keyCode === 32){
     const isShift = !!window.event.shiftKey;
     const index = fullBackgrounds.indexOf(currentBackground);
@@ -126,9 +123,10 @@ document.body.onkeyup = e => {
     return;
   }
 
+  // Test Code: Remove on import
   if (e.key === 'n') {
     if (storage.getItem('no-animate')) {
-      storage.removetItem('no-animate');
+      storage.removeItem('no-animate');
       return;
     }
     storage.setItem('no-animate', true);

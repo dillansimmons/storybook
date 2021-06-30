@@ -10,38 +10,42 @@ export function randomizer(R) {
   // peg sizes
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   // outputs
-  const outputs = ['dumbbell', 'ringer', 'starburst', 'abacus', 'multiply', 'gas', 'block', 'puzzle'];
+  const outputs = ['Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
     // colors
   const schemes = [
-    { mono: ['ffffff', '111111', '222222'] },
-    { lastdayofsummer: ['4281a4','48a9a6','eeeeee','d4b483','c1666b'] },
-    { blueberry: ['e7e6f7','e3d0d8','aea3b0','827081','c6d2ed'] },
-    { remove: ['5d2a42', 'C70039', 'fb6376','fcb1a6','ffdccc','fff9ec'] },
-    { sundown: ['fcd0a1','b1b695','53917e','63535b','6d1a36'] },
-    { merca: ['b32134','ebebeb','c0c0c0','3a6ea5','004e98'] },
-    { liger: ['5bc0eb','fde74c','9bc53d','c3423f','404e4d'] }, // meh
-    { moody: ['161925','23395b','406e8e','8ea8c3','cbf7ed'] },
-    { hydroclassic: ['55dde0','33658a','2f4858','f6ae2d','f26419'] },
-    { dino: ['dbf9f4','e6fdff','d9d7dd','b07bac','5f7367'] },
-    { lilac: ['330c2f','7b287d','7067cf','b7c0ee','cbf3d2'] },
-    { orangecountry: ['588b8b','ffffff','ffd5c2','f28f3b','c8553d'] },
-    { zombie: ['8daa91','788475','5e5d5c','453643','28112b'] },
-    { mint: ['a3e7fc','26c485','32908f','553a41','2f0601'] },
-    { july: ['0d3b66','faf0ca','f4d35e','ee964b','f95738'] },
-    { blackeye: ['0d1821','344966','e6aace','f0f4ef','bfcc94'] },
-    { jazz: ['34f6f2','78e3fd','d1f5ff','eef8ff','7d53de'] },
+    // 3 color scheme
+    { Mon: ['ffffff', '111111', '222222'] },
+    { Pie: ['7522f6', '2c49eb', '22b1f6'] },
+    { Goo: ['11f67d', '34eb1c', 'cbf611'] },
+    { Fry: ['f6a30c', 'eb5900', 'f6220c'] },
+    // 5 color scheme
+    { Sumer: ['4281a4','48a9a6','eeeeee','d4b483','c1666b'] },
+    { Bluby: ['e7e6f7','e3d0d8','aea3b0','827081','c6d2ed'] },
+    { Sundn: ['fcd0a1','b1b695','53917e','63535b','6d1a36'] },
+    { Merca: ['b32134','ebebeb','c0c0c0','3a6ea5','004e98'] },
+    { Moody: ['161925','23395b','406e8e','8ea8c3','cbf7ed'] },
+    { Hydro: ['55dde0','33658a','2f4858','f6ae2d','f26419'] },
+    { Dinos: ['dbf9f4','e6fdff','d9d7dd','b07bac','5f7367'] },
+    { Lilac: ['330c2f','7b287d','7067cf','b7c0ee','cbf3d2'] },
+    { Cntry: ['588b8b','ffffff','ffd5c2','f28f3b','c8553d'] },
+    { Zombi: ['8daa91','788475','5e5d5c','453643','28112b'] },
+    { Alien: ['c9fbfc','26c485','32908f','553a41','2f0601'] },
+    { Julie: ['0d3b66','faf0ca','f4d35e','ee964b','f95738'] },
+    { Bgeye: ['0d1821','344966','e6aace','f0f4ef','bfcc94'] },
+    { Jazzz: ['34f6f2','78e3fd','d1f5ff','eef8ff','7d53de'] },
     // 9 color scheme
-    { pastel: ['eae4e9','fff1e6','fde2e4','fad2e1','e2ece9','bee1e6','f0efeb','dfe7fd','cddafd'] },
+    { SirenBoom: [ 'b7094c','a01a58','892b64','723c70','5c4d7d','455e89','2e6f95','1780a1','0091ad'] },
+    { CryPastel: ['eae4e9','fff1e6','fde2e4','fad2e1','e2ece9','bee1e6','f0efeb','dfe7fd','cddafd'] },
     // 10 color schemes
-    { lizard: ['007f5f','2b9348','55a630','80b918','aacc00','bfd200','d4d700','dddf00','eeef20','ffff3f'] },
-    { miami: ['f72585','b5179e','7209b7','560bad','480ca8','3a0ca3','3f37c9','4361ee','4895ef','4cc9f0'] },
-    { germany: ['03071e','370617','6a040f','9d0208','d00000','dc2f02','e85d04','f48c06','faa307','ffba08'] },
-    { toyland: ['f94144','f3722c','f8961e','f9844a','f9c74f','90be6d','43aa8b','4d908e','577590','277da1'] },
-    { blues: ['012a4a','013a63','01497c','014f86','2a6f97','2c7da0','468faf','61a5c2','89c2d9','a9d6e5'] },
-    { reddawn: ['641220','6e1423','85182a','a11d33','a71e34','b21e35','bd1f36','c71f37','da1e37','e01e37'] },
-    { rainbow: ['ff0000','ff8700','ffd300','deff0a','a1ff0a','0aff99','0aefff','147df5','580aff','be0aff'] },
-    { candy: ['54478c','2c699a','048ba8','0db39e','16db93','83e377','b9e769','efea5a','f1c453','f29e4c'] },
-    { martian: ['b76935','a56336','935e38','815839','6f523b','5c4d3c','4a473e','38413f','263c41','143642'] }
+    { NeonLizard: ['007f5f','2b9348','55a630','80b918','aacc00','bfd200','d4d700','dddf00','eeef20','ffff3f'] },
+    { MiamiNight: ['f72585','b5179e','7209b7','560bad','480ca8','3a0ca3','3f37c9','4361ee','4895ef','4cc9f0'] },
+    { NewGermany: ['03071e','370617','6a040f','9d0208','d00000','dc2f02','e85d04','f48c06','faa307','ffba08'] },
+    { BigToyland: ['f94144','f3722c','f8961e','f9844a','f9c74f','90be6d','43aa8b','4d908e','577590','277da1'] },
+    { Blueliners: ['012a4a','013a63','01497c','014f86','2a6f97','2c7da0','468faf','61a5c2','89c2d9','a9d6e5'] },
+    { RedSkyDawn: ['641220','6e1423','85182a','a11d33','a71e34','b21e35','bd1f36','c71f37','da1e37','e01e37'] },
+    { RainbowMad: ['ff0000','ff8700','ffd300','deff0a','a1ff0a','0aff99','0aefff','147df5','580aff','be0aff'] },
+    { Candymaker: ['54478c','2c699a','048ba8','0db39e','16db93','83e377','b9e769','efea5a','f1c453','f29e4c'] },
+    { MartianDay: ['b76935','a56336','935e38','815839','6f523b','5c4d3c','4a473e','38413f','263c41','143642'] }
   ];
   const schemeObj = R.random_choice(schemes);
   const schemeName = Object.keys(schemeObj)[0];
@@ -103,22 +107,22 @@ export function randomizer(R) {
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,9);
   let cropped = 'none';
-  if ((croppedInt > 3 && croppedInt < 8 && ['gas','puzzle'].includes(output)) || ('puzzle' === output && size < 90)) {
+  if ((croppedInt > 3 && croppedInt < 8 && ['Gas','Puzzle'].includes(output)) || ('Puzzle' === output && size < 90)) {
     cropped = 'square'
   }
-  if (croppedInt === 2 && (('puzzle' === output) || ('gas' === output && size > 15))) {
+  if (croppedInt === 2 && (('Puzzle' === output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 1 && (['puzzle','gas','block','starburst'].includes(output) || (['multiply','abacus'].includes(output) && size > 30) || ('ringer' === output && size > 90))) {
+  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['puzzle','gas','block','starburst'].includes(output)) {
+  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst'].includes(output)) {
     cropped = R.random_int(0,1) === 1
       ? 'cross'
       : 'sando'
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['starburst', 'abacus', 'dumbbell'].includes(output); // (1/10 + 3/8) 3/80
+  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave'].includes(output); // (1/10 + 3/8) 3/80
   const squarePeg = R.random_int(0,4) < 1; // 1/4
 
   // Config values
@@ -169,11 +173,11 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
   // all the dots
   const allDots = columnCount * rowCount;
   // the x starting point: 1/6 the width
-  let cx = Math.ceil(widthMax / 2);
+  let cx = Math.ceil(widthMax / 2 - halfBase);
   // a static of this cx / used for resets
   const cxStatic = cx;
   // the y starting point: 1/6 the height
-  const cy = Math.ceil((heightMax) / 2);
+  const cy = Math.ceil(heightMax / 2);
   // the row count / used for grid draw
   let row = 0;
   // empty animated points array
@@ -191,18 +195,17 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     <span>Output: ${config.output}</span>
     <span>Size: ${config.size}</span>
     <span>Cropped: ${config.cropped}</span>
-    <span>Behind: ${config.output !== 'multiply' && config.output !== 'ringer' && config.behind === 1}</span>
     <span>Hyper: ${config.hyper}</span>
     <span>SquarePeg: ${config.squarePeg}</span>
+    <br/>
     <span>Base: ${base}</span>
-    <span>width: ${width}</span>
     <span>All: ${allDots}</span>
     <span>Columns: ${columnCount}</span>
     <span>Rows: ${rowCount}</span>
     <span>Animation: ${((allDots * 5 + 500 % 60000) / 1000).toFixed(0)}s</span>
     <span>Font Size: bold ${Math.floor(fontSize)}px serif</span>
+    <br />
     <span>Scheme:${config.schemeName}</span>
-    <span>Colors:</span>
     ${pallete.toString().replaceAll(',', '')}
   `;
   document.getElementById('controls').innerHTML = controlSettings;
@@ -284,7 +287,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
   }
 
   // randomize points
-  const pointsCopy = [...points]; // used for dumbbell
+  const pointsCopy = [...points]; // used for Weave
   for (let i = points.length; i > 0; i--) {
     const j = Math.floor(config.randomizer[i] * (i + 1));
     [points[i], points[j]] = [points[j], points[i]];
@@ -302,7 +305,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
   prose(
     ctx,
     poem,
-    cxStatic + (config.output === 'multiply' ? quarterBase : halfBase) + (columnCount * halfBase),
+    cxStatic + (config.output === 'Multiply' ? quarterBase : halfBase) + (columnCount * halfBase),
     cy + (rowCount * base) + (fontSize * 1.5),
     columnCount * base,
     fontSize
@@ -320,7 +323,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     const fill = `#${config.scheme[Math.floor(config.randomizer[i + 1 ? i + 1 : i] * config.scheme.length)]}`;
     const blurArray = [1,2,3,4];
     // const lineArray = [base / 4, base / 3, base / 2, base];
-    if (config.output !== 'multiply' && config.output !== 'ringer' && config.behind === 1) {
+    if (config.output !== 'Multiply' && config.output !== 'Ring' && config.behind === 1) {
         ctx.globalCompositeOperation = 'destination-over';
     }
     if (config.cropped !== 'none') {
@@ -356,7 +359,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     ctx.fillStyle = fill;
     if (points[i]) {
       switch(config.output){
-        case 'multiply':
+        case 'Multiply':
           // multiply
           if (config.squarePeg) {
             ctx.rect(points[i].x - quarterBase, points[i].y - quarterBase, halfBase, halfBase);
@@ -365,7 +368,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
             ctx.arc(points[i].x, points[i].y, base / 8, 0, 2 * Math.PI);
           }
           break;
-        case 'puzzle':
+        case 'Puzzle':
           // Puzzle
           ctx.globalAlpha = 0.8;
           ctx.shadowColor = fill;
@@ -391,7 +394,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
             );
           }
           break;
-        case 'gas':
+        case 'Gas':
           // Gas
           ctx.globalAlpha = 0.5;
           ctx.filter = `blur(${halfBase * blurArray[Math.floor(config.randomizer[4] * blurArray.length)]}px)`;
@@ -399,12 +402,12 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
           ctx.shadowOffsetY = config.randomizer[6] < 0.5 ? base : -base;
           ctx.rect(points[i].x, points[i].y, base, base);
           break;
-        case 'block':
+        case 'Block':
           // LEGO
           ctx.rect(points[i].x, points[i].y, base, base);
           ctx.globalAlpha = 0.4;
           break;
-        case 'ringer':
+        case 'Ring':
           if (!(config.bad.includes(i) || config.good.includes(i))) {
             ctx.strokeStyle = fill;
             ctx.fillStyle = 'transparent';
@@ -423,29 +426,29 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
             ctx.stroke();
           }
           break;
-        case 'abacus':
+        case 'Abacus':
           // Lines
           if (columnFirst.filter(point => (point.x === points[i].x))) {
             ctx.beginPath();
             ctx.fillStyle = 'transparent';
             ctx.shadowColor = fill;
             ctx.globalAlpha = 0.05;
-            ctx.shadowOffsetX = config.randomizer[7] < 0.5 ? halfBase : -halfBase;
-            ctx.shadowOffsetY = config.randomizer[8] < 0.5 ? halfBase : -halfBase;
+            ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? halfBase : -halfBase;
+            ctx.shadowOffsetY = config.randomizer[i + 1 ? i + 1 : i] > 0.5 ? halfBase : -halfBase;
             ctx.lineWidth = base / 5;
             ctx.lineCap = 'round';
             ctx.strokeStyle = fill;
             const first = columnFirst.filter(point => point.x === points[i].x);
             const last = columnLast.filter(point => point.x === points[i].x)
 
-            ctx.moveTo(first[0].x + halfBase, first[0].y - 1);
-            ctx.lineTo(last[0].x + halfBase, last[0].y + base);
+            ctx.moveTo(first[0].x + halfBase, first[0].y + halfBase);
+            ctx.lineTo(last[0].x + halfBase, last[0].y + halfBase);
 
             ctx.stroke();
           }
           break;
-        case 'starburst':
-          // Starburst
+        case 'Burst':
+          // burst
           ctx.beginPath();
           ctx.fillStyle = 'transparent';
           ctx.shadowColor = 'transparent';
@@ -460,8 +463,8 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
           ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
           ctx.stroke();
           break;
-        case 'dumbbell':
-          // Dumbbell
+        case 'Weave':
+          // Weave
           if (!(config.bad.includes(i) || config.good.includes(i))) {
             ctx.globalAlpha = 1;
             ctx.fillStyle = 'transparent';
@@ -470,7 +473,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
             ctx.lineCap = 'round';
             ctx.strokeStyle = fill;
 
-            ctx.dumbbell(
+            ctx.Weave(
               {x: pointsCopy[i].x + halfBase, y:(pointsCopy[i].y + halfBase )},
               checkIfBad(pointsCopy, halfBase, i, i+1, config.good, config.bad),
               1, 1, 1
@@ -494,9 +497,9 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
 }
 
 // Utilities
-// Used for dumbbell, only return x/y point if it's good / bad, don't jump to next row
+// Used for Weave, only return x/y point if it's good / bad, don't jump to next row
 function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
-  if (array[numOg].y !== array[num].y) {
+  if (array[numOg]?.y !== array[num]?.y) {
     return {x: (array[numOg]).x + halfBase, y:(array[numOg]).y + halfBase }
   } else if ((badArray.includes(num) || goodArray.includes(num)) && array[num]) {
     return {x: (array[num]).x + halfBase, y:(array[num]).y + halfBase }
@@ -506,7 +509,7 @@ function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
 }
 
 // slight slope
-CanvasRenderingContext2D.prototype.dumbbell = function (from, to, frequency) {
+CanvasRenderingContext2D.prototype.Weave = function (from, to, frequency) {
 	let cx = 0;
   let cy = 0;
 	const fx = from.x;
