@@ -1,4 +1,4 @@
-import { prose, proseBuilder } from './poem';
+import { prose, proseBuilder } from './prose';
 
 /**
  * TODO:
