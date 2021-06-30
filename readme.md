@@ -1,4 +1,4 @@
-# Pegboard Drivein (PDi)
+# Pegboard Drivein (PbDi)
 Dillan Simmons (DSIMS) | AB hopeful factory project.
 
 ## Using the project
@@ -15,11 +15,12 @@ Dillan Simmons (DSIMS) | AB hopeful factory project.
 ## Project overview
 
 ### Influence
-PDi is influenced heavily by film narrative and the feeling of being in a movie theater (or drive in theater). Each piece includes generative prose and a visual to try to bring the viewer into the movie goer experience: The feeling when the lights go down and the introduction scene plays out. From action to horror to art-house the narratives and visuals are versitile and each influence each other. Random ideas that drove this:
+PbDi is influenced heavily by film narrative and the feeling of being in a movie theater (or drive in theater). Each piece includes generative prose and a visual to try to bring the viewer into the movie goer experience: The feeling when the lights go down and the introduction scene plays out. From action to horror to art-house the narratives and visuals are versitile and each influence each other. Random ideas that drove this:
 
 - Generative poetry (Nick Montfort / Alison Knowles / etc.)
 - Strange movie plots (Predator)
 - Detective writing
+- Grids
 - Letterpress offsets / Plotter layering
 - Op art
 
