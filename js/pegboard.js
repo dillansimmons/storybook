@@ -124,6 +124,7 @@ export function randomizer(R) {
 
   const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave'].includes(output); // (1/10 + 3/8) 3/80
   const squarePeg = R.random_int(0,4) < 1; // 1/4
+  const behind = output !== 'Multiply' && output !== 'Ring' && R.random_int(0,3) === 1
 
   // Config values
   // 1/2016 (size / output / color)
@@ -135,7 +136,7 @@ export function randomizer(R) {
     // mundi 1/10 + (1/2 || 1/4 + 1/3 || 1/8 + 2/9)
     // none ???
     cropped,
-    behind: R.random_int(0,3), // 1/3
+    behind, // 1/3
     hyper, // 3/80
     squarePeg, // 1/3
     schemeName,
@@ -150,7 +151,7 @@ export function randomizer(R) {
 }
 
 // Dots
-export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
+export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) {
   const width = canvasWidth;
   const height = canvasHeight;
   // the size of the dots based on config
@@ -180,6 +181,8 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
   const cy = Math.ceil(heightMax / 2);
   // the row count / used for grid draw
   let row = 0;
+  // initial background
+  const canvasBg = canvas.style.backgroundColor;
   // empty animated points array
   const points = [];
   const columnFirst = [];
@@ -197,6 +200,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     <span>Cropped: ${config.cropped}</span>
     <span>Hyper: ${config.hyper}</span>
     <span>SquarePeg: ${config.squarePeg}</span>
+    <span>Behind: ${config.behind}</span>
     <br/>
     <span>Base: ${base}</span>
     <span>All: ${allDots}</span>
@@ -215,6 +219,11 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
   // ctx.beginPath();
   // ctx.rect(cxStatic + halfBase, cy, columnCount * base, rowCount * base + (fontSize * 1.5) + fontSize * 2);
   // ctx.stroke();
+
+  // // background stuff
+  // ctx.beginPath();
+  // ctx.fillStyle = `${canvasBg}`;
+  // ctx.fillRect(0, 0, width, height);
 
   // for all our available grid fill in our pegs
   for (let i = 0; i < allDots; i++) {
@@ -295,11 +304,10 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
 
   // build our prose
   const poem = config.prose;
-  let canvasBg = document.querySelector('canvas').style.backgroundColor;
-  canvasBg = rgba2hex(canvasBg);
+  const canvasBgHex = rgba2hex(canvasBg);
   let poemFill = `#${config.scheme[Math.floor(config.randomizer[1] * config.scheme.length)]}`;
   // account for canvas bg : bg should not be same as text
-  poemFill = (canvasBg === poemFill) ? (canvasBg === '#ffffff') ? '#000' : '#fff' : poemFill;
+  poemFill = (canvasBgHex === poemFill) ? (canvasBgHex === '#ffffff') ? '#000' : '#fff' : poemFill;
   ctx.fillStyle = poemFill;
 
   prose(
@@ -323,7 +331,7 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
     const fill = `#${config.scheme[Math.floor(config.randomizer[i + 1 ? i + 1 : i] * config.scheme.length)]}`;
     const blurArray = [1,2,3,4];
     // const lineArray = [base / 4, base / 3, base / 2, base];
-    if (config.output !== 'Multiply' && config.output !== 'Ring' && config.behind === 1) {
+    if (config.behind) {
         ctx.globalCompositeOperation = 'destination-over';
     }
     if (config.cropped !== 'none') {
@@ -485,8 +493,8 @@ export async function drillPegs(ctx, config, canvasWidth, canvasHeight) {
       }
     // fill event for all
     ctx.fill();
-    // run until out of points or the window resizes
-    if (i < points.length - 1 && window.innerWidth === width){
+    // the window resizes or the background changes : those signal we've restarted the animation
+    if (i < points.length - 1 && window.innerWidth === width && window.innerHeight === height && canvasBg === document.querySelector('canvas').style.backgroundColor) {
       // Testing Only : allow no animate
       if (!window.localStorage.getItem('no-animate')) {
         await new Promise(resolve => setTimeout(resolve, 5));

@@ -15,14 +15,14 @@ Dillan Simmons (DSIMS) | AB hopeful factory project.
 ## Project overview
 
 ### Influence
-PbDi is influenced heavily by film narrative and the feeling of being in a movie theater (or drive in theater). Each piece includes generative prose and a visual to try to bring the viewer into the movie goer experience: The feeling when the lights go down and the introduction scene plays out. From action to horror to art-house the narratives and visuals are versitile and each influence each other. Random ideas that drove this:
+PbDi is influenced heavily by film narrative and the feeling of being in a movie theater (or drive in theater). Each piece includes generative prose and a screen like visual in an attempt to recreate the movie going experience, the feeling when the lights go down and the introduction scene plays out.
 
+Ideas that drove this:
 - Generative poetry (Nick Montfort / Alison Knowles / etc.)
-- Strange movie plots (Predator)
+- Strange movie plots (Predator, Big Lebowski, Turner and Hooch)
 - Detective writing
-- Grids
+- Grids, microchips, and pegboards
 - Letterpress offsets / Plotter layering
-- Op art
 
 
 ### Artistic approach
@@ -30,8 +30,13 @@ The artistic approcah is based on a variable grid of pegs (the pegboard) and dif
 
 #### Traits: 
 Background is white, black, or dark grey
+
 Grid size can vary in 9 different sizes
-Color schemes generated are 3,5,9, and 10 palletes and each produces a unique combination. There are 28 unique color schemes. 
+
+Color schemes generated are 3,5,9, and 10 palletes and each produces a unique combination.
+
+There are 28 unique color schemes.
+
 Outputs ( these are what effects happen to the pegboard)
   - weave: lines are woven between certain pegs
   - rings: rings are made around certain pegs
@@ -41,6 +46,7 @@ Outputs ( these are what effects happen to the pegboard)
   - gas: a blur of variable size is added over each peg
   - multiply: the pegs are multiplied across the board
   - abacus: lines skewer the pegs vertically
+
 Cropped ( are there areas where our output will not display)
     - none: no crop (default)
     - square: a tight crop is applied around the board (grid)
@@ -48,11 +54,15 @@ Cropped ( are there areas where our output will not display)
     - swept: the output only happens in a quarter circle that covers half the board in a swoop
     - sando: the output happens in the top 1/3 and bottom 1/3 of the board, the middle is untouched
     - cross: the output happens in the four corners of the board, leaving an empty + in the middle
+
 Behind: true or false. Do the outputs happen on top of or behind the pegs
+
 Hyper: Any output on top lightens the peg underneath it
 
+SquarePeg: true or false. Is the peg round or square
+
 #### Prose:
-The prose is very variable and dynamic but basically consists of 3 main prompts filled in with a combination of 2100-2200 unique words. Prose can sound absurdist (like many movies from the 80s) but should be structurally sound and make sense as a sentance. They are intentionally built to represent a movie plot or scene. 
+The prose is very variable and dynamic but basically consists of 3 main prompts filled in with a combination of 2100-2200 unique words. Prose can sound absurdist (like many movies from the 80s) but should be structurally sound and make sense as a sentance. They are intentionally built to represent a movie plot or scene and allude to a larger story.
 
 > A noseless kill bot and a plump heroic dog pair, a maddening fight lies ahead of them.
 

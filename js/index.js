@@ -40,7 +40,7 @@ const R = new Random(seed);
 const backgrounds = ['111', '222', 'fff'];
 const canvas = document.getElementById("canvas");
 const seedContainer = document.getElementById('seed');
-const c = canvas.getContext("2d");
+const c = canvas.getContext('2d');
 const config = randomizer(R);
 let timeout = false; // holder for timeout id
 
@@ -59,14 +59,6 @@ window.onclick = () => {
 
 // functions -------------------------------------------
 
-const draw = () => {
-  c.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  c.save();
-  // c.scale(pixelRatio, pixelRatio);
-  drillPegs(c, config, canvasWidth, canvasHeight);
-  c.restore();
-};
-
 function resize() {
   canvasWidth = window.innerWidth;
   canvasHeight = window.innerHeight;
@@ -78,7 +70,10 @@ function resize() {
   seedContainer.innerText = `SEED: ${tokenData.hash}`;
   canvas.style.background = `#${currentBackground}`;
   document.body.style.background = `#${currentBackground}`;
-  draw();
+  c.clearRect(0,0,canvasWidth, canvasHeight);
+  c.save();
+  drillPegs(canvas, c, config, canvasWidth, canvasHeight);
+  c.restore();
 }
 
 // window.resize event listener // debounce for perf
@@ -102,7 +97,7 @@ if (storage.getItem('control')) {
 // keypress
 document.body.onkeyup = e => {
   // space bar
-  if(e.keyCode === 32){
+  if(e.keyCode === 32) {
     const isShift = !!window.event.shiftKey;
     const index = fullBackgrounds.indexOf(currentBackground);
     if (isShift) {
@@ -120,10 +115,11 @@ document.body.onkeyup = e => {
     }
     canvas.style.background = `#${currentBackground}`;
     document.body.style.background = `#${currentBackground}`;
-    return;
+    return resize();
   }
 
   // Test Code: Remove on import
+  // remove animation / static image
   if (e.key === 'n') {
     if (storage.getItem('no-animate')) {
       storage.removeItem('no-animate');
@@ -132,6 +128,7 @@ document.body.onkeyup = e => {
     storage.setItem('no-animate', true);
   }
 
+  // hide / show controls
   if (e.key === 'c') {
     if (control.hidden === false) {
       storage.removeItem('control');
@@ -142,6 +139,7 @@ document.body.onkeyup = e => {
     control.hidden = false;
   }
 
+  // show seed
   if (e.key === 's') {
     return seedContainer.hidden === true ? seedContainer.hidden = false : seedContainer.hidden = true;
   }
