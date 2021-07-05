@@ -3,7 +3,7 @@ import getFolderSize from 'get-folder-size';
 
 
 async function checkCost() {
-    const myFolder = 'dist';
+    const myFolder = 'distZip.zip';
     const size = await getFolderSize.loose(myFolder);
     console.log(`The project is ${size} bytes large`);
     console.log(`Cost: ${675 * size * 10 * (1 / 1000000000)}Eth at 10Gwei`);

@@ -5,8 +5,8 @@ import puppeteer from 'puppeteer';
 // Assumes
 export async function screenshots() {
   const url = 'http://localhost:1234/'; // local server url where your project is running
-  const numberOfScreenshots = 5; // how many screenshots to take
-  const animationDelay = 15000; // how long to wait for animation / reload to run in ms
+  const numberOfScreenshots = 25; // how many screenshots to take
+  const animationDelay = 20000; // how long to wait for animation / reload to run in ms
 
   // log how long it will take
   console.log(`⌚ This will take roughly ${msToMinutes(numberOfScreenshots * animationDelay)} minutes to complete.`)
@@ -17,9 +17,11 @@ export async function screenshots() {
   await page.setViewport({ width: 2400, height: 2400 });
 
   for (let i = 0; i < numberOfScreenshots; i++) {
+    const element = await page.$('#seed');
+    const seed = await page.evaluate(el => el.textContent, element);
     await new Promise(resolve => setTimeout(resolve, animationDelay));
     await page.screenshot({
-        path: `./screenshots/shot-${i}.jpg`,
+        path: `./screenshots/shot-${i}-${seed.split(': ').pop()}.jpg`,
         fullPage: true
     });
     await page.reload({ waitUntil: 'domcontentloaded' });
