@@ -10,7 +10,7 @@ export function randomizer(R) {
   // peg sizes
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   // outputs
-  const outputs = ['Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
+  const outputs = ['Weave'] // ['Bubble', 'Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
     // colors
   const schemes = [
     // 3 color scheme
@@ -110,7 +110,7 @@ export function randomizer(R) {
   if ((croppedInt > 3 && croppedInt < 8 && ['Gas','Puzzle'].includes(output)) || ('Puzzle' === output && size < 90)) {
     cropped = 'square'
   }
-  if (croppedInt === 2 && (('Puzzle' === output) || ('Gas' === output && size > 15))) {
+  if (croppedInt === 2 && (('Bubble' === output) || ('Puzzle' === output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
   if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
@@ -124,7 +124,7 @@ export function randomizer(R) {
 
   const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave'].includes(output); // (1/10 + 3/8) 3/80
   const squarePeg = R.random_int(0,4) < 1; // 1/4
-  const behind = output !== 'Multiply' && output !== 'Ring' && R.random_int(0,3) === 1
+  const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1
 
   // Config values
   // 1/2016 (size / output / color)
@@ -184,7 +184,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   // initial background
   const canvasBg = canvas.style.backgroundColor;
   // empty animated points array
-  const points = [];
+  let points = [];
   const columnFirst = [];
   const columnLast = [];
 
@@ -295,11 +295,19 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     }
   }
 
+  // make a non random copy of points
+  let pointsCopy = [...points]; // used for Weave / blocked
   // randomize points
-  const pointsCopy = [...points]; // used for Weave
-  for (let i = points.length; i > 0; i--) {
+  for (let i = points.length; i >= 0; i--) {
     const j = Math.floor(config.randomizer[i] * (i + 1));
     [points[i], points[j]] = [points[j], points[i]];
+  }
+  // remove undefined
+  points = points.filter(x => x !== undefined);
+
+  // for Bubble reduce to only the points used
+  if (config.output === 'Bubble' && config.size > 15) {
+    pointsCopy = pointsCopy.filter((point, i) => (i % 5 === 0 && i / columnCount % 5 < 1));
   }
 
   // build our prose
@@ -334,7 +342,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     if (config.behind) {
         ctx.globalCompositeOperation = 'destination-over';
     }
-    if (config.cropped !== 'none') {
+    if (config.cropped !== 'none' || config.output === 'Bubble' && config.cropped === 'swept') {
       ctx.beginPath();
       switch (config.cropped) {
         case 'square':
@@ -357,6 +365,12 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.rect(cxStatic + halfBase + (columnCount * base / 2 + doubleBase * 2) + halfBase, cy + (row * base / 2) + doubleBase * 2, columnCount * base / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
           break;
       }
+      ctx.clip();
+    }
+    if (config.output === 'Bubble' && config.cropped !== 'swept') {
+      ctx.beginPath();
+      ctx.rect(cxStatic - doubleBase, cy - doubleBase, columnCount * base + halfBase + doubleBase, row * base + doubleBase);
+      // ctx.stroke();
       ctx.clip();
     }
     if (config.hyper) {
@@ -477,7 +491,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.globalAlpha = 1;
             ctx.fillStyle = 'transparent';
             ctx.shadowColor = fill;
-            ctx.lineWidth = base / 10;
+            ctx.lineWidth = base / 3;
             ctx.lineCap = 'round';
             ctx.strokeStyle = fill;
 
@@ -488,6 +502,34 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
               );
             ctx.stroke();
           }
+          break;
+        case 'Bubble':
+          ctx.globalAlpha = 0.8;
+          if (config.size <= 15) {
+                ctx.rect(pointsCopy[i].x, pointsCopy[i].y, base, base);
+                ctx.arc(pointsCopy[i].x + quarterBase, pointsCopy[i].y + quarterBase, halfBase, 0, 2 * Math.PI);
+            break;
+          }
+            ctx.rect(pointsCopy[i].x, pointsCopy[i].y, doubleBase * 2.5, doubleBase * 2.5);
+            ctx.arc(pointsCopy[i].x + doubleBase * .75, pointsCopy[i].y + doubleBase * .75, (doubleBase * 1.25), 0, 2 * Math.PI);
+          // lines
+          // ctx.globalAlpha = 0.5;
+          // if ((i % (columnCount % 2 === 0 && config.size !== 60 && config.size !== 45 ? columnCount / 4 : columnCount)) === 0) {
+          //   ctx.save();
+          //   ctx.translate(pointsCopy[i].x, pointsCopy[i].y);
+          //   ctx.rect(0, 0, (columnCount % 2 === 0 && config.size !== 60 && config.size !== 45 ? columnCount * base / 4 : columnCount * base), base);
+          //   ctx.restore();
+          // }
+          // Rotate
+          // ctx.save();
+          // ctx.translate(points[i].x + halfBase, points[i].y + quarterBase);
+          // ctx.rotate(Math.PI / 4);
+          // if (config.squarePeg) {
+          //   ctx.arc(0, 0, quarterBase, 0, 2 * Math.PI);
+          // } else {
+          //   ctx.rect(0, 0, halfBase * .725, halfBase * .725);
+          // }
+          // ctx.restore();
           break;
         }
       }

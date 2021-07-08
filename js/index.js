@@ -1,5 +1,5 @@
 import { drillPegs, randomizer } from './pegboard';
-
+import { downloadSVG } from './utilities';
 // const hash = tokenData.hash
 // const hash = '0x11ac128f8b54949c12d04102cfc01960fc496813cbc3495bf77aeed738579738';
 
@@ -47,7 +47,6 @@ let timeout = false; // holder for timeout id
 
 let canvasWidth;
 let canvasHeight;
-// let pixelRatio;
 let currentBackground = R.random_choice(backgrounds);
 let fullBackgrounds = [...backgrounds, ...config.scheme];
 fullBackgrounds = [...new Set(fullBackgrounds)];
@@ -94,8 +93,8 @@ if (storage.getItem('control')) {
   control.hidden = false;
 }
 
-// keypress
-document.body.onkeyup = e => {
+// keypress: only keep spacebar to toggle bg
+document.body.onkeyup = async e => {
   // space bar
   if(e.keyCode === 32) {
     const isShift = !!window.event.shiftKey;
@@ -144,5 +143,10 @@ document.body.onkeyup = e => {
     return seedContainer.hidden === true ? seedContainer.hidden = false : seedContainer.hidden = true;
   }
 
+  if (e.key === 'd') {
+    //serialize your SVG
+    await downloadSVG(canvas, config);
+  }
+  // end
   return;
 }
