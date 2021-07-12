@@ -9,8 +9,9 @@ import { prose, proseBuilder } from './prose';
 export function randomizer(R) {
   // peg sizes
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
+  if (R.random_int(1,500) === 99) { sizes.push(3) } // 1/5000 chance of a single dot
   // outputs
-  const outputs = ['Weave'] // ['Bubble', 'Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
+  const outputs = ['Lines', 'Bubble', 'Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
     // colors
   const schemes = [
     // 3 color scheme
@@ -107,30 +108,30 @@ export function randomizer(R) {
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,9);
   let cropped = 'none';
-  if ((croppedInt > 3 && croppedInt < 8 && ['Gas','Puzzle'].includes(output)) || ('Puzzle' === output && size < 90)) {
+  if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle'].includes(output)) || ('Puzzle' === output && size < 90))) {
     cropped = 'square'
   }
-  if (croppedInt === 2 && (('Bubble' === output) || ('Puzzle' === output) || ('Gas' === output && size > 15))) {
+  if (croppedInt === 2 && (['Bubble','Lines','Puzzle'].includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst'].includes(output)) {
+  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines'].includes(output)) {
     cropped = R.random_int(0,1) === 1
       ? 'cross'
       : 'sando'
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave'].includes(output); // (1/10 + 3/8) 3/80
+  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines'].includes(output); // (1/10 + 4/8) 1/20
   const squarePeg = R.random_int(0,4) < 1; // 1/4
-  const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1
+  const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
 
   // Config values
   // 1/2016 (size / output / color)
   return {
     size, // 1/9
-    output, // 1/8
+    output, // 1/10
     // square 3/5 + (1/4 || 1/8 + 2/9)
     // swept 1/10 + (1/8 || 1/8 + 2/9)
     // mundi 1/10 + (1/2 || 1/4 + 1/3 || 1/8 + 2/9)
@@ -310,6 +311,10 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     pointsCopy = pointsCopy.filter((point, i) => (i % 5 === 0 && i / columnCount % 5 < 1));
   }
 
+  if (config.output === 'Lines') {
+    pointsCopy = pointsCopy.filter((point, i) => i % columnCount === 0);
+  }
+
   // build our prose
   const poem = config.prose;
   const canvasBgHex = rgba2hex(canvasBg);
@@ -342,7 +347,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     if (config.behind) {
         ctx.globalCompositeOperation = 'destination-over';
     }
-    if (config.cropped !== 'none' || config.output === 'Bubble' && config.cropped === 'swept') {
+    if (config.cropped !== 'none' || (config.output === 'Bubble' && config.cropped === 'swept')) {
       ctx.beginPath();
       switch (config.cropped) {
         case 'square':
@@ -418,7 +423,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
         case 'Gas':
           // Gas
-          ctx.globalAlpha = 0.5;
+          ctx.globalAlpha = 0.75;
           ctx.filter = `blur(${halfBase * blurArray[Math.floor(config.randomizer[4] * blurArray.length)]}px)`;
           ctx.shadowOffsetX = config.randomizer[5] < 0.5 ? base : -base;
           ctx.shadowOffsetY = config.randomizer[6] < 0.5 ? base : -base;
@@ -512,14 +517,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           }
             ctx.rect(pointsCopy[i].x, pointsCopy[i].y, doubleBase * 2.5, doubleBase * 2.5);
             ctx.arc(pointsCopy[i].x + doubleBase * .75, pointsCopy[i].y + doubleBase * .75, (doubleBase * 1.25), 0, 2 * Math.PI);
-          // lines
-          // ctx.globalAlpha = 0.5;
-          // if ((i % (columnCount % 2 === 0 && config.size !== 60 && config.size !== 45 ? columnCount / 4 : columnCount)) === 0) {
-          //   ctx.save();
-          //   ctx.translate(pointsCopy[i].x, pointsCopy[i].y);
-          //   ctx.rect(0, 0, (columnCount % 2 === 0 && config.size !== 60 && config.size !== 45 ? columnCount * base / 4 : columnCount * base), base);
-          //   ctx.restore();
-          // }
+
           // Rotate
           // ctx.save();
           // ctx.translate(points[i].x + halfBase, points[i].y + quarterBase);
@@ -530,6 +528,12 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           //   ctx.rect(0, 0, halfBase * .725, halfBase * .725);
           // }
           // ctx.restore();
+          break;
+
+        case 'Lines':
+            // lines
+            ctx.globalAlpha = 0.75;
+            ctx.rect(pointsCopy[i].x, pointsCopy[i].y, columnCount * base, base);
           break;
         }
       }
@@ -589,12 +593,14 @@ const rgba2hex = rgba => `#${rgba.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(
 // filter colors based on good / bad
 function countryFill(ctx, country, num, config) {
   const s = config.scheme;
+  let fill = `#${s[config.int, num % config.int]}`;
   if (country.includes(num)) {
-    const fill = config.bad.includes(num)
-    ? `#${s[0]}`
-    : config.good.includes(num)
-      ? `#${s[s.length - 1]}`
-      : `#${s[config.int, num % config.int]}`
-    ctx.fillStyle = fill;
+    if (config.bad.includes(num)) {
+      fill = `#${s[0]}`
+    }
+    if (config.good.includes(num)) {
+      fill = `#${s[s.length - 1]}`
+    }
   }
+  ctx.fillStyle = fill;
 }
