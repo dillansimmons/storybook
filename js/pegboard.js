@@ -341,6 +341,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   // cropped
+
   if (config.cropped !== 'none') {
     ctx.beginPath();
     switch (config.cropped) {
@@ -368,6 +369,12 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         ctx.rect(cxStatic + halfBase + (columnCount * base / 2 + doubleBase * 2) + halfBase, cy + (row * base / 2) + doubleBase * 2, columnCount * base / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
         break;
     }
+    ctx.clip();
+  }
+
+  // if not swept crop special for bubble
+  if (config.cropped !== 'swept' && config.output === 'Bubble') {
+    ctx.rect(cxStatic - doubleBase, cy - doubleBase, columnCount * base + halfBase + doubleBase, row * base + doubleBase);
     ctx.clip();
   }
 
