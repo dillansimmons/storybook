@@ -147,6 +147,14 @@ document.body.onkeyup = async e => {
     //serialize your SVG
     await downloadSVG(canvas, config);
   }
+
+  if (e.key === 'p') {
+    if (storage.getItem('no-prose')) {
+      storage.removeItem('no-prose');
+      return;
+    }
+    storage.setItem('no-prose', true);
+  }
   // end
   return;
 }

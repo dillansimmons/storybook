@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 // Assumes
 export async function screenshots() {
   const url = 'http://localhost:1234/'; // local server url where your project is running
-  const numberOfScreenshots = 25; // how many screenshots to take
+  const numberOfScreenshots = 10; // how many screenshots to take
   const animationDelay = 20000; // how long to wait for animation / reload to run in ms
 
   // log how long it will take

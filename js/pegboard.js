@@ -15,38 +15,39 @@ export function randomizer(R) {
     // colors
   const schemes = [
     // 3 color scheme
-    { Mon: ['ffffff', '111111', '222222'] },
-    { Pie: ['7522f6', '2c49eb', '22b1f6'] },
-    { Goo: ['11f67d', '34eb1c', 'cbf611'] },
-    { Fry: ['f6a30c', 'eb5900', 'f6220c'] },
+    { Mon: ['ffffff', '222222', '111111'] },
+    { Pie: ['22B1F6', '7522F6', '2C49EB'] },
+    { Goo: ['CBF611', '11F67D', '34EB1C'] },
+    { Fry: ['F6A30C', 'EB5900', 'F6220C'] },
     // 5 color scheme
-    { Sumer: ['4281a4','48a9a6','eeeeee','d4b483','c1666b'] },
-    { Bluby: ['e7e6f7','e3d0d8','aea3b0','827081','c6d2ed'] },
-    { Sundn: ['fcd0a1','b1b695','53917e','63535b','6d1a36'] },
-    { Merca: ['b32134','ebebeb','c0c0c0','3a6ea5','004e98'] },
-    { Moody: ['161925','23395b','406e8e','8ea8c3','cbf7ed'] },
-    { Hydro: ['55dde0','33658a','2f4858','f6ae2d','f26419'] },
-    { Dinos: ['dbf9f4','e6fdff','d9d7dd','b07bac','5f7367'] },
-    { Lilac: ['330c2f','7b287d','7067cf','b7c0ee','cbf3d2'] },
-    { Cntry: ['588b8b','ffffff','ffd5c2','f28f3b','c8553d'] },
-    { Zombi: ['8daa91','788475','5e5d5c','453643','28112b'] },
-    { Alien: ['c9fbfc','26c485','32908f','553a41','2f0601'] },
-    { Julie: ['0d3b66','faf0ca','f4d35e','ee964b','f95738'] },
-    { Bgeye: ['0d1821','344966','e6aace','f0f4ef','bfcc94'] },
-    { Jazzz: ['34f6f2','78e3fd','d1f5ff','eef8ff','7d53de'] },
+    { Sumer: ['EEEEEE', 'D4B483', '48A9A6', '4281A4', 'C1666B'] },
+    { Bluby: ['E7E6F7', 'E3D0D8', 'C6D2ED', 'AEA3B0', '827081'] },
+    { Sundn: ['FCD0A1', 'B1B695', '53917E', '63535B', '6D1A36'] },
+    { Merca: ['EBEBEB', 'C0C0C0', '3A6EA5', 'B32134', '004E98'] },
+    { Moody: ['CBF7ED', '8EA8C3', '406E8E', '23395B', '161925'] },
+    { Hydro: ['55DDE0', 'F6AE2D', 'F26419', '33658A', '2F4858'] },
+    { Dinos: ['E6FDFF', 'D9D7DD', 'DBF9F4', 'B07BAC', '5F7367'] },
+    { Lilac: ['CBF3D2', 'B7C0EE', '7067CF', '7B287D', '330C2F'] },
+    { Cntry: ['FFFFFF', 'FFD5C2', 'F28F3B', '588B8B', 'C8553D'] },
+    { Zombi: ['8DAA91', '788475', '5E5D5C', '453643', '28112B'] },
+    { Alien: ['C9FBFC', '26C485', '32908F', '553A41', '2F0601'] },
+    { Julie: ['FAF0CA', 'F4D35E', 'EE964B', 'F95738', '0D3B66'] },
+    { Bgeye: ['F0F4EF', 'BFCC94', 'E6AACE', '344966', '0D1821'] },
+    { Jazzz: ['EEF8FF', 'D1F5FF', '78E3FD', '34F6F2', '7D53DE'] },
     // 9 color scheme
-    { SirenBoom: [ 'b7094c','a01a58','892b64','723c70','5c4d7d','455e89','2e6f95','1780a1','0091ad'] },
-    { CryPastel: ['eae4e9','fff1e6','fde2e4','fad2e1','e2ece9','bee1e6','f0efeb','dfe7fd','cddafd'] },
+    { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
+    { CryPastel: ['F0EFEB', 'EAE4E9', 'E2ECE9', 'FFF1E6', 'DFE7FD', 'FDE2E4', 'BEE1E6', 'CDDAFD', 'FAD2E1'] },
+    { HirstSpot: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
     // 10 color schemes
-    { NeonLizard: ['007f5f','2b9348','55a630','80b918','aacc00','bfd200','d4d700','dddf00','eeef20','ffff3f'] },
-    { MiamiNight: ['f72585','b5179e','7209b7','560bad','480ca8','3a0ca3','3f37c9','4361ee','4895ef','4cc9f0'] },
-    { NewGermany: ['03071e','370617','6a040f','9d0208','d00000','dc2f02','e85d04','f48c06','faa307','ffba08'] },
-    { BigToyland: ['f94144','f3722c','f8961e','f9844a','f9c74f','90be6d','43aa8b','4d908e','577590','277da1'] },
-    { Blueliners: ['012a4a','013a63','01497c','014f86','2a6f97','2c7da0','468faf','61a5c2','89c2d9','a9d6e5'] },
-    { RedSkyDawn: ['641220','6e1423','85182a','a11d33','a71e34','b21e35','bd1f36','c71f37','da1e37','e01e37'] },
-    { RainbowMad: ['ff0000','ff8700','ffd300','deff0a','a1ff0a','0aff99','0aefff','147df5','580aff','be0aff'] },
-    { Candymaker: ['54478c','2c699a','048ba8','0db39e','16db93','83e377','b9e769','efea5a','f1c453','f29e4c'] },
-    { MartianDay: ['b76935','a56336','935e38','815839','6f523b','5c4d3c','4a473e','38413f','263c41','143642'] }
+    { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
+    { MiamiNight: ['4CC9F0', '4895EF', 'F72585', '4361EE', 'B5179E', '3F37C9', '7209B7', '560BAD', '3A0CA3', '480CA8'] },
+    { NewGermany: ['FFBA08', 'FAA307', 'F48C06', 'E85D04', 'DC2F02', 'D00000', '9D0208', '6A040F', '370617', '03071E'] },
+    { BigToyland: ['F9C74F', '90BE6D', 'F8961E', 'F9844A', '43AA8B', '4D908E', 'F3722C', '577590', '277DA1', 'F94144'] },
+    { Blueliners: ['A9D6E5', '89C2D9', '61A5C2', '468FAF', '2C7DA0', '2A6F97', '014F86', '01497C', '013A63', '012A4A'] },
+    { RedSkyDawn: ['E01E37', 'DA1E37', 'C71F37', 'BD1F36', 'B21E35', 'A11D33', 'A71E34', '85182A', '6E1423', '641220'] },
+    { RainbowMad: ['0AEFFF', '0AFF99', 'FFD300', 'DEFF0A', 'A1FF0A', 'FF8700', '147DF5', 'FF0000', 'BE0AFF', '580AFF'] },
+    { Candymaker: ['B9E769', 'EFEA5A', 'F1C453', '83E377', '16DB93', 'F29E4C', '0DB39E', '048BA8', '2C699A', '54478C'] },
+    { MartianDay: ['B76935', 'A56336', '935E38', '815839', '6F523B', '5C4D3C', '4A473E', '38413F', '263C41', '143642'] }
   ];
   const schemeObj = R.random_choice(schemes);
   const schemeName = Object.keys(schemeObj)[0];
@@ -141,7 +142,7 @@ export function randomizer(R) {
     hyper, // 3/80
     squarePeg, // 1/3
     schemeName,
-    scheme, // 1/28
+    scheme, // 1/30
     countries,
     good,
     bad,
@@ -153,6 +154,8 @@ export function randomizer(R) {
 
 // Dots
 export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) {
+  // prose or no
+  const showProse = window.localStorage.getItem('no-prose') === null ? true : false;
   const width = canvasWidth;
   const height = canvasHeight;
   // the size of the dots based on config
@@ -170,7 +173,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   // fontsize
   const fontSize = columnCount * base / 30 * 1.125;
   // maxes
-  const heightMax = height - (rowCount * base + (fontSize * 1.5) + fontSize * 2);
+  const heightMax = height - (rowCount * base + (showProse ? (fontSize * 1.5) + fontSize * 2 : 0));
   const widthMax = width - (columnCount * base);
   // all the dots
   const allDots = columnCount * rowCount;
@@ -316,21 +319,23 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   }
 
   // build our prose
-  const poem = config.prose;
-  const canvasBgHex = rgba2hex(canvasBg);
-  let poemFill = `#${config.scheme[Math.floor(config.randomizer[1] * config.scheme.length)]}`;
-  // account for canvas bg : bg should not be same as text
-  poemFill = (canvasBgHex === poemFill) ? (canvasBgHex === '#ffffff') ? '#000' : '#fff' : poemFill;
-  ctx.fillStyle = poemFill;
+  if (showProse) {
+    const poem = config.prose;
+    const canvasBgHex = rgba2hex(canvasBg).toUpperCase();
+    let poemFill = `#${config.scheme[canvasBgHex === '#FFFFFF' ? config.scheme.length - 1 : 0]}`;
+    // account for canvas bg : bg should not be same as text
+    poemFill = (canvasBgHex === poemFill) ? (canvasBgHex === '#FFFFFF') ? '#000000' : '#FFFFFF' : poemFill;
+    ctx.fillStyle = poemFill;
 
-  prose(
-    ctx,
-    poem,
-    cxStatic + (config.output === 'Multiply' ? quarterBase : halfBase) + (columnCount * halfBase),
-    cy + (rowCount * base) + (fontSize * 1.5),
-    columnCount * base,
-    fontSize
-  );
+    prose(
+      ctx,
+      poem,
+      cxStatic + (config.output === 'Multiply' ? quarterBase : halfBase) + (columnCount * halfBase),
+      cy + (rowCount * base) + (fontSize * 1.5),
+      columnCount * base,
+      fontSize
+    );
+  }
 
   // wait half a second would ya
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -432,20 +437,25 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         case 'Block':
           // LEGO
           ctx.rect(points[i].x, points[i].y, base, base);
-          ctx.globalAlpha = 0.4;
+          ctx.globalAlpha = 0.8;
           break;
         case 'Ring':
           if (!(config.bad.includes(i) || config.good.includes(i))) {
             ctx.strokeStyle = fill;
+            ctx.lineWidth = config.size === 9
+                              ? config.size * 2
+                              : config.size === 15
+                                ? config.size / 2
+                                : 2;
             ctx.fillStyle = 'transparent';
             ctx.shadowColor = fill;
             if (config.squarePeg) {
-              ctx.rect(points[i].x, points[i].y, base, base);
+              ctx.rect(points[i].x + base * .125, points[i].y + base * .125, base * .75, base * .75);
               if (i % 5) {
                 ctx.rect(points[i].x + quarterBase, points[i].y + quarterBase, halfBase, halfBase);
               }
             } else {
-              ctx.arc(points[i].x + halfBase, points[i].y + halfBase, halfBase, 0, 2 * Math.PI);
+              ctx.arc(points[i].x + halfBase, points[i].y + halfBase, halfBase * .75, 0, 2 * Math.PI);
               if (i % 5) {
                 ctx.arc(points[i].x + halfBase, points[i].y + halfBase, quarterBase, 0, 2 * Math.PI);
               }
@@ -533,7 +543,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         case 'Lines':
             // lines
             ctx.globalAlpha = 0.75;
-            ctx.rect(pointsCopy[i].x, pointsCopy[i].y, columnCount * base, base);
+            ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, columnCount * base, base + 2 - halfBase);
           break;
         }
       }
