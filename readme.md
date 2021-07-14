@@ -32,11 +32,11 @@ The artistic approcah is based on a variable grid of pegs (the pegboard) and dif
 #### Traits: 
 Background is white, black, or dark grey
 
-Grid size can vary in 9 different sizes
+Grid size can vary in 10 different sizes. A single peg grid is very rare 1/1000
 
 Color schemes generated are 3,5,9, and 10 palletes. Each produces a unique combination. 
 
-There are 28 unique color schemes. Colors were inspired by a number of sources and very curated. Picked off of from things like an old t-shirt print, a sundown, a dixie cup, etc...
+There are 30 unique color schemes. Colors were inspired by a number of sources and very curated. Picked off of from things like an old t-shirt print, a sundown, a dixie cup, art, etc...
 
 Outputs ( these are what effects happen to the pegboard )
   - weave: lines are woven between certain pegs
@@ -47,6 +47,8 @@ Outputs ( these are what effects happen to the pegboard )
   - gas: a blur of variable size is added over each peg
   - multiply: the pegs are multiplied across the board
   - abacus: lines skewer the pegs vertically
+  - lines: lines go horizontally across the page
+  - bubble: bubbles form over the pegs
 
 Cropped ( controls if there are areas where our output will not display )
     - none: no crop (default)
