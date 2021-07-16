@@ -1,8 +1,10 @@
 import { drillPegs, randomizer } from './pegboard';
 import { downloadSVG } from './utilities';
+
 // const hash = tokenData.hash
 // const hash = '0x11ac128f8b54949c12d04102cfc01960fc496813cbc3495bf77aeed738579738';
 
+// TESTING ONLY : random hash
 function random_hash() {
   const chars = "0123456789abcdef";
   let result = '0x';
@@ -93,7 +95,7 @@ if (storage.getItem('control')) {
   control.hidden = false;
 }
 
-// keypress: only keep spacebar to toggle bg
+// Spacebar to toggle bg
 document.body.onkeyup = async e => {
   // space bar
   if(e.keyCode === 32) {
@@ -117,7 +119,16 @@ document.body.onkeyup = async e => {
     return resize();
   }
 
-  // Test Code: Remove on import
+  // Hide Prose (no subtitles)
+  if (e.key === 'p') {
+    if (storage.getItem('no-prose')) {
+      storage.removeItem('no-prose');
+      return;
+    }
+    storage.setItem('no-prose', true);
+  }
+
+  // TESTING ONLY: Remove on import
   // remove animation / static image
   if (e.key === 'n') {
     if (storage.getItem('no-animate')) {
@@ -127,7 +138,7 @@ document.body.onkeyup = async e => {
     storage.setItem('no-animate', true);
   }
 
-  // hide / show controls
+  // TESTING ONLY : hide / show controls
   if (e.key === 'c') {
     if (control.hidden === false) {
       storage.removeItem('control');
@@ -138,23 +149,17 @@ document.body.onkeyup = async e => {
     control.hidden = false;
   }
 
-  // show seed
+  // TESTING ONLY : show seed
   if (e.key === 's') {
     return seedContainer.hidden === true ? seedContainer.hidden = false : seedContainer.hidden = true;
   }
 
+  // TESTING ONLY
   if (e.key === 'd') {
     //serialize your SVG
     await downloadSVG(canvas, config);
   }
 
-  if (e.key === 'p') {
-    if (storage.getItem('no-prose')) {
-      storage.removeItem('no-prose');
-      return;
-    }
-    storage.setItem('no-prose', true);
-  }
   // end
   return;
 }

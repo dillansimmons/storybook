@@ -9,13 +9,19 @@ Dillan Simmons (DSIMS) | AB hopeful factory project.
 3. Run the project locally: `npm run start`
 4. Visit [http://localhost:1234/](http://localhost:1234/) to view.
     - You can manually refresh or click anywhere on the page to refresh with a new random seed
-    - You can toggle the traits window with the `c` button
-    - You can toggle the background color with the `spacebar`
+    - You can toggle the background color with the <kbd>spacebar</kbd> or <kbd>Shift</kbd> + <kbd>spacebar</kbd>. 
+    - You can turn off the prose and only view the visual by pressing <kbd>p</kbd>. This is not the reccomended way of viewing the art but to each their own. Come as you are.
+    
+    **Test controls - wont be in the final piece**
+
+    - You can toggle a side window showing trait details by pressing <kbd>c</kbd>
+    - You can turn off the animations by pressing the <kbd>n</kbd> key, nice for quickly viewing outputs. Some big peg animations can take 20s
+    - You can press <kbd>s</kbd> to view the seed
 
 ## Project overview
 
 ### Influence
-PbDi is influenced heavily by film narrative and the feeling of being in a movie theater (or drive in theater). Each piece includes generative prose and a screen like visual in an attempt to recreate the movie going experience, the feeling when the lights go down and the introduction scene plays out.
+PbDi is influenced heavily by film narrative and the feeling of being in a movie theater (or drive in theater). Each piece includes generative prose and a screen like visual in an attempt to recreate the movie going experience, the feeling when the lights go down and a key scene plays out.
 
 Ideas that drove this:
 - Generative poetry (Especially slotted works, ie Alison Knowles / etc.)
@@ -27,12 +33,12 @@ Ideas that drove this:
 
 
 ### Artistic approach
-The artistic approcah is based on a variable grid of pegs (the pegboard) and different colors / outputs / crop are generated on top of behind it. Coming from a relief / screen printing background layers and opacity are very important to the visuals of the piece. Though it is a 2d work, much of the layering and opacity gives depth to each work. 
+The artistic approcah is based on a variable grid of pegs (the pegboard) and different colors / outputs / crop are generated on top of behind it. Coming from a relief / screen printing background layers and opacity are very important to the visuals of the piece. Though it is a 2d work, much of the layering and opacity gives depth. 
 
 #### Traits: 
 Background is white, black, or dark grey
 
-Grid size can vary in 10 different sizes. A single peg grid is very rare 1/1000
+Grid size can vary in 10 different sizes. A single peg grid is an outlier at 1/1000.
 
 Color schemes generated are 3,5,9, and 10 palletes. Each produces a unique combination. 
 
@@ -47,16 +53,16 @@ Outputs ( these are what effects happen to the pegboard )
   - gas: a blur of variable size is added over each peg
   - multiply: the pegs are multiplied across the board
   - abacus: lines skewer the pegs vertically
-  - lines: lines go horizontally across the page
+  - lines: lines go horizontally across the pegs
   - bubble: bubbles form over the pegs
 
 Cropped ( controls if there are areas where our output will not display )
-    - none: no crop (default)
-    - square: a tight crop is applied around the board (grid)
-    - mundi: the output only happens in a circle in the middle of the board
-    - swept: the output only happens in a quarter circle that covers half the board in a swoop
-    - sando: the output happens in the top 1/3 and bottom 1/3 of the board, the middle is untouched
-    - cross: the output happens in the four corners of the board, leaving an empty + in the middle
+  - none: no crop (default)
+  - square: a tight crop is applied around the board (grid)
+  - mundi: the output only happens in a circle in the middle of the board
+  - swept: the output only happens in a quarter circle that covers half the board in a swoop
+  - sando: the output happens in the top 1/3 and bottom 1/3 of the board, the middle is untouched
+  - cross: the output happens in the four corners of the board, leaving an empty + in the middle
 
 Behind: true or false. Do the outputs happen on top of or behind the pegs
 

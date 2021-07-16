@@ -1,7 +1,7 @@
 import { drillPegs } from './pegboard';
 import Canvas2Svg from 'canvas2svg';
 
-// download
+// TESTING ONLY : Download SVG
 export async function downloadSVG(canvas, config) {
     const delay = 20;
     const inWidth = window.innerWidth;

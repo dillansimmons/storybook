@@ -1,11 +1,5 @@
 import { prose, proseBuilder } from './prose';
 
-/**
- * TODO:
- * - cleanup
- */
-
-
 export function randomizer(R) {
   // peg sizes
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
@@ -37,7 +31,7 @@ export function randomizer(R) {
     // 9 color scheme
     { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
     { CryPastel: ['F0EFEB', 'EAE4E9', 'E2ECE9', 'FFF1E6', 'DFE7FD', 'FDE2E4', 'BEE1E6', 'CDDAFD', 'FAD2E1'] },
-    { HirstSpot: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
+    { HirstLike: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
     // 10 color schemes
     { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
     { MiamiNight: ['4CC9F0', '4895EF', 'F72585', '4361EE', 'B5179E', '3F37C9', '7209B7', '560BAD', '3A0CA3', '480CA8'] },
@@ -55,7 +49,7 @@ export function randomizer(R) {
 
   const size = R.random_choice(sizes)
 
-  // All the pegs
+  // All the pegs : TODO check coverage
   const all = (size / 2) * (size / 3);
 
   // Arrays for peg coloring
@@ -108,6 +102,8 @@ export function randomizer(R) {
   const randomArray = Array.from({length: all}, () => Math.random());
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,9);
+
+  // Cropping
   let cropped = 'none';
   if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle'].includes(output)) || ('Puzzle' === output && size < 90))) {
     cropped = 'square'
@@ -154,7 +150,7 @@ export function randomizer(R) {
 
 // Dots
 export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) {
-  // prose or no
+  // prose or no based on localstorage value / keypress
   const showProse = window.localStorage.getItem('no-prose') === null ? true : false;
   const width = canvasWidth;
   const height = canvasHeight;
@@ -192,7 +188,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   const columnFirst = [];
   const columnLast = [];
 
-  // Testing Only: Build controls UI
+  // TESTING ONLY: Build controls UI
   const pallete =[];
   config.scheme.forEach(s => {
     pallete.push(`<span style='background: #${s}'>&nbsp;</span>`)
@@ -219,12 +215,12 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   document.getElementById('controls').innerHTML = controlSettings;
   // END Controls
 
-  // Testing Only: draw a rectangle around the pegs
+  // TESTING ONLY: draw a rectangle around the pegs
   // ctx.beginPath();
   // ctx.rect(cxStatic + halfBase, cy, columnCount * base, rowCount * base + (fontSize * 1.5) + fontSize * 2);
   // ctx.stroke();
 
-  // // background stuff
+  // TESTING ONLY : background stuff
   // ctx.beginPath();
   // ctx.fillStyle = `${canvasBg}`;
   // ctx.fillRect(0, 0, width, height);
@@ -274,7 +270,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         false
       );
     }
-    // Testing Only: Text helper
+    // TESTING ONLY: Text helper, grid troubleshooting
     // if (i < columnCount) {
     //   ctx.font = 'bold 16px serif';
     //   ctx.fillText(
@@ -337,11 +333,10 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     );
   }
 
-  // wait half a second would ya
+  // wait a second would ya
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   // cropped
-
   if (config.cropped !== 'none') {
     ctx.beginPath();
     switch (config.cropped) {
@@ -381,6 +376,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   if (config.behind) {
     ctx.globalCompositeOperation = 'destination-over';
   }
+
   if (config.hyper) {
     ctx.globalCompositeOperation = 'lighter';
   }
@@ -388,7 +384,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   const i = -1;
   myLoop(i)
 
-  //animator
+  // animator
   async function myLoop(i) {
     i++;
     const fill = `#${config.scheme[Math.floor(config.randomizer[i + 1 ? i + 1 : i] * config.scheme.length)]}`;
@@ -410,7 +406,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Puzzle':
-          // Puzzle
           ctx.globalAlpha = 0.8;
           ctx.shadowColor = fill;
           ctx.shadowOffsetX = config.randomizer[2] < 0.5 ? halfBase : -halfBase;
@@ -437,7 +432,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Gas':
-          // Gas
           ctx.globalAlpha = 0.75;
           ctx.filter = `blur(${halfBase * blurArray[Math.floor(config.randomizer[4] * blurArray.length)]}px)`;
           ctx.shadowOffsetX = config.randomizer[5] < 0.5 ? base : -base;
@@ -446,7 +440,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Block':
-          // LEGO
           ctx.rect(points[i].x, points[i].y, base, base);
           ctx.globalAlpha = 0.8;
           break;
@@ -477,7 +470,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Abacus':
-          // Lines
           if (columnFirst.filter(point => (point.x === points[i].x))) {
             ctx.beginPath();
             ctx.fillStyle = 'transparent';
@@ -499,7 +491,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Burst':
-          // burst
           ctx.beginPath();
           ctx.fillStyle = 'transparent';
           ctx.shadowColor = 'transparent';
@@ -516,7 +507,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Weave':
-          // Weave
           if (!(config.bad.includes(i) || config.good.includes(i))) {
             ctx.globalAlpha = 1;
             ctx.fillStyle = 'transparent';
@@ -525,11 +515,12 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.lineCap = 'round';
             ctx.strokeStyle = fill;
 
-            ctx.Weave(
+            Weave(
+              ctx,
               {x: pointsCopy[i].x + halfBase, y:(pointsCopy[i].y + halfBase )},
               checkIfBad(pointsCopy, halfBase, i, i+1, config.good, config.bad),
-              1, 1, 1
-              );
+              1
+            );
             ctx.stroke();
           }
           break;
@@ -546,7 +537,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Lines':
-            // lines
             ctx.globalAlpha = 0.75;
             ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, columnCount * base, base + 2 - halfBase);
           break;
@@ -555,9 +545,9 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
       }
     // fill event for all
     ctx.fill();
-    // the window resizes or the background changes : those signal we've restarted the animation
+    // the window resizes or the background changes : those signal we've restarted the animation so stop the old ones
     if (i < points.length - 1 && window.innerWidth === width && window.innerHeight === height && canvasBg === document.querySelector('canvas').style.backgroundColor) {
-      // Testing Only : allow no animate
+      // TESTING ONLY : allow no animate
       if (!window.localStorage.getItem('no-animate')) {
         await new Promise(resolve => setTimeout(resolve, 5));
       }
@@ -580,7 +570,7 @@ function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
 }
 
 // slight slope
-CanvasRenderingContext2D.prototype.Weave = function (from, to, frequency) {
+Weave = (context, from, to, frequency) => {
 	let cx = 0;
   let cy = 0;
 	const fx = from.x;
@@ -597,9 +587,9 @@ CanvasRenderingContext2D.prototype.Weave = function (from, to, frequency) {
 		cx = from.x + Math.cos(ang) * i + Math.cos(ang - Math.PI/2) * waveOffsetLength;
 		cy = from.y + Math.sin(ang) * i + Math.sin(ang - Math.PI/2) * waveOffsetLength;
     if (i > 0) {
-      this.lineTo(cx, cy);
+      context.lineTo(cx, cy);
     } else {
-      this.moveTo(cx, cy);
+      context.moveTo(cx, cy);
     }
 	}
 }

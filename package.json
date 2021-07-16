@@ -5,9 +5,9 @@
   "scripts": {
     "start": "parcel serve index.html",
     "build": "parcel build index.html --no-source-maps --detailed-report --no-scope-hoist && npm run cost",
-    "cost": "node cost.mjs",
+    "cost": "node ./build/cost.mjs",
     "lint": "eslint .",
-    "screenshots": "node screenshots.mjs"
+    "screenshots": "node ./build/screenshots.mjs"
   },
   "keywords": [],
   "author": "",

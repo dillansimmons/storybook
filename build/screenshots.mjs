@@ -2,7 +2,6 @@
 import puppeteer from 'puppeteer';
 
 // !!! Your local build must be running for this script to work
-// Assumes
 export async function screenshots() {
   const url = 'http://localhost:1234/'; // local server url where your project is running
   const numberOfScreenshots = 10; // how many screenshots to take
