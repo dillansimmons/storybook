@@ -61,7 +61,7 @@ Cropped ( controls if there are areas where our output will not display )
   - square: a tight crop is applied around the board (grid)
   - mundi: the output only happens in a circle in the middle of the board
   - swept: the output only happens in a quarter circle that covers half the board in a swoop
-  - sando: the output happens in the top 1/3 and bottom 1/3 of the board, the middle is untouched
+  - sando: the output happens in the top 1/3 and bottom 1/3 of the board, the middle is un-touched
   - cross: the output happens in the four corners of the board, leaving an empty + in the middle
 
 Behind: true or false. Do the outputs happen on top of or behind the pegs
