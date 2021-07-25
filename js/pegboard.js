@@ -154,6 +154,8 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   const showProse = window.localStorage.getItem('no-prose') === null ? true : false;
   const width = canvasWidth;
   const height = canvasHeight;
+  const midX = canvasWidth / 2;
+  const midY = canvasHeight / 2;
   // the size of the dots based on config
   const base = Math.floor(width / config.size);
   // quarter size
@@ -169,16 +171,16 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   // fontsize
   const fontSize = columnCount * base / 30 * 1.125;
   // maxes
-  const heightMax = height - (rowCount * base + (showProse ? (fontSize * 1.5) + fontSize * 2 : 0));
-  const widthMax = width - (columnCount * base);
+  const heightMax = (rowCount * base + (showProse ? (fontSize * 1.5) + fontSize * 2 : 0));
+  const widthMax = (columnCount * base);
   // all the dots
   const allDots = columnCount * rowCount;
   // the x starting point: 1/6 the width
-  let cx = Math.ceil(widthMax / 2 - halfBase);
+  let cx = Math.ceil(midX - widthMax / 2);
   // a static of this cx / used for resets
   const cxStatic = cx;
   // the y starting point: 1/6 the height
-  const cy = Math.ceil(heightMax / 2);
+  const cy = Math.ceil(midY - heightMax / 2);
   // the row count / used for grid draw
   let row = 0;
   // initial background
@@ -189,7 +191,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   const columnLast = [];
 
   // TESTING ONLY: Build controls UI
-  const pallete =[];
+  const pallete = [];
   config.scheme.forEach(s => {
     pallete.push(`<span style='background: #${s}'>&nbsp;</span>`)
   })
@@ -217,7 +219,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // TESTING ONLY: draw a rectangle around the pegs
   // ctx.beginPath();
-  // ctx.rect(cxStatic + halfBase, cy, columnCount * base, rowCount * base + (fontSize * 1.5) + fontSize * 2);
+  // ctx.rect(cx, cy, widthMax, heightMax);
   // ctx.stroke();
 
   // TESTING ONLY : background stuff
@@ -255,14 +257,14 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     // round of square
     if (config.squarePeg) {
       ctx.rect(
-        cx - quarterBase,
+        cx - (base * .75),
         (cy + row * base) - (base * .75),
         (halfBase),
         (halfBase)
       );
     } else {
       ctx.arc(
-        cx,
+        cx - halfBase,
         (cy + row * base) - halfBase,
         quarterBase,
         0,
@@ -284,14 +286,14 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     ctx.fill();
 
     // push points for later animation values
-    points.push({x: cx - halfBase, y: cy + row * base - base, start: i === columnCount * row});
+    points.push({x: cx - base, y: cy + row * base - base, start: i === columnCount * row});
 
     // abacus points
     if (i < columnCount) {
-      columnFirst.push({x: cx - halfBase, y: cy + row * base - base})
+      columnFirst.push({x: cx - base, y: cy + row * base - base})
     }
     if (i > (allDots - columnCount - 1)) {
-      columnLast.push({x: cx - halfBase, y: cy + row * base - base})
+      columnLast.push({x: cx - base, y: cy + row * base - base})
     }
   }
 
@@ -326,9 +328,9 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     prose(
       ctx,
       poem,
-      cxStatic + (config.output === 'Multiply' ? quarterBase : halfBase) + (columnCount * halfBase),
-      cy + (rowCount * base) + (fontSize * 1.5),
-      columnCount * base,
+      cxStatic + widthMax / 2,
+      cy + heightMax - (fontSize * 2),
+      widthMax,
       fontSize
     );
   }
@@ -341,27 +343,27 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     ctx.beginPath();
     switch (config.cropped) {
       case 'square':
-        ctx.rect(cxStatic + halfBase, cy, columnCount * base, row * base);
+        ctx.rect(cxStatic, cy, widthMax, row * base);
         break;
       case 'swept':
         if (config.output === 'Bubble') {
-          ctx.rect(cxStatic - doubleBase, cy - doubleBase, columnCount * base + halfBase + doubleBase, row * base + doubleBase);
+          ctx.rect(cxStatic - doubleBase, cy - doubleBase, widthMax + halfBase + doubleBase, row * base + doubleBase);
         } else {
-          ctx.arc(cxStatic + halfBase, cy, row * base, 0, 2 * Math.PI);
+          ctx.arc(cxStatic, cy, row * base, 0, 2 * Math.PI);
         }
         break;
       case 'mundi':
-        ctx.arc(cxStatic + halfBase + (columnCount * halfBase), cy + (row * halfBase), (row * halfBase) - (config.base < 15 ? doubleBase : base), 0, 2 * Math.PI);
+        ctx.arc(cxStatic + (widthMax / 2), cy + (row * halfBase), (row * halfBase) - (config.base < 15 ? doubleBase : base), 0, 2 * Math.PI);
         break;
       case 'sando':
-        ctx.rect(cxStatic + halfBase, cy, columnCount * base, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic + halfBase, cy + (row * base / 2) + doubleBase * 2, columnCount * base, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic, cy, widthMax, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic, cy + (row * base / 2) + doubleBase * 2, widthMax, (row * base / 2) - doubleBase * 2);
         break;
       case 'cross':
-        ctx.rect(cxStatic + halfBase, cy, columnCount * base / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic + halfBase + (columnCount * base / 2 + doubleBase * 2) + halfBase, cy, columnCount * base / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic + halfBase, cy + (row * base / 2) + doubleBase * 2, columnCount * base / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic + halfBase + (columnCount * base / 2 + doubleBase * 2) + halfBase, cy + (row * base / 2) + doubleBase * 2, columnCount * base / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic, cy, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic + (widthMax / 2 + doubleBase * 2) + halfBase, cy, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic, cy + (row * base / 2) + doubleBase * 2, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic + (widthMax / 2 + doubleBase * 2) + halfBase, cy + (row * base / 2) + doubleBase * 2, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
         break;
     }
     ctx.clip();
@@ -369,7 +371,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // if not swept crop special for bubble
   if (config.cropped !== 'swept' && config.output === 'Bubble') {
-    ctx.rect(cxStatic - doubleBase, cy - doubleBase, columnCount * base + halfBase + doubleBase, row * base + doubleBase);
+    ctx.rect(cxStatic - doubleBase, cy - doubleBase, widthMax + halfBase + doubleBase, row * base + doubleBase);
     ctx.clip();
   }
 
@@ -501,7 +503,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.lineCap = 'round';
           ctx.strokeStyle = fill;
 
-          ctx.moveTo(cxStatic + halfBase + (columnCount * halfBase), cy + (row * halfBase));
+          ctx.moveTo(midX, midY);
           ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
           ctx.stroke();
           break;
@@ -515,7 +517,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.lineCap = 'round';
             ctx.strokeStyle = fill;
 
-            Weave(
+            weave(
               ctx,
               {x: pointsCopy[i].x + halfBase, y:(pointsCopy[i].y + halfBase )},
               checkIfBad(pointsCopy, halfBase, i, i+1, config.good, config.bad),
@@ -538,7 +540,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
         case 'Lines':
             ctx.globalAlpha = 0.75;
-            ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, columnCount * base, base + 2 - halfBase);
+            ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, widthMax, base + 2 - halfBase);
           break;
 
         }
@@ -570,7 +572,7 @@ function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
 }
 
 // slight slope
-Weave = (context, from, to, frequency) => {
+function weave(context, from, to, frequency) {
 	let cx = 0;
   let cy = 0;
 	const fx = from.x;
