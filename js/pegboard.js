@@ -219,7 +219,9 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // TESTING ONLY: draw a rectangle around the pegs
   // ctx.beginPath();
-  // ctx.rect(cx, cy, widthMax, heightMax);
+  // ctx.rect(cx - halfBase, cy - halfBase, widthMax + base, heightMax + base);
+  // ctx.lineWidth = base / 10;
+  // ctx.strokeStyle = `#${config.scheme[2]}`
   // ctx.stroke();
 
   // TESTING ONLY : background stuff
@@ -434,11 +436,12 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Gas':
-          ctx.globalAlpha = 0.75;
-          ctx.filter = `blur(${halfBase * blurArray[Math.floor(config.randomizer[4] * blurArray.length)]}px)`;
-          ctx.shadowOffsetX = config.randomizer[5] < 0.5 ? base : -base;
-          ctx.shadowOffsetY = config.randomizer[6] < 0.5 ? base : -base;
-          ctx.rect(points[i].x, points[i].y, base, base);
+          ctx.globalAlpha = 0.4;
+          ctx.shadowColor = fill;
+          ctx.shadowBlur = base * blurArray[Math.floor(config.randomizer[i] * blurArray.length)];
+          ctx.shadowOffsetY = width // + (config.randomizer[i] < 0.5 ? base : -base);
+          ctx.rect(points[i].x, points[i].y - width, base, base);
+          ctx.fill();
           break;
 
         case 'Block':
