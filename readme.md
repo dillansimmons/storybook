@@ -10,7 +10,7 @@ Dillan Simmons (DSIMS) | AB hopeful factory project.
 4. Visit [http://localhost:1234/](http://localhost:1234/) to view.
     - You can manually refresh or click anywhere on the page to refresh with a new random seed
     - You can toggle the background color with the <kbd>spacebar</kbd> or <kbd>Shift</kbd> + <kbd>spacebar</kbd>. 
-    - You can turn off the prose and only view the visual by pressing <kbd>p</kbd>. This is not the reccomended way of viewing the art but to each their own. Come as you are.
+    - You can turn off the prose and only view the visual by pressing <kbd>p</kbd>. TI'm currently torn if the text should be visible or hidden by default...
     
     **Test controls - wont be in the final piece**
 
@@ -71,7 +71,7 @@ Hyper: Any output on top lightens the peg underneath it
 SquarePeg: true or false. Is the peg round or square
 
 #### Prose:
-The prose is very variable and dynamic but basically consists of 3 main prompts filled in with a combination of 2100-2200 unique words. Prose can sound absurdist (like many movies from the 80s) but should be structurally sound and make sense as a sentance. They are intentionally built to represent a movie plot or scene and allude to a larger story.
+The prose is very variable and dynamic but basically consists of 3 main prompts filled in with a combination of around 2100 unique words. Prose can sound absurdist (like many movies from the 80s) but should be structurally sound and make sense as a sentance. They are intentionally built to represent a movie plot or scene and allude to a larger story.
 
 > A noseless kill bot and a plump heroic dog pair, a maddening fight lies ahead of them.
 

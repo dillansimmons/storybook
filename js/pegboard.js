@@ -506,7 +506,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.lineCap = 'round';
           ctx.strokeStyle = fill;
 
-          ctx.moveTo(midX, midY);
+          ctx.moveTo(midX, midY - (showProse ? (fontSize * 1.5) + fontSize * 2 / 4 : 0));
           ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
           ctx.stroke();
           break;
