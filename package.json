@@ -5,6 +5,7 @@
   "scripts": {
     "start": "parcel serve *.html",
     "build": "parcel build *.html --no-source-maps --detailed-report --no-scope-hoist && npm run cost",
+    "build-netlify": "parcel build *.html --no-source-maps --no-scope-hoist",
     "cost": "node ./build/cost.mjs",
     "lint": "eslint .",
     "screenshots": "node ./build/screenshots.mjs"
