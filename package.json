@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "parcel serve index.html",
-    "build": "parcel build index.html --no-source-maps --detailed-report --no-scope-hoist && npm run cost",
+    "start": "parcel serve *.html",
+    "build": "parcel build *.html --no-source-maps --detailed-report --no-scope-hoist && npm run cost",
     "cost": "node ./build/cost.mjs",
     "lint": "eslint .",
     "screenshots": "node ./build/screenshots.mjs"
