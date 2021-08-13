@@ -4,8 +4,8 @@ export function randomizer(R) {
   // peg sizes
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   if (R.random_int(1,500) === 99) { sizes.push(3) } // 1/5000 chance of a single dot
-  // outputs
-  const outputs = ['Lines', 'Bubble', 'Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
+  // outputs //['Magnetic'] //
+  const outputs = ['Pilled', 'Diamond', 'Lines', 'Bubble', 'Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
     // colors
   const schemes = [
     // 3 color scheme
@@ -105,22 +105,22 @@ export function randomizer(R) {
 
   // Cropping
   let cropped = 'none';
-  if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle'].includes(output)) || ('Puzzle' === output && size < 90))) {
+  if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle', 'Pilled'].includes(output)) || ('Puzzle' === output && size < 90))) {
     cropped = 'square'
   }
-  if (croppedInt === 2 && (['Bubble','Lines','Puzzle'].includes(output) || ('Gas' === output && size > 15))) {
+  if (croppedInt === 2 && (['Bubble','Lines','Puzzle', 'Pilled', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Diamond'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines'].includes(output)) {
+  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled'].includes(output)) {
     cropped = R.random_int(0,1) === 1
       ? 'cross'
       : 'sando'
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines'].includes(output); // (1/10 + 4/8) 1/20
+  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond'].includes(output); // (1/10 + 4/8) 1/20
   const squarePeg = R.random_int(0,4) < 1; // 1/4
   const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
 
@@ -546,6 +546,37 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, widthMax, base + 2 - halfBase);
           break;
 
+        case 'Magnetic':
+          // if (!(config.bad.includes(i) || config.good.includes(i))) {
+          ctx.globalAlpha = 0.5;
+          // ctx.fillStyle = 'transparent';
+          ctx.beginPath();
+          // ctx.fillStyle = shadeColor(fill, (i * config.randomizer[i]));
+          ctx.setTransform(2, config.randomizer[i], config.randomizer[i], 2, points[i].x + halfBase, points[i].y + halfBase);
+          ctx.rotate(i * config.randomizer[i] * Math.PI / 360);
+          ctx.arc(0, 0, quarterBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
+          ctx.arc(0, 0, halfBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
+          // ctx.stroke();
+          // }
+          break;
+
+        case 'Pilled':
+          ctx.globalAlpha = 0.66;
+          // ctx.setTransform(1, 0, 0, 1, pointsCopy[i].x, pointsCopy[i].y);
+          // 45 Edition
+          ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase);
+          ctx.rotate(45 * Math.PI / 360);
+          ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+          ctx.rect(0, 0, base, base);
+          ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+          break;
+
+          case 'Diamond':
+            ctx.globalAlpha = 0.8;
+            ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y - quarterBase);
+            ctx.rotate(90 * Math.PI / 360);
+            ctx.rect(0, 0, base, base);
+            break;
         }
       }
     // fill event for all
@@ -616,3 +647,24 @@ function countryFill(ctx, country, num, config) {
   }
   ctx.fillStyle = fill;
 }
+
+// Test this for color lightning
+// function shadeColor(color, percent) {
+//   let R = parseInt(color.substring(1,3),16);
+//   let G = parseInt(color.substring(3,5),16);
+//   let B = parseInt(color.substring(5,7),16);
+
+//   R = parseInt(R * (100 + percent) / 100);
+//   G = parseInt(G * (100 + percent) / 100);
+//   B = parseInt(B * (100 + percent) / 100);
+
+//   R = (R<255)?R:255;
+//   G = (G<255)?G:255;
+//   B = (B<255)?B:255;
+
+//   const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+//   const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+//   const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+
+//   return "#"+RR+GG+BB;
+// }
