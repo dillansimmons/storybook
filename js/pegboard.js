@@ -5,7 +5,21 @@ export function randomizer(R) {
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   if (R.random_int(1,500) === 99) { sizes.push(3) } // 1/5000 chance of a single dot
   // outputs //['Magnetic'] //
-  const outputs = ['Pilled', 'Diamond', 'Lines', 'Bubble', 'Weave', 'Ring', 'Burst', 'Abacus', 'Multiply', 'Gas', 'Block', 'Puzzle'];
+  const outputs = [
+    'Abacus',
+    'Block',
+    'Bubble',
+    'Burst',
+    'Diamond',
+    'Gas',
+    'Lines',
+    'Multiply',
+    'Pilled',
+    'Puzzle',
+    'Ring',
+    'Weave',
+    'Webbed'
+  ];
     // colors
   const schemes = [
     // 3 color scheme
@@ -111,16 +125,16 @@ export function randomizer(R) {
   if (croppedInt === 2 && (['Bubble','Lines','Puzzle', 'Pilled', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Diamond'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Diamond', 'Webbed'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled'].includes(output)) {
+  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Webbed'].includes(output)) {
     cropped = R.random_int(0,1) === 1
       ? 'cross'
       : 'sando'
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond'].includes(output); // (1/10 + 4/8) 1/20
+  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Webbed'].includes(output); // (1/10 + 4/8) 1/20
   const squarePeg = R.random_int(0,4) < 1; // 1/4
   const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
 
@@ -547,18 +561,26 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Magnetic':
-          // if (!(config.bad.includes(i) || config.good.includes(i))) {
           ctx.globalAlpha = 0.5;
           // ctx.fillStyle = 'transparent';
           ctx.beginPath();
           // ctx.fillStyle = shadeColor(fill, (i * config.randomizer[i]));
-          ctx.setTransform(2, config.randomizer[i], config.randomizer[i], 2, points[i].x + halfBase, points[i].y + halfBase);
-          ctx.rotate(i * config.randomizer[i] * Math.PI / 360);
-          ctx.arc(0, 0, quarterBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
-          ctx.arc(0, 0, halfBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
+          ctx.setTransform(1, 0, 0, 1, points[i].x + (base * .375), points[i].y);
+          // ctx.rotate(90 * Math.PI / 360);
+          ctx.rect(0,0,quarterBase,base);
+          ctx.rect(0 - (base * .375),0 +(base * .375),base,quarterBase);
+          // ctx.arc(0, 0, quarterBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
+          // ctx.arc(0, 0, halfBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
           // ctx.stroke();
-          // }
           break;
+
+          case 'Webbed':
+            ctx.globalAlpha = 0.75;
+            ctx.beginPath();
+            ctx.setTransform(1, 0, 0, 1, points[i].x + (base * .375), points[i].y);
+            ctx.rect(0,0,quarterBase,base);
+            ctx.rect(0 - (base * .375),0 +(base * .375),base,quarterBase);
+            break;
 
         case 'Pilled':
           ctx.globalAlpha = 0.66;

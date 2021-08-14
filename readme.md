@@ -45,16 +45,19 @@ Color schemes generated are 3,5,9, and 10 palletes. Each produces a unique combi
 There are 30 unique color schemes. Colors were inspired by a number of sources and very curated. Picked off of from things like an old t-shirt print, a sundown, a dixie cup, art, etc...
 
 Outputs ( these are what effects happen to the pegboard )
-  - weave: lines are woven between certain pegs
-  - rings: rings are made around certain pegs
-  - blocks: squares are placed over each peg giving a block (LEGO) effect
-  - puzzle: a random sized square / rectangle fills over all the pegs
-  - burst: lines originating from the center connect to each peg
-  - gas: a blur of variable size is added over each peg
-  - multiply: the pegs are multiplied across the board
   - abacus: lines skewer the pegs vertically
-  - lines: lines go horizontally across the pegs
+  - blocks: squares are placed over each peg giving a block (LEGO) effect
   - bubble: bubbles form over the pegs
+  - burst: lines originating from the center connect to each peg
+  - diamond: a diamond is placed over each peg
+  - gas: a blur of variable size is added over each peg
+  - lines: lines go horizontally across the pegs
+  - multiply: the pegs are multiplied across the board
+  - pilled: each peg is closed in a pill
+  - puzzle: a random sized square / rectangle fills over all the pegs
+  - rings: rings are made around certain pegs
+  - weave: lines are woven between certain pegs
+  - webbed: lines connect each peg in a web pattern
 
 Cropped ( controls if there are areas where our output will not display )
   - none: no crop (default)
