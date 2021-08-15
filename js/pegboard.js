@@ -7,6 +7,7 @@ export function randomizer(R) {
   // outputs //['Magnetic'] //
   const outputs = [
     'Abacus',
+    'Tube',
     'Block',
     'Bubble',
     'Burst',
@@ -18,7 +19,7 @@ export function randomizer(R) {
     'Puzzle',
     'Ring',
     'Weave',
-    'Webbed'
+    'Web'
   ];
     // colors
   const schemes = [
@@ -44,7 +45,7 @@ export function randomizer(R) {
     { Jazzz: ['EEF8FF', 'D1F5FF', '78E3FD', '34F6F2', '7D53DE'] },
     // 9 color scheme
     { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
-    { CryPastel: ['F0EFEB', 'EAE4E9', 'E2ECE9', 'FFF1E6', 'DFE7FD', 'FDE2E4', 'BEE1E6', 'CDDAFD', 'FAD2E1'] },
+    // { CryPastel: ['F0EFEB', 'EAE4E9', 'E2ECE9', 'FFF1E6', 'DFE7FD', 'FDE2E4', 'BEE1E6', 'CDDAFD', 'FAD2E1'] },
     { HirstLike: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
     // 10 color schemes
     { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
@@ -119,22 +120,22 @@ export function randomizer(R) {
 
   // Cropping
   let cropped = 'none';
-  if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle', 'Pilled'].includes(output)) || ('Puzzle' === output && size < 90))) {
+  if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle', 'Pilled', 'Tube'].includes(output)) || ('Puzzle' === output && size < 90))) {
     cropped = 'square'
   }
-  if (croppedInt === 2 && (['Bubble','Lines','Puzzle', 'Pilled', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
+  if (croppedInt === 2 && (['Bubble','Lines','Puzzle', 'Pilled', 'Tube', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Diamond', 'Webbed'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Diamond', 'Web'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Webbed'].includes(output)) {
+  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Web'].includes(output)) {
     cropped = R.random_int(0,1) === 1
       ? 'cross'
       : 'sando'
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Webbed'].includes(output); // (1/10 + 4/8) 1/20
+  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Web'].includes(output); // (1/10 + 4/8) 1/20
   const squarePeg = R.random_int(0,4) < 1; // 1/4
   const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
 
@@ -464,7 +465,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Ring':
-          if (!(config.bad.includes(i) || config.good.includes(i))) {
+          if (!config.bad.includes(i)) {
             ctx.strokeStyle = fill;
             ctx.lineWidth = config.size === 9
                               ? config.size * 2
@@ -493,7 +494,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.beginPath();
             ctx.fillStyle = 'transparent';
             ctx.shadowColor = fill;
-            ctx.globalAlpha = 0.05;
+            ctx.globalAlpha = 0.15;
             ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? halfBase : -halfBase;
             ctx.shadowOffsetY = config.randomizer[i + 1 ? i + 1 : i] > 0.5 ? halfBase : -halfBase;
             ctx.lineWidth = base / 5;
@@ -520,7 +521,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.lineCap = 'round';
           ctx.strokeStyle = fill;
 
-          ctx.moveTo(midX, midY - (showProse ? (fontSize * 1.5) + fontSize / 2 : 0));
+          ctx.moveTo(midX, midY - (showProse ? ((fontSize * 1.5 + fontSize * 2) / 2) : 0));
           ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
           ctx.stroke();
           break;
@@ -538,7 +539,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
               ctx,
               {x: pointsCopy[i].x + halfBase, y:(pointsCopy[i].y + halfBase )},
               checkIfBad(pointsCopy, halfBase, i, i+1, config.good, config.bad),
-              1
+              2 * config.randomizer[i]
             );
             ctx.stroke();
           }
@@ -574,7 +575,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           // ctx.stroke();
           break;
 
-          case 'Webbed':
+          case 'Web':
             ctx.globalAlpha = 0.75;
             ctx.beginPath();
             ctx.setTransform(1, 0, 0, 1, points[i].x + (base * .375), points[i].y);
@@ -583,15 +584,27 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             break;
 
         case 'Pilled':
-          ctx.globalAlpha = 0.66;
-          // ctx.setTransform(1, 0, 0, 1, pointsCopy[i].x, pointsCopy[i].y);
+          ctx.globalAlpha = 0.75;
           // 45 Edition
-          ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase);
+          // *.75 to help with rotation
+          ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
           ctx.rotate(45 * Math.PI / 360);
           ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
           ctx.rect(0, 0, base, base);
           ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
           break;
+
+          case 'Tube':
+            ctx.globalAlpha = 0.75;
+            ctx.setTransform(1, 0, 0, 1, points[i].x, points[i].y);
+            // 45 Edition
+            // *.75 to help with rotation
+            // ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
+            // ctx.rotate(45 * Math.PI / 360);
+            ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+            ctx.rect(0, 0, base, base);
+            ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+            break;
 
           case 'Diamond':
             ctx.globalAlpha = 0.8;
@@ -618,9 +631,10 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
 // Used for Weave, only return x/y point if it's good / bad, don't jump to next row
 function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
+  // if it
   if (array[numOg]?.y !== array[num]?.y) {
     return {x: (array[numOg]).x + halfBase, y:(array[numOg]).y + halfBase }
-  } else if ((badArray.includes(num) || goodArray.includes(num)) && array[num]) {
+  } else if ((!badArray.includes(num) || !goodArray.includes(num)) && array[num]) {
     return {x: (array[num]).x + halfBase, y:(array[num]).y + halfBase }
   } else {
     return checkIfBad(array, halfBase, numOg, num + 1, badArray, goodArray)
@@ -629,13 +643,13 @@ function checkIfBad(array, halfBase, numOg, num, badArray, goodArray) {
 
 // slight slope
 function weave(context, from, to, frequency) {
-	let cx = 0;
-  let cy = 0;
+	let cx;
+  let cy;
+  let waveOffsetLength;
 	const fx = from.x;
   const fy = from.y;
   const tx = to.x;
   const ty = to.y;
-  let waveOffsetLength = 0;
 	const ang = Math.atan2(ty - fy, tx - fx);
 	const distance = Math.sqrt((fx - tx) * (fx - tx) + (fy - ty) * (fy - ty));
 	const f = Math.PI * frequency;
