@@ -135,9 +135,10 @@ export function randomizer(R) {
       : 'sando'
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Web'].includes(output); // (1/10 + 4/8) 1/20
+  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Gas', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Web'].includes(output); // (1/10 + 4/8) 1/20
   const squarePeg = R.random_int(0,4) < 1; // 1/4
   const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
+  const orderly = R.random_int(0,7) < 1 ||  ['Weave', 'Lines', 'Bubble'].includes(output);
 
   // Config values
   // 1/2016 (size / output / color)
@@ -150,6 +151,7 @@ export function randomizer(R) {
     // none ???
     cropped,
     behind, // 1/3
+    orderly, // 1/8
     hyper, // 3/80
     squarePeg, // 1/3
     schemeName,
@@ -218,6 +220,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     <span>Hyper: ${config.hyper}</span>
     <span>SquarePeg: ${config.squarePeg}</span>
     <span>Behind: ${config.behind}</span>
+    <span>Orderly: ${config.orderly}</span>
     <br/>
     <span>Base: ${base}</span>
     <span>All: ${allDots}</span>
@@ -411,6 +414,9 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
     ctx.beginPath();
     ctx.fillStyle = fill;
+    if (config.orderly) {
+      points = pointsCopy;
+    }
     if (points[i]) {
       switch(config.output) {
 
@@ -685,22 +691,22 @@ function countryFill(ctx, country, num, config) {
 }
 
 // Test this for color lightning
-// function shadeColor(color, percent) {
-//   let R = parseInt(color.substring(1,3),16);
-//   let G = parseInt(color.substring(3,5),16);
-//   let B = parseInt(color.substring(5,7),16);
+function shadeColor(color, percent) {
+  let R = parseInt(color.substring(1,3),16);
+  let G = parseInt(color.substring(3,5),16);
+  let B = parseInt(color.substring(5,7),16);
 
-//   R = parseInt(R * (100 + percent) / 100);
-//   G = parseInt(G * (100 + percent) / 100);
-//   B = parseInt(B * (100 + percent) / 100);
+  R = parseInt(R * (100 + percent) / 100);
+  G = parseInt(G * (100 + percent) / 100);
+  B = parseInt(B * (100 + percent) / 100);
 
-//   R = (R<255)?R:255;
-//   G = (G<255)?G:255;
-//   B = (B<255)?B:255;
+  R = (R<255)?R:255;
+  G = (G<255)?G:255;
+  B = (B<255)?B:255;
 
-//   const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
-//   const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
-//   const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+  const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+  const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+  const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
 
-//   return "#"+RR+GG+BB;
-// }
+  return "#"+RR+GG+BB;
+}
