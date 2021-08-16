@@ -23,12 +23,12 @@ export function randomizer(R) {
   ];
     // colors
   const schemes = [
-    // 3 color scheme
+    // // 3 color scheme
     { Mon: ['ffffff', '222222', '111111'] },
     { Pie: ['22B1F6', '7522F6', '2C49EB'] },
     { Goo: ['CBF611', '11F67D', '34EB1C'] },
     { Fry: ['F6A30C', 'EB5900', 'F6220C'] },
-    // 5 color scheme
+    // // 5 color scheme
     { Sumer: ['EEEEEE', 'D4B483', '48A9A6', '4281A4', 'C1666B'] },
     { Bluby: ['E7E6F7', 'E3D0D8', 'C6D2ED', 'AEA3B0', '827081'] },
     { Sundn: ['FCD0A1', 'B1B695', '53917E', '63535B', '6D1A36'] },
@@ -44,8 +44,9 @@ export function randomizer(R) {
     { Bgeye: ['F0F4EF', 'BFCC94', 'E6AACE', '344966', '0D1821'] },
     { Jazzz: ['EEF8FF', 'D1F5FF', '78E3FD', '34F6F2', '7D53DE'] },
     // 9 color scheme
+    { OnThePond: ['2498FF', '0091E2', '0086BF', '00789A', '006977', '005A57', '044A3E', '1A3A2B', '1E2B1E' ] },
     { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
-    // { CryPastel: ['F0EFEB', 'EAE4E9', 'E2ECE9', 'FFF1E6', 'DFE7FD', 'FDE2E4', 'BEE1E6', 'CDDAFD', 'FAD2E1'] },
+    { BigCircus: ['FFFF00', 'FFD700', 'FFA800', 'FF6F25', 'FF0053', 'FF007E', 'FF00AC', 'DE00D9', '7300FF'] },
     { HirstLike: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
     // 10 color schemes
     { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
@@ -688,25 +689,4 @@ function countryFill(ctx, country, num, config) {
     }
   }
   ctx.fillStyle = fill;
-}
-
-// Test this for color lightning
-function shadeColor(color, percent) {
-  let R = parseInt(color.substring(1,3),16);
-  let G = parseInt(color.substring(3,5),16);
-  let B = parseInt(color.substring(5,7),16);
-
-  R = parseInt(R * (100 + percent) / 100);
-  G = parseInt(G * (100 + percent) / 100);
-  B = parseInt(B * (100 + percent) / 100);
-
-  R = (R<255)?R:255;
-  G = (G<255)?G:255;
-  B = (B<255)?B:255;
-
-  const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
-  const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
-  const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
-
-  return "#"+RR+GG+BB;
 }
