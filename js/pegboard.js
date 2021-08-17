@@ -23,25 +23,20 @@ export function randomizer(R) {
   ];
     // colors
   const schemes = [
-    // // 3 color scheme
+    // 3 color scheme
     { Mon: ['ffffff', '222222', '111111'] },
     { Pie: ['22B1F6', '7522F6', '2C49EB'] },
     { Goo: ['CBF611', '11F67D', '34EB1C'] },
     { Fry: ['F6A30C', 'EB5900', 'F6220C'] },
-    // // 5 color scheme
+    // 5 color scheme
     { Sumer: ['EEEEEE', 'D4B483', '48A9A6', '4281A4', 'C1666B'] },
     { Bluby: ['E7E6F7', 'E3D0D8', 'C6D2ED', 'AEA3B0', '827081'] },
-    { Sundn: ['FCD0A1', 'B1B695', '53917E', '63535B', '6D1A36'] },
     { Merca: ['EBEBEB', 'C0C0C0', '3A6EA5', 'B32134', '004E98'] },
     { Moody: ['CBF7ED', '8EA8C3', '406E8E', '23395B', '161925'] },
     { Hydro: ['55DDE0', 'F6AE2D', 'F26419', '33658A', '2F4858'] },
-    { Dinos: ['E6FDFF', 'D9D7DD', 'DBF9F4', 'B07BAC', '5F7367'] },
     { Lilac: ['CBF3D2', 'B7C0EE', '7067CF', '7B287D', '330C2F'] },
     { Cntry: ['FFFFFF', 'FFD5C2', 'F28F3B', '588B8B', 'C8553D'] },
     { Zombi: ['8DAA91', '788475', '5E5D5C', '453643', '28112B'] },
-    { Alien: ['C9FBFC', '26C485', '32908F', '553A41', '2F0601'] },
-    { Julie: ['FAF0CA', 'F4D35E', 'EE964B', 'F95738', '0D3B66'] },
-    { Bgeye: ['F0F4EF', 'BFCC94', 'E6AACE', '344966', '0D1821'] },
     { Jazzz: ['EEF8FF', 'D1F5FF', '78E3FD', '34F6F2', '7D53DE'] },
     // 9 color scheme
     { OnThePond: ['2498FF', '0091E2', '0086BF', '00789A', '006977', '005A57', '044A3E', '1A3A2B', '1E2B1E' ] },
@@ -489,6 +484,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             } else {
               ctx.arc(points[i].x + halfBase, points[i].y + halfBase, halfBase * .75, 0, 2 * Math.PI);
               if (i % 5) {
+                ctx.moveTo(points[i].x + halfBase + quarterBase, points[i].y + halfBase);
                 ctx.arc(points[i].x + halfBase, points[i].y + halfBase, quarterBase, 0, 2 * Math.PI);
               }
             }
