@@ -273,14 +273,14 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     // round of square
     if (config.squarePeg) {
       ctx.rect(
-        cx - (base * .75),
+        cx - (base * .75) + (config.output === 'Multiply' ? quarterBase : 0),
         (cy + row * base) - (base * .75),
         (halfBase),
         (halfBase)
       );
     } else {
       ctx.arc(
-        cx - halfBase,
+        cx - halfBase + (config.output === 'Multiply' ? quarterBase : 0),
         (cy + row * base) - halfBase,
         quarterBase,
         0,
@@ -347,7 +347,8 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
       cxStatic + widthMax / 2,
       cy + heightMax - (fontSize * 2),
       widthMax,
-      fontSize
+      fontSize,
+      poemFill
     );
   }
 
@@ -419,29 +420,34 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         case 'Multiply':
           // multiply
           if (config.squarePeg) {
-            ctx.rect(points[i].x - quarterBase, points[i].y - quarterBase, halfBase, halfBase);
+            ctx.rect(points[i].x, points[i].y - quarterBase, halfBase, halfBase);
           } else {
-            ctx.arc(points[i].x, points[i].y, quarterBase, 0, 2 * Math.PI);
-            ctx.arc(points[i].x, points[i].y, base / 8, 0, 2 * Math.PI);
+            ctx.arc(points[i].x + quarterBase, points[i].y, quarterBase, 0, 2 * Math.PI);
+            ctx.arc(points[i].x + quarterBase, points[i].y, base / 8, 0, 2 * Math.PI);
           }
+
+          // stack
+          // if (config.squarePeg) {
+          //   ctx.rect(points[i].x + halfBase, points[i].y - quarterBase, halfBase, halfBase);
+          // } else {
+          //   ctx.arc(points[i].x + quarterBase + halfBase, points[i].y, quarterBase, 0, 2 * Math.PI);
+          //   ctx.arc(points[i].x + quarterBase + halfBase, points[i].y, base / 8, 0, 2 * Math.PI);
+          // }
           break;
 
         case 'Puzzle':
           ctx.globalAlpha = 0.8;
           ctx.shadowColor = fill;
-          ctx.shadowOffsetX = config.randomizer[2] < 0.5 ? halfBase : -halfBase;
-          ctx.shadowOffsetY = config.randomizer[3] < 0.5 ? halfBase : -halfBase;
+          ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
+          ctx.shadowOffsetY = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
           if (config.squarePeg) {
-            ctx.rect(
-              points[i].x,
-              points[i].y,
-              config.randomizer[[i]] < 0.5
-                ? base : config.randomizer[[i]] < 0.25
-                ? doubleBase : base * 2.5,
-              config.randomizer[[i]] < 0.5
-                ? base : config.randomizer[i + 1 ? i + 1 : i - 1] < 0.25
-                ? doubleBase : base * 2.5
+            ctx.arc(
+              config.randomizer[i] < 0.5 ? points[i].x + halfBase : points[i].x - quarterBase,
+              config.randomizer[i] < 0.5 ? points[i].y + quarterBase : points[i].y - quarterBase,
+              base,
+                0, 2 * Math.PI
             );
+            ctx.arc(points[i].x + halfBase, points[i].y + halfBase, halfBase * .75, 0, 2 * Math.PI);
           } else {
             ctx.rect(
               points[i].x,

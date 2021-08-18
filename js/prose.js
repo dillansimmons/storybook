@@ -1,3 +1,5 @@
+import ctx from "canvas2svg"
+
 // Builds our generative prose
 export function proseBuilder(R) {
     const word0 = ['the', 'our', 'your'] //'their'
@@ -26,16 +28,38 @@ export function proseBuilder(R) {
       : `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2)} ${wordSelector(R,word9)} the ${wordSelector(R,word2Alt)}, ${wordSelector(R,word4)} the ${wordSelector(R,word6)} the ${wordSelector(R,word8.filter(word => word !== 'monster'))} appears to end.`
 }
 
-export function prose(ctx, string, x, y, maxWidth, fontSize) {
+export function prose(ctx, string, x, y, maxWidth, fontSize, fill) {
     ctx.shadowColor = 'transparent';
     ctx.textAlign = 'center';
     ctx.font = `bold ${fontSize}px serif`;
     ctx.globalCompositeOperation = "source-over";
-    wrapText(ctx, string, x, y, maxWidth, (fontSize*1.1));
+    wrapText(ctx, string, x, y, maxWidth, fontSize, fill);
 }
 
 // Prose Utilities
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
+function wrapText(context, text, x, y, maxWidth, fontSize, fill) {
+  // let count = 0;
+  // let chars;
+  // function draw() {
+  //     count ++;
+  //     // Grab all the characters up to count
+  //     chars = text.substr(0, count);
+  //     // context.strokeRect(x, y, maxWidth, fontSize*4);
+  //     context.clearRect(0, y-fontSize, window.innerWidth, fontSize*4);
+  //     // Draw the characters to the canvas
+  //     context.fillStyle = fill;
+  //     context.shadowColor = 'transparent';
+  //     context.globalAlpha = 1;
+  //     context.textAlign = 'center';
+  //     context.font = `bold ${fontSize}px serif`;
+  //     context.globalCompositeOperation = "source-over";
+  //     context.fillText(chars, x, y);
+  //     if (count < text.length){
+  //       requestAnimationFrame(draw)
+  //     }
+  // }
+  // draw();
+
   const words = text.split(' ');
   let line = '';
 
@@ -46,7 +70,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
     if (testWidth > maxWidth && n > 0) {
       context.fillText(line, x, y);
       line = words[n] + ' ';
-      y += lineHeight;
+      y += fontSize*1.1;
     }
     else {
       line = testLine;
