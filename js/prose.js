@@ -15,16 +15,19 @@ export function proseBuilder(R) {
     const word11 = ['say', 'scream', 'whisper'];
 
     const phrases = [
+      'All you had to do was throw the boxing match.',
       'Ain\'t it big enough for us both in this town?',
       'God it is strange to see you again.',
-      'Hold on, cause this ones a doozie.',
+      'I don\'t think we can Fonzie our way out of this one.',
       'I used to be hip.',
-      'I\'ve captured all the wild places.',
+      'If heaven has an elevator, I hope our song is playing in it.',
       'Once the relic unlocks, everything will be one.',
-      'Our relationship is too valuable.',
+      'Our relationship was a lie.',
+      'This puzzle hasn\'t got any corners.',
       'Ten seconds \'til the volcano erupts.',
+      'This is one hell of a pickle.',
       'This was avoidable if you\'d returned my postcard.',
-      'We\'re all gonna make it.',
+      'We\'re both gonna make it.',
       'We\'re not gonna make it.',
       'You\'re not gonna make it.'
     ]
@@ -35,6 +38,7 @@ export function proseBuilder(R) {
     // `The [castle] is [great] and [decrepit]. The [villian] [awaits] [our] [solemn] [hero].`
     // `A [solemn] [villan] and a [lonely] [hero] pair, the final [puzzle] [awaits] them.`
     // `[Our] [solemn] [hero] [ensnares] [your] [villian] deep in the [castle] the [challenge] ends.
+    // return `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} turns to the ${wordSelector(R,word2)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}. "${wordSelector(R,phrases)}" they ${wordSelector(R,word11)}.`
     return randomizer > 0.8
       ? `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,randomizer > 0.1 ? word2 : word2Alt)} ${wordSelector(R,word3)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} ${wordSelector(R,word10)}.`
       : randomizer > 0.6 ? `The ${wordSelector(R,word6)} is ${wordSelector(R,word7)} and ${wordSelector(R,word5.filter(e => e !== 'carcass of the' && e !== 'shadow of the'))}. The ${wordSelector(R,word2Alt)} ${wordSelector(R,word9)} ${wordSelector(R,word0)} ${wordSelector(R,word1)} ${wordSelector(R,word2)}.`
@@ -43,37 +47,16 @@ export function proseBuilder(R) {
         : `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} turns to the ${wordSelector(R,word2)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}. "${wordSelector(R,phrases)}" they ${wordSelector(R,word11)}.`
 }
 
-export function prose(ctx, string, x, y, maxWidth, fontSize, fill) {
+export function prose(ctx, string, x, y, maxWidth, fontSize) {
     ctx.shadowColor = 'transparent';
     ctx.textAlign = 'center';
     ctx.font = `bold ${fontSize}px serif`;
     ctx.globalCompositeOperation = "source-over";
-    wrapText(ctx, string, x, y, maxWidth, fontSize, fill);
+    wrapText(ctx, string, x, y, maxWidth, fontSize);
 }
 
 // Prose Utilities
-function wrapText(context, text, x, y, maxWidth, fontSize, fill) {
-  // let count = 0;
-  // let chars;
-  // function draw() {
-  //     count ++;
-  //     // Grab all the characters up to count
-  //     chars = text.substr(0, count);
-  //     // context.strokeRect(x, y, maxWidth, fontSize*4);
-  //     context.clearRect(0, y-fontSize, window.innerWidth, fontSize*4);
-  //     // Draw the characters to the canvas
-  //     context.fillStyle = fill;
-  //     context.shadowColor = 'transparent';
-  //     context.globalAlpha = 1;
-  //     context.textAlign = 'center';
-  //     context.font = `bold ${fontSize}px serif`;
-  //     context.globalCompositeOperation = "source-over";
-  //     context.fillText(chars, x, y);
-  //     if (count < text.length){
-  //       requestAnimationFrame(draw)
-  //     }
-  // }
-  // draw();
+function wrapText(context, text, x, y, maxWidth, fontSize) {
 
   const words = text.split(' ');
   let line = '';

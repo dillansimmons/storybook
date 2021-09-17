@@ -110,7 +110,8 @@ export function randomizer(R) {
   const prose = proseBuilder(R);
 
   // Random array used for setting by hash
-  const randomArray = Array.from({length: all}, () => Math.random());
+  const dotsMax = R.random_int(200,1000);
+  const randomArray = Array.from({length: (window.innerWidth * window.innerHeight)}, () => Math.random());
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,9);
 
@@ -155,6 +156,9 @@ export function randomizer(R) {
     countries,
     good,
     bad,
+    noisy: R.random_int(0,2) < 1,
+    noiseFactor: dotsMax,
+    spacing: R.random_between(0.2,1),
     prose,
     int: R.random_int(1,scheme.length - 1),
     randomizer: randomArray
@@ -217,6 +221,9 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     <span>SquarePeg: ${config.squarePeg}</span>
     <span>Behind: ${config.behind}</span>
     <span>Orderly: ${config.orderly}</span>
+    <span>Noisy: ${config.noisy}</span>
+    <span>Spacing: ${config.spacing}</span>
+    <span>Noise Level: ${config.noiseFactor}</span>
     <br/>
     <span>Base: ${base}</span>
     <span>All: ${allDots}</span>
@@ -237,11 +244,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   // ctx.lineWidth = base / 10;
   // ctx.strokeStyle = `#${config.scheme[2]}`
   // ctx.stroke();
-
-  // TESTING ONLY : background stuff
-  // ctx.beginPath();
-  // ctx.fillStyle = `${canvasBg}`;
-  // ctx.fillRect(0, 0, width, height);
 
   // for all our available grid fill in our pegs
   for (let i = 0; i < allDots; i++) {
@@ -332,6 +334,11 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     pointsCopy = pointsCopy.filter((point, i) => i % columnCount === 0);
   }
 
+  // if noisy
+  if (config.noisy) {
+    gridWork(ctx, width, height, midX, midY, config.noiseFactor, config.randomizer, config.spacing);
+  }
+
   // build our prose
   if (showProse) {
     const poem = config.prose;
@@ -347,8 +354,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
       cxStatic + widthMax / 2,
       cy + heightMax - (fontSize * 2),
       widthMax,
-      fontSize,
-      poemFill
+      fontSize
     );
   }
 
@@ -438,17 +444,11 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         case 'Puzzle':
           ctx.globalAlpha = 0.8;
           ctx.shadowColor = fill;
-          ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
-          ctx.shadowOffsetY = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
           if (config.squarePeg) {
-            ctx.arc(
-              config.randomizer[i] < 0.5 ? points[i].x + halfBase : points[i].x - quarterBase,
-              config.randomizer[i] < 0.5 ? points[i].y + quarterBase : points[i].y - quarterBase,
-              base,
-                0, 2 * Math.PI
-            );
-            ctx.arc(points[i].x + halfBase, points[i].y + halfBase, halfBase * .75, 0, 2 * Math.PI);
+            ctx.arc(points[i].x + halfBase, points[i].y + halfBase, base, 0, 2 * Math.PI);
           } else {
+            ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
+            ctx.shadowOffsetY = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
             ctx.rect(
               points[i].x,
               points[i].y,
@@ -691,4 +691,126 @@ function countryFill(ctx, country, num, config) {
     }
   }
   ctx.fillStyle = fill;
+}
+
+/**
+ * TODO:
+ * Function re-use!!!
+ * Make this a config var isNoisy
+ * Remove math.random()
+ */
+ function gridWork(ctx, width, height, midX, midY, noiseFactor, randomizer, spacing) {
+  // the size of the dots based on config
+  const base = Math.floor(width / noiseFactor);
+  const halfBase = base / 2;
+  const quarterBase = halfBase / 2;
+  // how many dots can go on the x axis
+  const columnCount = Math.floor(width);
+  // how many dots can go on the y axis
+  const rowCount = Math.floor(height);
+  // maxes
+  const heightMax = (rowCount * base);
+  const widthMax = (columnCount * base);
+  // all the dots
+  const allDots = columnCount * rowCount;
+  // the x starting point: 1/6 the width
+  const cx = Math.ceil(midX - widthMax / 2);
+  // a static of this cx / used for resets
+  const cxStatic = cx;
+  // the y starting point: 1/6 the height
+  const cy = Math.ceil(midY - heightMax / 2);
+  // the row count / used for grid draw
+  const row = 0;
+
+  gridMaker(ctx, allDots, base, halfBase, quarterBase, row, columnCount, cx, cxStatic, cy, null, null, null, null, randomizer, spacing);
+}
+
+function gridMaker(ctx, allDots, base, halfBase, quarterBase, row, columnCount, cx, cxStatic, cy, config, points, columnFirst, columnLast, randomizer, spacing) {
+    // for all our available grid fill in our pegs
+    for (let i = 0; i < allDots; i++) {
+      // loop through countries and assign color
+      if (config) {
+        config.countries.forEach( country => {
+          countryFill(ctx, country, i, config);
+        })
+      }
+
+      // move the x axis by one dot
+      cx = cx + base;
+      // if the grid is wider than all the pegs that will fit into max columns then reset back to first column
+      if (cx >= Math.floor((columnCount + 1) * base + cxStatic)) {
+        cx = cxStatic + base;
+      }
+
+      // move down a row once we've filled it
+      const rowMax = (columnCount) * row;
+      if (i === rowMax) {
+        row++
+      }
+
+      if (!config) {
+        if (randomizer[i] < spacing) {
+          continue;
+        }
+      }
+
+      // drill the peg
+      ctx.beginPath();
+      if (config) {
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 2;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+      }
+
+      // round of square
+      if (config) {
+        if (config.squarePeg) {
+          ctx.rect(
+            cx - (base * .75) + (config && config.output === 'Multiply' ? quarterBase : 0),
+            (cy + row * base) - (base * .75),
+            (halfBase),
+            (halfBase)
+          );
+        } else {
+          ctx.arc(
+            cx - halfBase + (config.output === 'Multiply' ? quarterBase : 0),
+            (cy + row * base) - halfBase,
+            quarterBase,
+            0,
+            2 * Math.PI,
+            false
+          );
+        }
+      } else {
+        ctx.rect(
+          cx,
+          (cy + row * base),
+          (base),
+          (base)
+        );
+      }
+
+      if (!config) {
+        ctx.shadowBlur = 2;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        ctx.fillStyle = 'hsla(240,100%,0%,0.075)';
+        ctx.fill();
+      } else {
+        // color the peg
+        ctx.fill();
+
+        // push points for later animation values
+        points.push({x: cx - base, y: cy + row * base - base, start: i === columnCount * row});
+
+        // abacus points
+        if (i < columnCount) {
+          columnFirst.push({x: cx - base, y: cy + row * base - base})
+        }
+        if (i > (allDots - columnCount - 1)) {
+          columnLast.push({x: cx - base, y: cy + row * base - base})
+        }
+      }
+    }
 }
