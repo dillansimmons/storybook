@@ -13,6 +13,7 @@ export function proseBuilder(R) {
     const word9 = ['awaits', 'approaches', 'ensnares', 'constricts', 'swallows', 'lies ahead of', 'meets', 'will shake', 'will damage', 'will devour', 'has weakened', 'will enlighten', 'has wounded', 'will cripple', 'haunts', 'enrages', 'hypnotizes' ]
     const word10 = ['him', 'her', 'them'];
     const word11 = ['say', 'scream', 'whisper'];
+    const word12 = ['We\'re both', 'We\'re not', 'You\'re not']
 
     const phrases = [
       'All you had to do was throw the boxing match.',
@@ -22,14 +23,13 @@ export function proseBuilder(R) {
       'I used to be hip.',
       'If heaven has an elevator, I hope our song is playing in it.',
       'Once the relic unlocks, everything will be one.',
-      'Our relationship was a lie.',
+      'The sun is the key sensei.',
       'This puzzle hasn\'t got any corners.',
       'Ten seconds \'til the volcano erupts.',
       'This is one hell of a pickle.',
       'This was avoidable if you\'d returned my postcard.',
-      'We\'re both gonna make it.',
-      'We\'re not gonna make it.',
-      'You\'re not gonna make it.'
+      `${wordSelector(R, word12)} gonna make it.`,
+      `This ${wordSelector(R, word8)} will not be our conclusion...`
     ]
 
     const randomizer = R.random_between(0,1);
@@ -43,7 +43,7 @@ export function proseBuilder(R) {
       ? `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,randomizer > 0.1 ? word2 : word2Alt)} ${wordSelector(R,word3)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} ${wordSelector(R,word10)}.`
       : randomizer > 0.6 ? `The ${wordSelector(R,word6)} is ${wordSelector(R,word7)} and ${wordSelector(R,word5.filter(e => e !== 'carcass of the' && e !== 'shadow of the'))}. The ${wordSelector(R,word2Alt)} ${wordSelector(R,word9)} ${wordSelector(R,word0)} ${wordSelector(R,word1)} ${wordSelector(R,word2)}.`
       : randomizer > 0.4 ? `A ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} and a ${wordSelector(R,word1)} ${wordSelector(R,word2)} pair, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} them.`
-      : randomizer > 0.2 ? `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2)} ${wordSelector(R,word9)} the ${wordSelector(R,word2Alt)}, ${wordSelector(R,word4)} the ${wordSelector(R,word6)} the ${wordSelector(R,word8.filter(word => word !== 'monster'))} appears to end.`
+      : randomizer > 0.2 ? `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2)} ${wordSelector(R,word9)} the ${wordSelector(R,word2Alt)}, ${wordSelector(R,word4)} the ${wordSelector(R,word6)} the ${wordSelector(R,word8.filter(word => word !== 'monster'))} ${wordSelector(R, ['appears to end', 'has just begun', 'comes to pass', 'ends'])}.`
         : `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} turns to the ${wordSelector(R,word2)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}. "${wordSelector(R,phrases)}" they ${wordSelector(R,word11)}.`
 }
 
