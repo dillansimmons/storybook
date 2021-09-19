@@ -1,10 +1,10 @@
 import { prose, proseBuilder } from './prose';
 
 export function randomizer(R) {
-  // peg sizes
+  // peg sizes | 9 & 120 are half as frequent
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   if (R.random_int(1,500) === 99) { sizes.push(3) } // 1/5000 chance of a single dot
-  // outputs //['Magnetic'] //
+  // const outputs = ['Magnetic'];
   const outputs = [
     'Abacus',
     'Tube',
@@ -117,19 +117,24 @@ export function randomizer(R) {
 
   // Cropping
   let cropped = 'none';
-  if ((croppedInt > 3 && croppedInt < 8 && (['Gas','Puzzle', 'Pilled', 'Tube'].includes(output)) || ('Puzzle' === output && size < 90))) {
+  if ((croppedInt > 4 && croppedInt < 8 && (['Gas','Puzzle', 'Pilled', 'Tube'].includes(output)) || ('Puzzle' === output && size < 90) || ('Pilled' === output && size === 9))) {
     cropped = 'square'
   }
-  if (croppedInt === 2 && (['Bubble','Lines','Puzzle', 'Pilled', 'Tube', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
+  if (croppedInt === 3 && (['Bubble','Lines','Puzzle', 'Pilled', 'Tube', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 1 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Diamond', 'Web'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt === 2 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Diamond', 'Web'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt === 0 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Web'].includes(output)) {
-    cropped = R.random_int(0,1) === 1
-      ? 'cross'
-      : 'sando'
+  if (croppedInt >= 1 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Web'].includes(output)) {
+    const croppedNum = R.random_int(0,2);
+      if (croppedNum === 0) {
+        cropped = 'sando'
+      } else if (croppedNum === 1) {
+        cropped = 'cross'
+      } else {
+        cropped = 'post'
+      }
   }
 
   const hyper = R.random_int(0,9) < 1 && ['Burst', 'Gas', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Web'].includes(output); // (1/10 + 4/8) 1/20
@@ -179,6 +184,8 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   const quarterBase = base / 4;
   // half size
   const halfBase = base / 2;
+  // three quarter
+  const threeQuarterBase = base * .75;
   // double size
   const doubleBase = base * 2;
   // how many dots can go on the x axis
@@ -189,7 +196,8 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   const fontSize = columnCount * base / 30 * 1.125;
   // maxes
   const heightMax = (rowCount * base + (showProse ? (fontSize * 1.5) + fontSize * 2 : 0));
-  const widthMax = (columnCount * base);
+  const heightMaxDots = rowCount * base;
+  const widthMax = columnCount * base;
   // all the dots
   const allDots = columnCount * rowCount;
   // the x starting point: 1/6 the width
@@ -275,8 +283,8 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     // round of square
     if (config.squarePeg) {
       ctx.rect(
-        cx - (base * .75) + (config.output === 'Multiply' ? quarterBase : 0),
-        (cy + row * base) - (base * .75),
+        cx - threeQuarterBase + (config.output === 'Multiply' ? quarterBase : 0),
+        (cy + row * base) - threeQuarterBase,
         (halfBase),
         (halfBase)
       );
@@ -363,30 +371,37 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // cropped
   if (config.cropped !== 'none') {
+    const cropSize = base/2.5;
+    const xCrop = columnCount * cropSize;
+    const yCrop = row * cropSize;
     ctx.beginPath();
     switch (config.cropped) {
       case 'square':
-        ctx.rect(cxStatic, cy, widthMax, row * base);
+        ctx.rect(cxStatic, cy, widthMax, heightMaxDots);
         break;
       case 'swept':
         if (config.output === 'Bubble') {
-          ctx.rect(cxStatic - doubleBase, cy - doubleBase, widthMax + halfBase + doubleBase, row * base + doubleBase);
+          ctx.rect(cxStatic - doubleBase, cy - doubleBase, widthMax + halfBase + doubleBase, heightMaxDots + doubleBase);
         } else {
-          ctx.arc(cxStatic, cy, row * base, 0, 2 * Math.PI);
+          ctx.arc(cxStatic, cy, heightMaxDots, 0, 2 * Math.PI);
         }
         break;
       case 'mundi':
-        ctx.arc(cxStatic + (widthMax / 2), cy + (row * halfBase), (row * halfBase) - (config.base < 15 ? doubleBase : base), 0, 2 * Math.PI);
+        ctx.arc(midX, cy + (row * halfBase), (row * (config.size === 9 ?  (base * .66) : halfBase)) - base, 0, 2 * Math.PI);
         break;
       case 'sando':
-        ctx.rect(cxStatic, cy, widthMax, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic, cy + (row * base / 2) + doubleBase * 2, widthMax, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic, cy, widthMax, yCrop);
+        ctx.rect(cxStatic, cy + (heightMaxDots - yCrop), widthMax, yCrop);
         break;
       case 'cross':
-        ctx.rect(cxStatic, cy, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic + (widthMax / 2 + doubleBase * 2) + halfBase, cy, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic, cy + (row * base / 2) + doubleBase * 2, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
-        ctx.rect(cxStatic + (widthMax / 2 + doubleBase * 2) + halfBase, cy + (row * base / 2) + doubleBase * 2, widthMax / 2 - doubleBase * 2 - halfBase, (row * base / 2) - doubleBase * 2);
+        ctx.rect(cxStatic, cy, xCrop, yCrop);
+        ctx.rect(cxStatic + widthMax - xCrop, cy, xCrop, yCrop);
+        ctx.rect(cxStatic, cy + (heightMaxDots - yCrop), xCrop, yCrop);
+        ctx.rect(cxStatic + widthMax - xCrop, cy + (heightMaxDots - yCrop), xCrop, yCrop);
+        break;
+      case 'post':
+        ctx.rect(cxStatic, cy, xCrop, heightMaxDots);
+        ctx.rect(cxStatic + widthMax - xCrop, cy, xCrop, heightMaxDots);
         break;
     }
     ctx.clip();
@@ -394,7 +409,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // if not swept crop special for bubble
   if (config.cropped !== 'swept' && config.output === 'Bubble') {
-    ctx.rect(cxStatic - doubleBase, cy - doubleBase, widthMax + halfBase + doubleBase, row * base + doubleBase);
+    ctx.rect(cxStatic - doubleBase, cy - doubleBase, widthMax + halfBase + doubleBase, heightMaxDots + doubleBase);
     ctx.clip();
   }
 
@@ -483,7 +498,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.fillStyle = 'transparent';
             ctx.shadowColor = fill;
             if (config.squarePeg) {
-              ctx.rect(points[i].x + base * .125, points[i].y + base * .125, base * .75, base * .75);
+              ctx.rect(points[i].x + base * .125, points[i].y + base * .125, threeQuarterBase, threeQuarterBase);
               if (i % 5) {
                 ctx.rect(points[i].x + quarterBase, points[i].y + quarterBase, halfBase, halfBase);
               }
@@ -584,13 +599,13 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           // ctx.stroke();
           break;
 
-          case 'Web':
-            ctx.globalAlpha = 0.75;
-            ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, points[i].x + (base * .375), points[i].y);
-            ctx.rect(0,0,quarterBase,base);
-            ctx.rect(0 - (base * .375),0 +(base * .375),base,quarterBase);
-            break;
+        case 'Web':
+          ctx.globalAlpha = 0.75;
+          ctx.beginPath();
+          ctx.setTransform(1, 0, 0, 1, points[i].x + (base * .375), points[i].y);
+          ctx.rect(0,0,quarterBase,base);
+          ctx.rect(0 - (base * .375),0 +(base * .375),base,quarterBase);
+          break;
 
         case 'Pilled':
           ctx.globalAlpha = 0.75;
@@ -603,17 +618,17 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
           break;
 
-          case 'Tube':
-            ctx.globalAlpha = 0.75;
-            ctx.setTransform(1, 0, 0, 1, points[i].x, points[i].y);
-            // 45 Edition
-            // *.75 to help with rotation
-            // ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
-            // ctx.rotate(45 * Math.PI / 360);
-            ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
-            ctx.rect(0, 0, base, base);
-            ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
-            break;
+        case 'Tube':
+          ctx.globalAlpha = 0.75;
+          ctx.setTransform(1, 0, 0, 1, points[i].x, points[i].y);
+          // 45 Edition
+          // *.75 to help with rotation
+          // ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
+          // ctx.rotate(45 * Math.PI / 360);
+          ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+          ctx.rect(0, 0, base, base);
+          ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+          break;
 
           case 'Diamond':
             ctx.globalAlpha = 0.8;
@@ -696,14 +711,13 @@ function countryFill(ctx, country, num, config) {
 /**
  * TODO:
  * Function re-use!!!
- * Make this a config var isNoisy
- * Remove math.random()
  */
  function gridWork(ctx, width, height, midX, midY, noiseFactor, randomizer, spacing) {
   // the size of the dots based on config
   const base = Math.floor(width / noiseFactor);
   const halfBase = base / 2;
   const quarterBase = halfBase / 2;
+  const threeQuarterBase = base * .75;
   // how many dots can go on the x axis
   const columnCount = Math.floor(width);
   // how many dots can go on the y axis
@@ -722,10 +736,10 @@ function countryFill(ctx, country, num, config) {
   // the row count / used for grid draw
   const row = 0;
 
-  gridMaker(ctx, allDots, base, halfBase, quarterBase, row, columnCount, cx, cxStatic, cy, null, null, null, null, randomizer, spacing);
+  gridMaker(ctx, allDots, base, halfBase, quarterBase, threeQuarterBase, row, columnCount, cx, cxStatic, cy, null, null, null, null, randomizer, spacing);
 }
 
-function gridMaker(ctx, allDots, base, halfBase, quarterBase, row, columnCount, cx, cxStatic, cy, config, points, columnFirst, columnLast, randomizer, spacing) {
+function gridMaker(ctx, allDots, base, halfBase, quarterBase, threeQuarterBase, row, columnCount, cx, cxStatic, cy, config, points, columnFirst, columnLast, randomizer, spacing) {
     // for all our available grid fill in our pegs
     for (let i = 0; i < allDots; i++) {
       // loop through countries and assign color
@@ -767,8 +781,8 @@ function gridMaker(ctx, allDots, base, halfBase, quarterBase, row, columnCount, 
       if (config) {
         if (config.squarePeg) {
           ctx.rect(
-            cx - (base * .75) + (config && config.output === 'Multiply' ? quarterBase : 0),
-            (cy + row * base) - (base * .75),
+            cx - threeQuarterBase + (config && config.output === 'Multiply' ? quarterBase : 0),
+            (cy + row * base) - threeQuarterBase,
             (halfBase),
             (halfBase)
           );
