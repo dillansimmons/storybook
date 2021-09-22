@@ -294,7 +294,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
       poem,
       cxStatic + widthMax / 2,
       cy + heightMax - (fontSize * 2),
-      widthMax,
+      widthMax - quarterBase,
       fontSize
     );
   }
@@ -390,13 +390,14 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           break;
 
         case 'Puzzle':
-          ctx.globalAlpha = 0.8;
           ctx.shadowColor = fill;
           if (config.squarePeg) {
+            ctx.globalAlpha = 0.6;
             ctx.arc(points[i].x + halfBase, points[i].y + halfBase, base, 0, 2 * Math.PI);
           } else {
+            ctx.globalAlpha = config.randomizer[i] > 0.4 ? config.randomizer[i] : 0.8;
             ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
-            ctx.shadowOffsetY = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
+            ctx.shadowOffsetY = config.randomizer[i - 1 ? i-1 : i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
             ctx.rect(
               points[i].x,
               points[i].y,
@@ -417,7 +418,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
         case 'Block':
           ctx.rect(points[i].x, points[i].y, base, base);
-          ctx.globalAlpha = 0.8;
+          ctx.globalAlpha = 0.75;
           break;
 
         case 'Ring':

@@ -121,11 +121,11 @@ document.body.onkeyup = async e => {
 
   // Hide Prose (no subtitles)
   if (e.key === 'p') {
-    if (storage.getItem('no-prose')) {
-      storage.removeItem('no-prose');
+    if (storage.getItem('hide-prose')) {
+      storage.removeItem('hide-prose');
       return;
     }
-    storage.setItem('no-prose', true);
+    storage.setItem('hide-prose', true);
   }
 
   // TESTING ONLY: Remove on import
