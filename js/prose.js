@@ -23,7 +23,7 @@ export function proseBuilder(R) {
       'I used to be hip.',
       'If heaven has an elevator, I hope our song is playing in it.',
       'Once the relic unlocks, everything will be one.',
-      'The sun is the key sensei.',
+      'The sun is the key Sensei.',
       'This puzzle hasn\'t got any corners.',
       'Ten seconds \'til the volcano erupts.',
       'This is one hell of a pickle.',

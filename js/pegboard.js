@@ -173,7 +173,7 @@ export function randomizer(R) {
 // Dots
 export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) {
   // prose or no based on localstorage value / keypress
-  const showProse = window.localStorage.getItem('no-prose') === null ? true : false;
+  const hideProse = window.localStorage.getItem('hide-prose') === null ? false : true;
   const width = canvasWidth;
   const height = canvasHeight;
   const midX = canvasWidth / 2;
@@ -195,19 +195,19 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   // fontsize
   const fontSize = columnCount * base / 30 * 1.125;
   // maxes
-  const heightMax = (rowCount * base + (showProse ? (fontSize * 1.5) + fontSize * 2 : 0));
+  const heightMax = (rowCount * base + (hideProse ? (fontSize * 1.5) + fontSize * 2 : 0));
   const heightMaxDots = rowCount * base;
   const widthMax = columnCount * base;
   // all the dots
   const allDots = columnCount * rowCount;
   // the x starting point: 1/6 the width
-  let cx = Math.ceil(midX - widthMax / 2);
+  const cx = Math.ceil(midX - widthMax / 2);
   // a static of this cx / used for resets
   const cxStatic = cx;
   // the y starting point: 1/6 the height
   const cy = Math.ceil(midY - heightMax / 2);
   // the row count / used for grid draw
-  let row = 0;
+  const row = 0;
   // initial background
   const canvasBg = canvas.style.backgroundColor;
   // empty animated points array
@@ -253,75 +253,8 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   // ctx.strokeStyle = `#${config.scheme[2]}`
   // ctx.stroke();
 
-  // for all our available grid fill in our pegs
-  for (let i = 0; i < allDots; i++) {
-    // loop through countries and assign color
-    config.countries.forEach( country => {
-      countryFill(ctx, country, i, config);
-    })
-
-    // move the x axis by one dot
-    cx = cx + base;
-    // if the grid is wider than all the pegs that will fit into max columns then reset back to first column
-    if (cx >= Math.floor((columnCount + 1) * base + cxStatic)) {
-      cx = cxStatic + base;
-    }
-
-    // move down a row once we've filled it
-    const rowMax = (columnCount) * row;
-    if (i === rowMax) {
-      row++
-    }
-
-    // drill the peg
-    ctx.beginPath();
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 2;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-
-    // round of square
-    if (config.squarePeg) {
-      ctx.rect(
-        cx - threeQuarterBase + (config.output === 'Multiply' ? quarterBase : 0),
-        (cy + row * base) - threeQuarterBase,
-        (halfBase),
-        (halfBase)
-      );
-    } else {
-      ctx.arc(
-        cx - halfBase + (config.output === 'Multiply' ? quarterBase : 0),
-        (cy + row * base) - halfBase,
-        quarterBase,
-        0,
-        2 * Math.PI,
-        false
-      );
-    }
-    // TESTING ONLY: Text helper, grid troubleshooting
-    // if (i < columnCount) {
-    //   ctx.font = 'bold 16px serif';
-    //   ctx.fillText(
-    //     i,
-    //     cx,
-    //     (cy - row * base),
-    //   );
-    // }
-
-    // color the peg
-    ctx.fill();
-
-    // push points for later animation values
-    points.push({x: cx - base, y: cy + row * base - base, start: i === columnCount * row});
-
-    // abacus points
-    if (i < columnCount) {
-      columnFirst.push({x: cx - base, y: cy + row * base - base})
-    }
-    if (i > (allDots - columnCount - 1)) {
-      columnLast.push({x: cx - base, y: cy + row * base - base})
-    }
-  }
+  // Draw the grid of pegs
+  gridMaker(ctx, allDots, base, halfBase, quarterBase, threeQuarterBase, row, columnCount, cx, cxStatic, cy, config, points, columnFirst, columnLast, config.randomizer, 0);
 
   // make a non random copy of points
   let pointsCopy = [...points]; // used for Weave / blocked
@@ -348,7 +281,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   }
 
   // build our prose
-  if (showProse) {
+  if (hideProse) {
     const poem = config.prose;
     const canvasBgHex = rgba2hex(canvasBg).toUpperCase();
     let poemFill = `#${config.scheme[canvasBgHex === '#FFFFFF' ? config.scheme.length - 1 : 0]}`;
@@ -373,7 +306,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   if (config.cropped !== 'none') {
     const cropSize = base/2.5;
     const xCrop = columnCount * cropSize;
-    const yCrop = row * cropSize;
+    const yCrop = rowCount * cropSize;
     ctx.beginPath();
     switch (config.cropped) {
       case 'square':
@@ -387,7 +320,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         }
         break;
       case 'mundi':
-        ctx.arc(midX, cy + (row * halfBase), (row * (config.size === 9 ?  (base * .66) : halfBase)) - base, 0, 2 * Math.PI);
+        ctx.arc(midX, cy + (rowCount * halfBase), (rowCount * (config.size === 9 ?  (base * .66) : halfBase)) - base, 0, 2 * Math.PI);
         break;
       case 'sando':
         ctx.rect(cxStatic, cy, widthMax, yCrop);
@@ -545,7 +478,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.lineCap = 'round';
           ctx.strokeStyle = fill;
 
-          ctx.moveTo(midX, midY - (showProse ? ((fontSize * 1.5 + fontSize * 2) / 2) : 0));
+          ctx.moveTo(midX, midY - (hideProse ? ((fontSize * 1.5 + fontSize * 2) / 2) : 0));
           ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
           ctx.stroke();
           break;
@@ -708,10 +641,7 @@ function countryFill(ctx, country, num, config) {
   ctx.fillStyle = fill;
 }
 
-/**
- * TODO:
- * Function re-use!!!
- */
+// resets new grid for noise in background
  function gridWork(ctx, width, height, midX, midY, noiseFactor, randomizer, spacing) {
   // the size of the dots based on config
   const base = Math.floor(width / noiseFactor);
@@ -739,6 +669,7 @@ function countryFill(ctx, country, num, config) {
   gridMaker(ctx, allDots, base, halfBase, quarterBase, threeQuarterBase, row, columnCount, cx, cxStatic, cy, null, null, null, null, randomizer, spacing);
 }
 
+// lays out noise grid and peg grid
 function gridMaker(ctx, allDots, base, halfBase, quarterBase, threeQuarterBase, row, columnCount, cx, cxStatic, cy, config, points, columnFirst, columnLast, randomizer, spacing) {
     // for all our available grid fill in our pegs
     for (let i = 0; i < allDots; i++) {
