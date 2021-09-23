@@ -173,7 +173,7 @@ export function randomizer(R) {
 // Dots
 export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) {
   // prose or no based on localstorage value / keypress
-  const hideProse = window.localStorage.getItem('hide-prose') === null ? false : true;
+  const hideProse = window.localStorage.getItem('hide-prose') === null ? true : false;
   const width = canvasWidth;
   const height = canvasHeight;
   const midX = canvasWidth / 2;
@@ -575,6 +575,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     // fill event for all
     ctx.fill();
     // the window resizes or the background changes : those signal we've restarted the animation so stop the old ones
+    // && (window.localStorage.getItem('hide-prose') ? true : false) === hideProse
     if (i < points.length - 1 && window.innerWidth === width && window.innerHeight === height && canvasBg === document.querySelector('canvas').style.backgroundColor) {
       // TESTING ONLY : allow no animate
       if (!window.localStorage.getItem('no-animate')) {

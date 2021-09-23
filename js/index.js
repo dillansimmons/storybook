@@ -124,8 +124,10 @@ document.body.onkeyup = async e => {
     if (storage.getItem('hide-prose')) {
       storage.removeItem('hide-prose');
       return;
+      // return resize();
     }
     storage.setItem('hide-prose', true);
+    // return resize();
   }
 
   // TESTING ONLY: Remove on import
