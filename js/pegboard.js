@@ -189,7 +189,7 @@ export function randomizer(R) {
       }
   }
 
-  const hyper = R.random_int(0,1) < 1 && hyperAllow.includes(output); // (1/10 + 4/8) 1/20
+  const hyper = R.random_int(0,3) < 1 && hyperAllow.includes(output); // (1/3 + 4/8) 1/6
   const squarePeg = R.random_int(0,4) < 1; // 1/4
   const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
   const orderly = R.random_int(0,7) < 1 ||  ['Weave', 'Lines', 'Bubble'].includes(output);
