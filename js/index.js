@@ -6,9 +6,10 @@ import { downloadSVG } from './utilities';
 
 // TESTING ONLY : random hash
 function random_hash() {
-  const chars = "0123456789abcdef";
-  let result = '0x';
-  for (let i = 64; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+// i.e. not deterministic!
+  let result = "0x";
+  for (let i = 64; i > 0; --i)
+    result += "0123456789abcdef"[~~(Math.random() * 16)];
   return result;
 }
 

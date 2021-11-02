@@ -4,20 +4,22 @@ export function randomizer(R) {
   // peg sizes | 9 & 120 are half as frequent
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   if (R.random_int(1,500) === 99) { sizes.push(3) } // 1/5000 chance of a single dot
-  // const outputs = ['Magnetic'];
+  // const outputs = ['Acorn'];
   const outputs = [
     'Abacus',
-    'Tube',
+    'Acorn',
     'Block',
     'Bubble',
     'Burst',
     'Diamond',
     'Gas',
+    'Ladder',
     'Lines',
     'Multiply',
     'Pilled',
     'Puzzle',
     'Ring',
+    'Tube',
     'Weave',
     'Web'
   ];
@@ -113,20 +115,70 @@ export function randomizer(R) {
   const dotsMax = R.random_int(200,1000);
   const randomArray = Array.from({length: (window.innerWidth * window.innerHeight)}, () => Math.random());
   const output = R.random_choice(outputs);
-  const croppedInt = R.random_int(0,9);
+  const croppedInt = R.random_int(0,19);
+  const squareCrop = [
+    'Gas',
+    'Pilled',
+    'Puzzle',
+    'Tube'
+  ];
+  const sweptCrop = [
+    'Acrorn',
+    'Bubble',
+    'Diamond',
+    'Lines',
+    'Pilled',
+    'Puzzle',
+    'Tube'
+  ];
+  const mundiCrop = [
+    'Acorn',
+    'Block',
+    'Burst',
+    'Diamond',
+    'Gas',
+    'Ladder',
+    'Lines',
+    'Pilled',
+    'Puzzle',
+    'Tube',
+    'Web'
+  ];
+  const postCrop = [
+    'Block',
+    'Burst',
+    'Gas',
+    'Ladder',
+    'Lines',
+    'Pilled',
+    'Puzzle',
+    'Tube',
+    'Web'
+  ];
+  const hyperAllow = [
+    'Abacus',
+    'Acorn',
+    'Burst',
+    'Diamond',
+    'Gas',
+    'Lines',
+    'Pilled',
+    'Weave',
+    'Web'
+  ];
 
   // Cropping
   let cropped = 'none';
-  if ((croppedInt > 4 && croppedInt < 8 && (['Gas','Puzzle', 'Pilled', 'Tube'].includes(output)) || ('Puzzle' === output && size < 90) || ('Pilled' === output && size === 9))) {
+  if ((croppedInt > 7 && croppedInt < 12 && (squareCrop.includes(output)) || ('Puzzle' === output && size < 90) || ('Pilled' === output && size === 9))) {
     cropped = 'square'
   }
-  if (croppedInt === 3 && (['Bubble','Lines','Puzzle', 'Pilled', 'Tube', 'Diamond'].includes(output) || ('Gas' === output && size > 15))) {
+  if (croppedInt > 5 && croppedInt < 7 && (sweptCrop.includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt === 2 && (['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Diamond', 'Web'].includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt > 2 && croppedInt < 5 && (mundiCrop.includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt >= 1 && (size > 30 && size % 10 !== 5) && ['Puzzle','Gas','Block','Burst','Lines', 'Pilled', 'Tube', 'Web'].includes(output)) {
+  if (croppedInt >= 2 && (size > 30 && size % 10 !== 5) && postCrop.includes(output)) {
     const croppedNum = R.random_int(0,2);
       if (croppedNum === 0) {
         cropped = 'sando'
@@ -137,7 +189,7 @@ export function randomizer(R) {
       }
   }
 
-  const hyper = R.random_int(0,9) < 1 && ['Burst', 'Gas', 'Abacus', 'Weave', 'Lines', 'Pilled', 'Diamond', 'Web'].includes(output); // (1/10 + 4/8) 1/20
+  const hyper = R.random_int(0,1) < 1 && hyperAllow.includes(output); // (1/10 + 4/8) 1/20
   const squarePeg = R.random_int(0,4) < 1; // 1/4
   const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
   const orderly = R.random_int(0,7) < 1 ||  ['Weave', 'Lines', 'Bubble'].includes(output);
@@ -217,6 +269,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // TESTING ONLY: Build controls UI
   const pallete = [];
+  console.log(config.scheme);
   config.scheme.forEach(s => {
     pallete.push(`<span style='background: #${s}'>&nbsp;</span>`)
   })
@@ -519,19 +572,30 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
             ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, widthMax, base + 2 - halfBase);
           break;
 
-        case 'Magnetic':
-          ctx.globalAlpha = 0.5;
-          // ctx.fillStyle = 'transparent';
+        case 'Ladder':
+          ctx.globalAlpha = 0.8;
           ctx.beginPath();
-          // ctx.fillStyle = shadeColor(fill, (i * config.randomizer[i]));
-          ctx.setTransform(1, 0, 0, 1, points[i].x + (base * .375), points[i].y);
-          // ctx.rotate(90 * Math.PI / 360);
-          ctx.rect(0,0,quarterBase,base);
-          ctx.rect(0 - (base * .375),0 +(base * .375),base,quarterBase);
-          // ctx.arc(0, 0, quarterBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
-          // ctx.arc(0, 0, halfBase * config.randomizer[i], halfBase, 0, 2 * Math.PI);
-          // ctx.stroke();
+          ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y + halfBase);
+
+          if (config.squarePeg) {
+            // ctx.rotate(45 * Math.PI / 360);
+            ctx.rect(-halfBase,+quarterBase,halfBase*.75,quarterBase);
+            ctx.rect(-halfBase,-halfBase,halfBase*.75,quarterBase);
+            ctx.rect(quarterBase*.5,+quarterBase,halfBase*.75,quarterBase);
+            ctx.rect(quarterBase*.5,-halfBase,halfBase*.75,quarterBase);
+          } else {
+            ctx.rect(-halfBase,+quarterBase,base,quarterBase);
+            ctx.rect(-halfBase,-halfBase,base,quarterBase);
+          }
           break;
+
+          case 'Acorn':
+            // ctx.globalAlpha = 0.9;
+            ctx.beginPath();
+            ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y + halfBase);
+            ctx.rotate(360 * config.randomizer[i] * Math.PI / 360);
+            ctx.arc(0, 0, halfBase, 0, 1 * Math.PI);
+            break;
 
         case 'Web':
           ctx.globalAlpha = 0.75;
