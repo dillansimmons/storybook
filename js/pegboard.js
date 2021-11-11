@@ -337,9 +337,10 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   if (hideProse) {
     const poem = config.prose;
     const canvasBgHex = rgba2hex(canvasBg).toUpperCase();
-    let poemFill = `#${config.scheme[canvasBgHex === '#FFFFFF' ? config.scheme.length - 1 : 0]}`;
+    const isLight = canvasBgHex === '#FFFFFF' || canvasBgHex === '#F9F4EF';
+    let poemFill = `#${config.scheme[isLight ? config.scheme.length - 1 : 0]}`;
     // account for canvas bg : bg should not be same as text
-    poemFill = (canvasBgHex === poemFill) ? (canvasBgHex === '#FFFFFF') ? '#000000' : '#FFFFFF' : poemFill;
+    poemFill = (canvasBgHex === poemFill) ? isLight ? '#000000' : '#FFFFFF' : poemFill;
     ctx.fillStyle = poemFill;
 
     prose(

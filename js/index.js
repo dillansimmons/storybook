@@ -40,7 +40,7 @@ class Random {
 }
 
 const R = new Random(seed);
-const backgrounds = ['111', '222', 'fff'];
+const backgrounds = ['111', '222', 'fff', 'f9f4ef'];
 const canvas = document.getElementById("canvas");
 const seedContainer = document.getElementById('seed');
 const c = canvas.getContext('2d');
