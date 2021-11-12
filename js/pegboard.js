@@ -269,7 +269,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // TESTING ONLY: Build controls UI
   const pallete = [];
-  console.log(config.scheme);
   config.scheme.forEach(s => {
     pallete.push(`<span style='background: #${s}'>&nbsp;</span>`)
   })
