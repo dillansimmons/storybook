@@ -8,6 +8,7 @@ export function randomizer(R) {
   const outputs = [
     'Abacus',
     'Acorn',
+    'Bit',
     'Block',
     'Bubble',
     'Burst',
@@ -17,8 +18,8 @@ export function randomizer(R) {
     'Lines',
     'Multiply',
     'Pilled',
-    'Puzzle',
     'Ring',
+    'Stamp',
     'Tube',
     'Weave',
     'Web'
@@ -45,6 +46,8 @@ export function randomizer(R) {
     { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
     { BigCircus: ['FFFF00', 'FFD700', 'FFA800', 'FF6F25', 'FF0053', 'FF007E', 'FF00AC', 'DE00D9', '7300FF'] },
     { HirstLike: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
+    { DownBelow: ['DDF8D0', 'A0F5C6', '7FE3DC', '62AADD', '5463D9', '5429C2', '3A1E7E', '1F123A', '000000'] },
+    { MoreBauha: ['FFFFFF', 'ECDDBE', 'F1CA00', 'AD6D37', 'EA1F25', '91144E', '3E4DB4', '4F186B', '1A1616'] },
     // 10 color schemes
     { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
     { MiamiNight: ['4CC9F0', '4895EF', 'F72585', '4361EE', 'B5179E', '3F37C9', '7209B7', '560BAD', '3A0CA3', '480CA8'] },
@@ -117,21 +120,24 @@ export function randomizer(R) {
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,19);
   const squareCrop = [
+    "Bit",
     'Gas',
     'Pilled',
-    'Puzzle',
+    'Stamp',
     'Tube'
   ];
   const sweptCrop = [
+    "Bit",
     'Acrorn',
     'Bubble',
     'Diamond',
     'Lines',
     'Pilled',
-    'Puzzle',
+    'Stamp',
     'Tube'
   ];
   const mundiCrop = [
+    "Bit",
     'Acorn',
     'Block',
     'Burst',
@@ -140,18 +146,19 @@ export function randomizer(R) {
     'Ladder',
     'Lines',
     'Pilled',
-    'Puzzle',
+    'Stamp',
     'Tube',
     'Web'
   ];
   const postCrop = [
+    "Bit",
     'Block',
     'Burst',
     'Gas',
     'Ladder',
     'Lines',
     'Pilled',
-    'Puzzle',
+    'Stamp',
     'Tube',
     'Web'
   ];
@@ -169,7 +176,7 @@ export function randomizer(R) {
 
   // Cropping
   let cropped = 'none';
-  if ((croppedInt > 7 && croppedInt < 12 && (squareCrop.includes(output)) || ('Puzzle' === output && size < 90) || ('Pilled' === output && size === 9))) {
+  if ((croppedInt > 7 && croppedInt < 12 && (squareCrop.includes(output)) || ('Stamp' === output && size < 90) || ('Bit' === output && size < 90) || ('Pilled' === output && size === 9))) {
     cropped = 'square'
   }
   if (croppedInt > 5 && croppedInt < 7 && (sweptCrop.includes(output) || ('Gas' === output && size > 15))) {
@@ -424,6 +431,131 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
     if (points[i]) {
       switch(config.output) {
 
+        case 'Abacus':
+          if (columnFirst.filter(point => (point.x === points[i].x))) {
+            ctx.beginPath();
+            ctx.fillStyle = 'transparent';
+            ctx.shadowColor = fill;
+            ctx.globalAlpha = 0.15;
+            ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? halfBase : -halfBase;
+            ctx.shadowOffsetY = config.randomizer[i + 1 ? i + 1 : i] > 0.5 ? halfBase : -halfBase;
+            ctx.lineWidth = base / 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = fill;
+            const first = columnFirst.filter(point => point.x === points[i].x);
+            const last = columnLast.filter(point => point.x === points[i].x)
+
+            ctx.moveTo(first[0].x + halfBase, first[0].y + halfBase);
+            ctx.lineTo(last[0].x + halfBase, last[0].y + halfBase);
+
+            ctx.stroke();
+          }
+          break;
+
+        case 'Acorn':
+          // ctx.globalAlpha = 0.9;
+          ctx.beginPath();
+          ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y + halfBase);
+          ctx.rotate(360 * config.randomizer[i] * Math.PI / 360);
+          ctx.arc(0, 0, halfBase, 0, 1 * Math.PI);
+          break;
+
+        case 'Bit':
+          ctx.globalAlpha = 0.8;
+          ctx.shadowColor = fill;
+          ctx.shadowOffsetX = config.randomizer[2] < 0.5 ? halfBase : -halfBase;
+          ctx.shadowOffsetY = config.randomizer[3] < 0.5 ? halfBase : -halfBase;
+          if (config.squarePeg) {
+            ctx.rect(
+              points[i].x,
+              points[i].y,
+              config.randomizer[[i]] < 0.5
+                ? base : config.randomizer[[i]] < 0.25
+                ? doubleBase : base * 2.5,
+              config.randomizer[[i]] < 0.5
+                ? base : config.randomizer[i + 1 ? i + 1 : i - 1] < 0.25
+                ? doubleBase : base * 2.5
+            );
+          } else {
+            ctx.rect(
+              points[i].x,
+              points[i].y,
+              base,
+              base
+            );
+          }
+          break;
+
+        case 'Block':
+          ctx.rect(points[i].x, points[i].y, base, base);
+          ctx.globalAlpha = 0.75;
+          break;
+
+        case 'Bubble':
+          ctx.globalAlpha = 0.8;
+          if (config.size <= 15) {
+                ctx.rect(pointsCopy[i].x, pointsCopy[i].y, base, base);
+                ctx.arc(pointsCopy[i].x + quarterBase, pointsCopy[i].y + quarterBase, halfBase, 0, 2 * Math.PI);
+          } else {
+            ctx.rect(pointsCopy[i].x, pointsCopy[i].y, doubleBase * 2.5, doubleBase * 2.5);
+            ctx.arc(pointsCopy[i].x + doubleBase * .75, pointsCopy[i].y + doubleBase * .75, (doubleBase * 1.25), 0, 2 * Math.PI);
+          }
+          break;
+
+        case 'Burst':
+          ctx.beginPath();
+          ctx.fillStyle = 'transparent';
+          ctx.shadowColor = 'transparent';
+          ctx.globalAlpha = 0.2;
+          ctx.shadowOffsetX = config.randomizer[9] < 0.5 ? halfBase : -halfBase;
+          ctx.shadowOffsetY = config.randomizer[10] < 0.5 ? halfBase : -halfBase;
+          ctx.lineWidth = base / 5;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = fill;
+
+          ctx.moveTo(midX, midY - (hideProse ? ((fontSize * 1.5 + fontSize * 2) / 2) : 0));
+          ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
+          ctx.stroke();
+          break;
+
+        case 'Diamond':
+          ctx.globalAlpha = 0.8;
+          ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y - quarterBase);
+          ctx.rotate(90 * Math.PI / 360);
+          ctx.rect(0, 0, base, base);
+          break;
+
+        case 'Gas':
+          ctx.globalAlpha = 0.4;
+          ctx.shadowColor = fill;
+          ctx.shadowBlur = base * blurArray[Math.floor(config.randomizer[i] * blurArray.length)];
+          ctx.shadowOffsetY = width // + (config.randomizer[i] < 0.5 ? base : -base);
+          ctx.rect(points[i].x, points[i].y - width, base, base);
+          ctx.fill();
+          break;
+
+        case 'Ladder':
+          ctx.globalAlpha = 0.8;
+          ctx.beginPath();
+          ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y + halfBase);
+
+          if (config.squarePeg) {
+            // ctx.rotate(45 * Math.PI / 360);
+            ctx.rect(-halfBase,+quarterBase,halfBase*.75,quarterBase);
+            ctx.rect(-halfBase,-halfBase,halfBase*.75,quarterBase);
+            ctx.rect(quarterBase*.5,+quarterBase,halfBase*.75,quarterBase);
+            ctx.rect(quarterBase*.5,-halfBase,halfBase*.75,quarterBase);
+          } else {
+            ctx.rect(-halfBase,+quarterBase,base,quarterBase);
+            ctx.rect(-halfBase,-halfBase,base,quarterBase);
+          }
+          break;
+
+        case 'Lines':
+          ctx.globalAlpha = 0.75;
+          ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, widthMax, base + 2 - halfBase);
+          break;
+
         case 'Multiply':
           // multiply
           if (config.squarePeg) {
@@ -442,36 +574,15 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           // }
           break;
 
-        case 'Puzzle':
-          ctx.shadowColor = fill;
-          if (config.squarePeg) {
-            ctx.globalAlpha = 0.6;
-            ctx.arc(points[i].x + halfBase, points[i].y + halfBase, base, 0, 2 * Math.PI);
-          } else {
-            ctx.globalAlpha = config.randomizer[i] > 0.4 ? config.randomizer[i] : 0.8;
-            ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
-            ctx.shadowOffsetY = config.randomizer[i - 1 ? i-1 : i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
-            ctx.rect(
-              points[i].x,
-              points[i].y,
-              base,
-              base
-            );
-          }
-          break;
-
-        case 'Gas':
-          ctx.globalAlpha = 0.4;
-          ctx.shadowColor = fill;
-          ctx.shadowBlur = base * blurArray[Math.floor(config.randomizer[i] * blurArray.length)];
-          ctx.shadowOffsetY = width // + (config.randomizer[i] < 0.5 ? base : -base);
-          ctx.rect(points[i].x, points[i].y - width, base, base);
-          ctx.fill();
-          break;
-
-        case 'Block':
-          ctx.rect(points[i].x, points[i].y, base, base);
+        case 'Pilled':
           ctx.globalAlpha = 0.75;
+          // 45 Edition
+          // *.75 to help with rotation
+          ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
+          ctx.rotate(45 * Math.PI / 360);
+          ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+          ctx.rect(0, 0, base, base);
+          ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
           break;
 
         case 'Ring':
@@ -500,41 +611,34 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           }
           break;
 
-        case 'Abacus':
-          if (columnFirst.filter(point => (point.x === points[i].x))) {
-            ctx.beginPath();
-            ctx.fillStyle = 'transparent';
-            ctx.shadowColor = fill;
-            ctx.globalAlpha = 0.15;
-            ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? halfBase : -halfBase;
-            ctx.shadowOffsetY = config.randomizer[i + 1 ? i + 1 : i] > 0.5 ? halfBase : -halfBase;
-            ctx.lineWidth = base / 5;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = fill;
-            const first = columnFirst.filter(point => point.x === points[i].x);
-            const last = columnLast.filter(point => point.x === points[i].x)
-
-            ctx.moveTo(first[0].x + halfBase, first[0].y + halfBase);
-            ctx.lineTo(last[0].x + halfBase, last[0].y + halfBase);
-
-            ctx.stroke();
+        case 'Stamp':
+          ctx.shadowColor = fill;
+          if (config.squarePeg) {
+            ctx.globalAlpha = 0.6;
+            ctx.arc(points[i].x + halfBase, points[i].y + halfBase, base, 0, 2 * Math.PI);
+          } else {
+            ctx.globalAlpha = config.randomizer[i] > 0.4 ? config.randomizer[i] : 0.8;
+            ctx.shadowOffsetX = config.randomizer[i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
+            ctx.shadowOffsetY = config.randomizer[i - 1 ? i-1 : i] < 0.5 ? doubleBase * config.randomizer[i] : -doubleBase * config.randomizer[i];
+            ctx.rect(
+              points[i].x,
+              points[i].y,
+              base,
+              base
+            );
           }
           break;
 
-        case 'Burst':
-          ctx.beginPath();
-          ctx.fillStyle = 'transparent';
-          ctx.shadowColor = 'transparent';
-          ctx.globalAlpha = 0.2;
-          ctx.shadowOffsetX = config.randomizer[9] < 0.5 ? halfBase : -halfBase;
-          ctx.shadowOffsetY = config.randomizer[10] < 0.5 ? halfBase : -halfBase;
-          ctx.lineWidth = base / 5;
-          ctx.lineCap = 'round';
-          ctx.strokeStyle = fill;
-
-          ctx.moveTo(midX, midY - (hideProse ? ((fontSize * 1.5 + fontSize * 2) / 2) : 0));
-          ctx.lineTo(points[i].x + halfBase, points[i].y + halfBase);
-          ctx.stroke();
+        case 'Tube':
+          ctx.globalAlpha = 0.75;
+          ctx.setTransform(1, 0, 0, 1, points[i].x, points[i].y);
+          // 45 Edition
+          // *.75 to help with rotation
+          // ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
+          ctx.rotate(45 * Math.PI / 360);
+          ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
+          ctx.rect(0, 0, base, base);
+          ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
           break;
 
         case 'Weave':
@@ -556,47 +660,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           }
           break;
 
-        case 'Bubble':
-          ctx.globalAlpha = 0.8;
-          if (config.size <= 15) {
-                ctx.rect(pointsCopy[i].x, pointsCopy[i].y, base, base);
-                ctx.arc(pointsCopy[i].x + quarterBase, pointsCopy[i].y + quarterBase, halfBase, 0, 2 * Math.PI);
-            break;
-          }
-            ctx.rect(pointsCopy[i].x, pointsCopy[i].y, doubleBase * 2.5, doubleBase * 2.5);
-            ctx.arc(pointsCopy[i].x + doubleBase * .75, pointsCopy[i].y + doubleBase * .75, (doubleBase * 1.25), 0, 2 * Math.PI);
-          break;
-
-        case 'Lines':
-            ctx.globalAlpha = 0.75;
-            ctx.rect(pointsCopy[i].x, pointsCopy[i].y + quarterBase, widthMax, base + 2 - halfBase);
-          break;
-
-        case 'Ladder':
-          ctx.globalAlpha = 0.8;
-          ctx.beginPath();
-          ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y + halfBase);
-
-          if (config.squarePeg) {
-            // ctx.rotate(45 * Math.PI / 360);
-            ctx.rect(-halfBase,+quarterBase,halfBase*.75,quarterBase);
-            ctx.rect(-halfBase,-halfBase,halfBase*.75,quarterBase);
-            ctx.rect(quarterBase*.5,+quarterBase,halfBase*.75,quarterBase);
-            ctx.rect(quarterBase*.5,-halfBase,halfBase*.75,quarterBase);
-          } else {
-            ctx.rect(-halfBase,+quarterBase,base,quarterBase);
-            ctx.rect(-halfBase,-halfBase,base,quarterBase);
-          }
-          break;
-
-          case 'Acorn':
-            // ctx.globalAlpha = 0.9;
-            ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y + halfBase);
-            ctx.rotate(360 * config.randomizer[i] * Math.PI / 360);
-            ctx.arc(0, 0, halfBase, 0, 1 * Math.PI);
-            break;
-
         case 'Web':
           ctx.globalAlpha = 0.75;
           ctx.beginPath();
@@ -604,36 +667,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
           ctx.rect(0,0,quarterBase,base);
           ctx.rect(0 - (base * .375),0 +(base * .375),base,quarterBase);
           break;
-
-        case 'Pilled':
-          ctx.globalAlpha = 0.75;
-          // 45 Edition
-          // *.75 to help with rotation
-          ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
-          ctx.rotate(45 * Math.PI / 360);
-          ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
-          ctx.rect(0, 0, base, base);
-          ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
-          break;
-
-        case 'Tube':
-          ctx.globalAlpha = 0.75;
-          ctx.setTransform(1, 0, 0, 1, points[i].x, points[i].y);
-          // 45 Edition
-          // *.75 to help with rotation
-          // ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
-          // ctx.rotate(45 * Math.PI / 360);
-          ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
-          ctx.rect(0, 0, base, base);
-          ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
-          break;
-
-          case 'Diamond':
-            ctx.globalAlpha = 0.8;
-            ctx.setTransform(1, 0, 0, 1, points[i].x + halfBase, points[i].y - quarterBase);
-            ctx.rotate(90 * Math.PI / 360);
-            ctx.rect(0, 0, base, base);
-            break;
         }
       }
     // fill event for all
