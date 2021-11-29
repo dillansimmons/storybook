@@ -18,17 +18,17 @@ export function proseBuilder(R) {
     const yearLeader = `The year is ${R.random_int(1900,2021)}. `;
 
     const phrases = [
-      'All you had to do was throw the boxing match.',
       'Ain\'t it big enough for us both in this town?',
+      'All you had to do was throw the boxing match.',
       'God it is strange to see you again.',
       'I don\'t think we can Fonzie our way out of this one.',
+      'I used all the bullets on trick shots.',
       'I used to be hip.',
       'If heaven has an elevator, I hope our song is playing in it.',
       'Once the relic unlocks, everything will be one.',
-      'The sun is the key Sensei.',
-      'This puzzle hasn\'t got any corners.',
       'Ten seconds \'til the volcano erupts.',
       'This is one hell of a pickle.',
+      'This puzzle hasn\'t got any corners.',
       'This was avoidable if you\'d returned my postcard.',
       `${wordSelector(R, word12)} gonna make it.`,
       `This ${wordSelector(R, word8)} will not be our conclusion...`

@@ -4,7 +4,7 @@ export function randomizer(R) {
   // peg sizes | 9 & 120 are half as frequent
   const sizes = [9, 15, 30, 45, 60, 75, 90, 105, 120];
   if (R.random_int(1,500) === 99) { sizes.push(3) } // 1/5000 chance of a single dot
-  // const outputs = ['Acorn'];
+  // const outputs = ['Tube'];
   const outputs = [
     'Abacus',
     'Acorn',
@@ -115,7 +115,7 @@ export function randomizer(R) {
   const prose = proseBuilder(R);
 
   // Random array used for setting by hash
-  const dotsMax = R.random_int(200,1000);
+  const dotsMax = R.random_int(500,1000);
   const randomArray = Array.from({length: (window.innerWidth * window.innerHeight)}, () => Math.random());
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,19);
@@ -176,16 +176,16 @@ export function randomizer(R) {
 
   // Cropping
   let cropped = 'none';
-  if ((croppedInt > 7 && croppedInt < 12 && (squareCrop.includes(output)) || ('Stamp' === output && size < 90) || ('Bit' === output && size < 90) || ('Pilled' === output && size === 9))) {
+  if ((croppedInt >= 9 && croppedInt < 14 && (squareCrop.includes(output)) || ('Stamp' === output && size < 90) || ('Bit' === output && (size < 90 || squarePeg)) || ('Pilled' === output && size === 9))) {
     cropped = 'square'
   }
-  if (croppedInt > 5 && croppedInt < 7 && (sweptCrop.includes(output) || ('Gas' === output && size > 15))) {
+  if (croppedInt >= 6 && croppedInt < 9 && (sweptCrop.includes(output) || ('Gas' === output && size > 15))) {
     cropped = 'swept'
   }
-  if (croppedInt > 2 && croppedInt < 5 && (mundiCrop.includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
+  if (croppedInt >= 3 && croppedInt < 6 && (mundiCrop.includes(output) || (['Multiply','Abacus'].includes(output) && size > 30) || ('Ring' === output && size > 90))) {
     cropped = 'mundi'
   }
-  if (croppedInt >= 2 && (size > 30 && size % 10 !== 5) && postCrop.includes(output)) {
+  if (croppedInt < 3 && (size > 30 && size % 10 !== 5) && postCrop.includes(output)) {
     const croppedNum = R.random_int(0,2);
       if (croppedNum === 0) {
         cropped = 'sando'
@@ -211,6 +211,7 @@ export function randomizer(R) {
     // mundi 1/10 + (1/2 || 1/4 + 1/3 || 1/8 + 2/9)
     // none ???
     cropped,
+    croppedInt,
     behind, // 1/3
     orderly, // 1/8
     hyper, // 3/80
@@ -220,7 +221,7 @@ export function randomizer(R) {
     countries,
     good,
     bad,
-    noisy: R.random_int(0,2) < 1,
+    noisy: R.random_int(0,3) === 3,
     noiseFactor: dotsMax,
     spacing: R.random_between(0.2,1),
     prose,
@@ -283,7 +284,7 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
   `
     <span>Output: ${config.output}</span>
     <span>Size: ${config.size}</span>
-    <span>Cropped: ${config.cropped}</span>
+    <span>Cropped: ${config.cropped} | ${config.croppedInt}</span>
     <span>Hyper: ${config.hyper}</span>
     <span>SquarePeg: ${config.squarePeg}</span>
     <span>Behind: ${config.behind}</span>
@@ -462,6 +463,9 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
         case 'Bit':
           ctx.globalAlpha = 0.8;
+          if (config.size <= 15) {
+            ctx.globalAlpha = 1;
+          }
           ctx.shadowColor = fill;
           ctx.shadowOffsetX = config.randomizer[2] < 0.5 ? halfBase : -halfBase;
           ctx.shadowOffsetY = config.randomizer[3] < 0.5 ? halfBase : -halfBase;
@@ -632,10 +636,6 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
         case 'Tube':
           ctx.globalAlpha = 0.75;
           ctx.setTransform(1, 0, 0, 1, points[i].x, points[i].y);
-          // 45 Edition
-          // *.75 to help with rotation
-          // ctx.setTransform(1, 0, 0, 1, points[i].x + quarterBase, points[i].y - quarterBase *.75);
-          ctx.rotate(45 * Math.PI / 360);
           ctx.arc(0, 0 + halfBase, halfBase, 0, 2 * Math.PI);
           ctx.rect(0, 0, base, base);
           ctx.arc(0 + base, 0 + halfBase, halfBase, 0, 2 * Math.PI);
