@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 export async function screenshots() {
   const url = 'http://localhost:1234/'; // local server url where your project is running
   const numberOfScreenshots = 100; // how many screenshots to take
-  const animationDelay = 22000; // how long to wait for animation / reload to run in ms
+  const animationDelay = 45000; // how long to wait for animation / reload to run in ms
 
   // log how long it will take
   console.log(`⌚ This will take roughly ${msToMinutes(numberOfScreenshots * animationDelay)} minutes to complete.`)
