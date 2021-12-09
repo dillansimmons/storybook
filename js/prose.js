@@ -13,7 +13,8 @@ export function proseBuilder(R) {
     const word9 = ['awaits', 'approaches', 'ensnares', 'constricts', 'swallows', 'lies ahead of', 'meets', 'will shake', 'will damage', 'will devour', 'has weakened', 'will enlighten', 'has wounded', 'will cripple', 'haunts', 'enrages', 'hypnotizes' ]
     const word10 = ['him', 'her', 'them'];
     const word11 = ['say', 'scream', 'whisper'];
-    const word12 = ['We\'re both', 'We\'re not', 'You\'re not']
+    const ngmi = ['We\'re both', 'We\'re not', 'You\'re not']
+    const sentientThings = ['artwork', 'flowers', 'island', 'machine', 'sculptures', 'storm system']
 
     const yearLeader = `The year is ${R.random_int(1900,2021)}. `;
 
@@ -21,17 +22,20 @@ export function proseBuilder(R) {
       'Ain\'t it big enough for us both in this town?',
       'All you had to do was throw the boxing match.',
       'God it is strange to see you again.',
-      'I don\'t think we can Fonzie our way out of this one.',
+      `I don't think we can ${wordSelector(R, ['bluff', 'Fonzie', 'shoot', 'sweet talk'])} our way out of this one.`,
       'I used all the bullets on trick shots.',
       'I used to be hip.',
       'If heaven has an elevator, I hope our song is playing in it.',
       'Once the relic unlocks, everything will be one.',
       'Ten seconds \'til the volcano erupts.',
-      'This is one hell of a pickle.',
+      `The ${wordSelector(R, sentientThings)} has become sentient`,
+      `The rest of our ${wordSelector(R, ['cohorts', 'comrades', 'contemporaries', 'crew', 'friends', 'generation'])} have returned to the earth`,
+      `This is one hell of a ${wordSelector(R, ['jam', 'pickle'])}.`,
       'This puzzle hasn\'t got any corners.',
       'This was avoidable if you\'d returned my postcard.',
-      `${wordSelector(R, word12)} gonna make it.`,
-      `This ${wordSelector(R, word8)} will not be our conclusion...`
+      'This was the consequence of surrounding oursleves with yes men.',
+      `This ${wordSelector(R, word8)} will not be our conclusion...`,
+      `${wordSelector(R, ngmi)} gonna make it.`
     ]
 
     const randomizer = R.random_between(0,1);
