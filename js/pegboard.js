@@ -27,37 +27,40 @@ export function randomizer(R) {
     // colors
   const schemes = [
     // 3 color scheme
+    { Coo: ['DDD1C7', '0F2D2F', '5F8585'] },
+    { Fry: ['F6A30C', 'EB5900', 'F6220C'] },
+    { Goo: ['CBF611', '11F67D', '34EB1C'] },
     { Mon: ['ffffff', '222222', '111111'] },
     { Pie: ['22B1F6', '7522F6', '2C49EB'] },
-    { Goo: ['CBF611', '11F67D', '34EB1C'] },
-    { Fry: ['F6A30C', 'EB5900', 'F6220C'] },
     // 5 color scheme
-    { Sumer: ['EEEEEE', 'D4B483', '48A9A6', '4281A4', 'C1666B'] },
     { Bluby: ['E7E6F7', 'E3D0D8', 'C6D2ED', 'AEA3B0', '827081'] },
+    { Cntry: ['FFFFFF', 'FFD5C2', 'F28F3B', '588B8B', 'C8553D'] },
+    { Flame: ['E04B00', 'F57E00', 'F59700', 'FFD399', 'FFFFFF'] },
+    { Hydro: ['55DDE0', 'F6AE2D', 'F26419', '33658A', '2F4858'] },
+    { Jazzz: ['EEF8FF', 'D1F5FF', '78E3FD', '34F6F2', '7D53DE'] },
+    { Lilac: ['CBF3D2', 'B7C0EE', '7067CF', '7B287D', '330C2F'] },
     { Merca: ['EBEBEB', 'C0C0C0', '3A6EA5', 'B32134', '004E98'] },
     { Moody: ['CBF7ED', '8EA8C3', '406E8E', '23395B', '161925'] },
-    { Hydro: ['55DDE0', 'F6AE2D', 'F26419', '33658A', '2F4858'] },
-    { Lilac: ['CBF3D2', 'B7C0EE', '7067CF', '7B287D', '330C2F'] },
-    { Cntry: ['FFFFFF', 'FFD5C2', 'F28F3B', '588B8B', 'C8553D'] },
+    { Sumer: ['EEEEEE', 'D4B483', '48A9A6', '4281A4', 'C1666B'] },
     { Zombi: ['8DAA91', '788475', '5E5D5C', '453643', '28112B'] },
-    { Jazzz: ['EEF8FF', 'D1F5FF', '78E3FD', '34F6F2', '7D53DE'] },
     // 9 color scheme
-    { OnThePond: ['2498FF', '0091E2', '0086BF', '00789A', '006977', '005A57', '044A3E', '1A3A2B', '1E2B1E' ] },
-    { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
     { BigCircus: ['FFFF00', 'FFD700', 'FFA800', 'FF6F25', 'FF0053', 'FF007E', 'FF00AC', 'DE00D9', '7300FF'] },
-    { HirstLike: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
     { DownBelow: ['DDF8D0', 'A0F5C6', '7FE3DC', '62AADD', '5463D9', '5429C2', '3A1E7E', '1F123A', '000000'] },
+    { FrogHound: ['D8F3DC', 'B7E4C7', '95D5B2', '74C69D', '52B788', '40916C', '2D6A4F', '1B4332', '081C15'] },
+    { HirstLike: ['A8CCE6', 'EFC6CC', 'FBD601', '1BB6A0', 'E84B18', 'AD497F', 'C73331', 'C12049', '3D3E6E'] },
     { MoreBauha: ['FFFFFF', 'ECDDBE', 'F1CA00', 'AD6D37', 'EA1F25', '91144E', '3E4DB4', '4F186B', '1A1616'] },
+    { OnThePond: ['2498FF', '0091E2', '0086BF', '00789A', '006977', '005A57', '044A3E', '1A3A2B', '1E2B1E'] },
+    { SirenBoom: ['0091AD', '1780A1', '2E6F95', '455E89', 'B7094C', '5C4D7D', 'A01A58', '723C70', '892B64'] },
     // 10 color schemes
-    { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
-    { MiamiNight: ['4CC9F0', '4895EF', 'F72585', '4361EE', 'B5179E', '3F37C9', '7209B7', '560BAD', '3A0CA3', '480CA8'] },
-    { NewGermany: ['FFBA08', 'FAA307', 'F48C06', 'E85D04', 'DC2F02', 'D00000', '9D0208', '6A040F', '370617', '03071E'] },
     { BigToyland: ['F9C74F', '90BE6D', 'F8961E', 'F9844A', '43AA8B', '4D908E', 'F3722C', '577590', '277DA1', 'F94144'] },
     { Blueliners: ['A9D6E5', '89C2D9', '61A5C2', '468FAF', '2C7DA0', '2A6F97', '014F86', '01497C', '013A63', '012A4A'] },
-    { RedSkyDawn: ['E01E37', 'DA1E37', 'C71F37', 'BD1F36', 'B21E35', 'A11D33', 'A71E34', '85182A', '6E1423', '641220'] },
-    { RainbowMad: ['0AEFFF', '0AFF99', 'FFD300', 'DEFF0A', 'A1FF0A', 'FF8700', '147DF5', 'FF0000', 'BE0AFF', '580AFF'] },
     { Candymaker: ['B9E769', 'EFEA5A', 'F1C453', '83E377', '16DB93', 'F29E4C', '0DB39E', '048BA8', '2C699A', '54478C'] },
-    { MartianDay: ['B76935', 'A56336', '935E38', '815839', '6F523B', '5C4D3C', '4A473E', '38413F', '263C41', '143642'] }
+    { MartianDay: ['B76935', 'A56336', '935E38', '815839', '6F523B', '5C4D3C', '4A473E', '38413F', '263C41', '143642'] },
+    { MiamiNight: ['4CC9F0', '4895EF', 'F72585', '4361EE', 'B5179E', '3F37C9', '7209B7', '560BAD', '3A0CA3', '480CA8'] },
+    { NeonLizard: ['FFFF3F', 'EEEF20', 'DDDF00', 'D4D700', 'BFD200', 'AACC00', '80B918', '55A630', '2B9348', '007F5F'] },
+    { NewGermany: ['FFBA08', 'FAA307', 'F48C06', 'E85D04', 'DC2F02', 'D00000', '9D0208', '6A040F', '370617', '03071E'] },
+    { RainbowMad: ['0AEFFF', '0AFF99', 'FFD300', 'DEFF0A', 'A1FF0A', 'FF8700', '147DF5', 'FF0000', 'BE0AFF', '580AFF'] },
+    { RedSkyDawn: ['E01E37', 'DA1E37', 'C71F37', 'BD1F36', 'B21E35', 'A11D33', 'A71E34', '85182A', '6E1423', '641220'] }
   ];
   const schemeObj = R.random_choice(schemes);
   const schemeName = Object.keys(schemeObj)[0];
@@ -119,6 +122,11 @@ export function randomizer(R) {
   const randomArray = Array.from({length: (window.innerWidth * window.innerHeight)}, () => Math.random());
   const output = R.random_choice(outputs);
   const croppedInt = R.random_int(0,19);
+
+  const squarePeg = R.random_int(0,4) < 1; // 1/4
+  const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
+  const orderly = R.random_int(0,7) < 1 ||  ['Weave', 'Lines', 'Bubble'].includes(output);
+
   const squareCrop = [
     "Bit",
     'Gas',
@@ -174,6 +182,8 @@ export function randomizer(R) {
     'Web'
   ];
 
+  const hyper = R.random_int(0,3) < 1 && hyperAllow.includes(output); // (1/3 + 4/8) 1/6
+
   // Cropping
   let cropped = 'none';
   if ((croppedInt >= 9 && croppedInt < 14 && (squareCrop.includes(output)) || ('Stamp' === output && size < 90) || ('Bit' === output && (size < 90 || squarePeg)) || ('Pilled' === output && size === 9))) {
@@ -195,11 +205,6 @@ export function randomizer(R) {
         cropped = 'post'
       }
   }
-
-  const hyper = R.random_int(0,3) < 1 && hyperAllow.includes(output); // (1/3 + 4/8) 1/6
-  const squarePeg = R.random_int(0,4) < 1; // 1/4
-  const behind = output !== 'Multiply' && output !== 'Ring' && output !== 'Bubble' && R.random_int(0,3) === 1; // (1/3 + 3/10) 1/10
-  const orderly = R.random_int(0,7) < 1 ||  ['Weave', 'Lines', 'Bubble'].includes(output);
 
   // Config values
   // 1/2016 (size / output / color)
@@ -342,12 +347,13 @@ export async function drillPegs(canvas, ctx, config, canvasWidth, canvasHeight) 
 
   // build our prose
   if (hideProse) {
+    const backgroundArray = ['#000000','#222222', '#F9F4EF', '#FFFFFF'];
     const poem = config.prose;
     const canvasBgHex = rgba2hex(canvasBg).toUpperCase();
     const isLight = canvasBgHex === '#FFFFFF' || canvasBgHex === '#F9F4EF';
     let poemFill = `#${config.scheme[isLight ? config.scheme.length - 1 : 0]}`;
     // account for canvas bg : bg should not be same as text
-    poemFill = (canvasBgHex === poemFill) ? isLight ? '#000000' : '#FFFFFF' : poemFill;
+    poemFill = backgroundArray.includes(poemFill) ? isLight ? '#000000' : '#FFFFFF' : poemFill;
     ctx.fillStyle = poemFill;
 
     prose(
