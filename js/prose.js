@@ -14,7 +14,7 @@ export function proseBuilder(R) {
     const word10 = ['him', 'her', 'them'];
     const word11 = ['say', 'scream', 'whisper'];
     const ngmi = ['We\'re both', 'We\'re not', 'You\'re not']
-    const sentientThings = ['artwork', 'flowers', 'island', 'machine', 'sculptures', 'storm system']
+    const sentientThings = ['artwork', 'island', 'machine', 'sculptures', 'storm system']
 
     const yearLeader = `The year is ${R.random_int(1900,2021)}. `;
 
