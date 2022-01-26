@@ -1,4 +1,4 @@
-import { drillPegs, randomizer } from './pegboard';
+import { mainFunction, randomizer } from './main';
 import { downloadSVG } from './utilities';
 
 // const hash = tokenData.hash
@@ -51,8 +51,6 @@ let timeout = false; // holder for timeout id
 let canvasWidth;
 let canvasHeight;
 let currentBackground = R.random_choice(backgrounds);
-let fullBackgrounds = [...backgrounds, ...config.scheme];
-fullBackgrounds = [...new Set(fullBackgrounds)];
 
 
 window.onclick = () => {
@@ -74,7 +72,7 @@ function resize() {
   document.body.style.background = `#${currentBackground}`;
   c.clearRect(0,0,canvasWidth, canvasHeight);
   c.save();
-  drillPegs(canvas, c, config, canvasWidth, canvasHeight);
+  mainFunction(canvas, c, config, canvasWidth, canvasHeight);
   c.restore();
 }
 
@@ -101,18 +99,18 @@ document.body.onkeyup = async e => {
   // space bar
   if(e.keyCode === 32) {
     const isShift = !!window.event.shiftKey;
-    const index = fullBackgrounds.indexOf(currentBackground);
+    const index = backgrounds.indexOf(currentBackground);
     if (isShift) {
-      if (index > 0 && index <= fullBackgrounds.length - 1) {
-        currentBackground = fullBackgrounds[index - 1];
+      if (index > 0 && index <= backgrounds.length - 1) {
+        currentBackground = backgrounds[index - 1];
       } else {
-        currentBackground = fullBackgrounds[fullBackgrounds.length - 1];
+        currentBackground = backgrounds[backgrounds.length - 1];
       }
     } else {
-      if (index >= 0 && index < fullBackgrounds.length - 1) {
-        currentBackground = fullBackgrounds[index + 1];
+      if (index >= 0 && index < backgrounds.length - 1) {
+        currentBackground = backgrounds[index + 1];
       } else {
-        currentBackground = fullBackgrounds[0];
+        currentBackground = backgrounds[0];
       }
     }
     canvas.style.background = `#${currentBackground}`;

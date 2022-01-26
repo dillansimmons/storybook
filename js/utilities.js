@@ -1,4 +1,4 @@
-import { drillPegs } from './pegboard';
+import { drillPegs } from './main';
 import Canvas2Svg from 'canvas2svg';
 
 // TESTING ONLY - Remove file pre compile : Download SVG
