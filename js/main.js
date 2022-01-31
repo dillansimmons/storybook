@@ -136,12 +136,19 @@ export async function mainFunction(canvas, ctx, config, canvasWidth, canvasHeigh
   config.scheme.forEach(s => {
     pallete.push(`<span style='background: #${s}'>&nbsp;</span>`)
   })
+
+  let mood = '';
+  // config.mood.forEach(s => {
+    for (const [key, value] of Object.entries(config.mood)) {
+      mood += `<span>${key[0].toUpperCase() + key.slice(1)}: ${value}</span>`;
+    }
+  // })
   const controlSettings =
   `
     <span>Noisy: ${config.noisy}</span>
     <span>Spacing: ${config.spacing}</span>
     <span>Noise Level: ${config.noiseFactor}</span>
-    <span>Mood: ${JSON.stringify(config.mood)}</span>
+    ${mood}
     <br/>
     <span>Base: ${base}</span>
     <span>Layout: ${config.layout}</span>

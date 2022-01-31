@@ -14,8 +14,8 @@ export function draw(ctx,config,x,y,width,height,fontSize,poemFill,canvasBgHex,l
 
 
     ctx.beginPath();
-    switch('river') {
-    // switch(config.mood.place) {
+    // switch('river') {
+    switch(config.mood.place) {
         // circles
         case 'anything':
             // console.log('a');
@@ -369,6 +369,7 @@ export function draw(ctx,config,x,y,width,height,fontSize,poemFill,canvasBgHex,l
             wave(ctx, config, x, y+height/2, width, height, config.randomizer[0]*20, config.randomizer[1]*80);
             break;
         case 'river':
+            // TBD not happy with lines
             hatch(ctx,config,x,y,width,height, 6, 18);
             ctx.save();
                 ctx.beginPath();
