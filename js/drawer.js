@@ -6,9 +6,16 @@ export function draw(ctx,config,x,y,width,height,fontSize,poemFill,canvasBgHex,l
   // place
   // 22 places (Abstraction is key)
   ctx.save();
+
+    // fill
+    ctx.fillStyle = canvasBgHex;
+    ctx.rect(0,0,width,height);
+    ctx.fill();
+
+
     ctx.beginPath();
-    // switch('hanger') {
-    switch(config.mood.place) {
+    switch('river') {
+    // switch(config.mood.place) {
         // circles
         case 'anything':
             // console.log('a');
@@ -362,7 +369,23 @@ export function draw(ctx,config,x,y,width,height,fontSize,poemFill,canvasBgHex,l
             wave(ctx, config, x, y+height/2, width, height, config.randomizer[0]*20, config.randomizer[1]*80);
             break;
         case 'river':
-            wave(ctx,config,x,y,width,height, 6, 18);
+            hatch(ctx,config,x,y,width,height, 6, 18);
+            ctx.save();
+                ctx.beginPath();
+                ctx.lineWidth = width/3;
+                ctx.strokeStyle = canvasBgHex;
+                weave(
+                    ctx,
+                    {x:x+width/2, y:y-height/2},
+                    {x:x+width/2, y:y+height+height/2},
+                    config.randomizer[1]*5,
+                    width/(4*config.randomizer[0]),
+                    1
+                );
+                ctx.stroke();
+                ctx.closePath();
+            ctx.restore();
+            wave(ctx,config,x,y,width,height, 6, 66);
             break;
         // hatches
         case 'patchwork farm':
@@ -629,7 +652,7 @@ function hatch(ctx,config,x,y,width,height,freq,smooth, fill) {
     ctx.lineWidth = (width/500);
     for (let i = 1; i < height*4; i++) {
         // const fill = `#${config.scheme[0]}`
-        fill = fill || randColor(config, i);
+        fill = randColor(config, i);
         ctx.beginPath();
         // using a single color fill can be interesting
         ctx.fillStyle = fill;

@@ -1,10 +1,10 @@
-import { prose, getTextHeight } from './prose';
+import { prose, dropCapWrapText } from './prose';
 import { draw, gridWork  } from './drawer';
 
 
 export function stacked(ctx, config,height,width,midX,midY,widthMax, fontSize, poemFill, canvasBgHex)  {
   const heightAdjust = height/7;
-    const textHeights = getTextHeight(ctx, config.prose, widthMax, fontSize, config.fontStyle);
+    const textHeights = dropCapWrapText(ctx, config, Math.ceil(midX - widthMax / 2), midY - textHeights.totalHeight/2, widthMax, null, null, fontSize, config.fontStyle, 'left', true)
     const xStart = midX-widthMax/2-textHeights.dropcapWidth*1.125;
     const yStart = midY-textHeights.totalHeight/2-fontSize*1.1-heightAdjust;
     const boxWidth = widthMax+textHeights.dropcapWidth*2.25;
@@ -38,7 +38,7 @@ export function stacked(ctx, config,height,width,midX,midY,widthMax, fontSize, p
     ctx.fillStyle = poemFill;
     prose(
       ctx,
-      config.prose,
+      config,
       Math.ceil(midX - widthMax / 2),
       midY - textHeights.totalHeight/2,
       widthMax,
@@ -53,7 +53,7 @@ export function stacked(ctx, config,height,width,midX,midY,widthMax, fontSize, p
 
 export function gallery(ctx, config,height,width,midX,midY,widthMax, fontSize, poemFill, canvasBgHex)  {
   fontSize = fontSize/2;
-  const textHeights = getTextHeight(ctx, config.prose, widthMax, fontSize, config.fontStyle);
+  const textHeights = dropCapWrapText(ctx, config, 0, 0, widthMax, null, null, fontSize, config.fontStyle, 'left', true)
   const xStart = midX-widthMax/2-textHeights.dropcapWidth*1.125;
   const yStart = midY-textHeights.totalHeight-height/5;
   const boxWidth = widthMax+textHeights.dropcapWidth*2.25;
@@ -64,7 +64,7 @@ export function gallery(ctx, config,height,width,midX,midY,widthMax, fontSize, p
     ctx.fillStyle = poemFill;
     prose(
       ctx,
-      config.prose,
+      config,
       midX,
       yStart + boxHeight + textHeights.totalHeight/2,
       widthMax,
@@ -94,7 +94,7 @@ export function gallery(ctx, config,height,width,midX,midY,widthMax, fontSize, p
 }
 
 export function computer(ctx, config,height,width,midX,midY,widthMax, fontSize, poemFill, canvasBgHex)  {
-  const textHeights = getTextHeight(ctx, config.prose, widthMax, fontSize, config.fontStyle);
+  const textHeights = dropCapWrapText(ctx, config, 0, 0, widthMax, null, null, fontSize, config.fontStyle, 'left', true)
   const xStart = midX-widthMax/2-textHeights.dropcapWidth*1.125;
   const yStart = midY-textHeights.totalHeight/2-fontSize*1.1-height/10;
   const boxWidth = widthMax+textHeights.dropcapWidth*2.25;
@@ -102,6 +102,7 @@ export function computer(ctx, config,height,width,midX,midY,widthMax, fontSize, 
 
   draw(ctx, config,0, 0, width, height, fontSize, poemFill, canvasBgHex, 'computer')
 
+  ctx.globalAlpha = 0.5;
   // main box
   ctx.beginPath();
     ctx.rect(xStart, yStart, boxWidth, boxHeight);
@@ -129,13 +130,14 @@ export function computer(ctx, config,height,width,midX,midY,widthMax, fontSize, 
     ctx.lineWidth = fontSize/8;
     ctx.stroke();
   ctx.closePath();
+  ctx.globalAlpha = 1;
 
   // Fill text center
   ctx.beginPath();
     ctx.fillStyle = poemFill;
     prose(
       ctx,
-      config.prose,
+      config,
       Math.ceil(midX - widthMax / 2),
       midY - textHeights.totalHeight/2,
       widthMax,
@@ -150,7 +152,7 @@ export function computer(ctx, config,height,width,midX,midY,widthMax, fontSize, 
 
 export function novel(ctx, config,height,width,midX,midY,widthMax, fontSize, poemFill, canvasBgHex)  {
   fontSize = fontSize*.75;
-  const textHeights = getTextHeight(ctx, config.prose, widthMax, fontSize, config.fontStyle);
+  const textHeights = dropCapWrapText(ctx, config, 0, 0, widthMax, null, null, fontSize, config.fontStyle, 'left', true)
   const xStart = midX-widthMax/2-textHeights.dropcapWidth*1.125;
   const yStart = midY-textHeights.totalHeight-(fontSize*1.1/3);
   const boxWidth = widthMax+textHeights.dropcapWidth*2.25;
@@ -161,7 +163,7 @@ export function novel(ctx, config,height,width,midX,midY,widthMax, fontSize, poe
     ctx.fillStyle = poemFill;
     prose(
       ctx,
-      config.prose,
+      config,
       Math.ceil(midX - widthMax / 2),
       midY + fontSize,
       widthMax,
@@ -186,13 +188,13 @@ export function novel(ctx, config,height,width,midX,midY,widthMax, fontSize, poe
   draw(ctx, config, xStart, yStart, boxWidth, boxHeight*2.5, fontSize, poemFill, canvasBgHex, 'novel')
   ctx.restore();
 
-  if (config.randomizer[0] > 0.5) { 
+  if (config.randomizer[0] > 0.5) {
   gridWork(ctx, width, height, midX, midY, config.noiseFactor, config, canvasBgHex);
 }}
 
 export function sidebar(ctx, config,height,width,midX,midY,widthMax, fontSize, poemFill, canvasBgHex)  {
   fontSize = fontSize*.75;
-  const textHeights = getTextHeight(ctx, config.prose, widthMax/3, fontSize, config.fontStyle);
+  const textHeights = dropCapWrapText(ctx, config, 0, 0, widthMax/3, null, null, fontSize, config.fontStyle, 'left', true)
   const xStart = midX+textHeights.dropcapWidth*1.125;
   const yStart = midY-textHeights.totalHeight/2-fontSize*1.1;
   const boxWidth = widthMax/2;
@@ -203,7 +205,7 @@ export function sidebar(ctx, config,height,width,midX,midY,widthMax, fontSize, p
     ctx.fillStyle = poemFill;
     prose(
       ctx,
-      config.prose,
+      config,
       xStart,
       midY - textHeights.totalHeight/2,
       widthMax/3,

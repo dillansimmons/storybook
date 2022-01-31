@@ -46,13 +46,17 @@ const fontStyle = fontStyles[Math.floor(R.random_dec() * fontStyles.length)];
 
   const layouts = [
     // 'computer',
-    'gallery',
+    // 'gallery',
     'novel',
     'sidebar',
     // 'stacked'
   ]
 
+  const dropCaps = ['chonk', 'berry', 'bones'];
+
   const layout = layouts[Math.floor(R.random_dec() * layouts.length)];
+  const dropCap = dropCaps[Math.floor(R.random_dec() * dropCaps.length)];
+
 
   // Build the prose
   const prose = proseBuilder(R);
@@ -71,6 +75,7 @@ const fontStyle = fontStyles[Math.floor(R.random_dec() * fontStyles.length)];
   // Config values
   // 1/2016 (size / output / color)
   return {
+    dropCap,
     fontStyle,
     layout,
     pattern: R.random_choice(pattern),
@@ -192,6 +197,7 @@ export async function mainFunction(canvas, ctx, config, canvasWidth, canvasHeigh
     case 'gallery':
       gallery(ctx,config,height,width,midX,midY,widthMax,fontSize,poemFill, canvasBgHex);
       break;
+    // config.prose.length > 155 looks off not square
     case 'sidebar':
       sidebar(ctx,config,height,width,midX,midY,widthMax,fontSize,poemFill, canvasBgHex);
       break;
