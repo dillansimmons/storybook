@@ -1,7 +1,7 @@
 import { buildType } from "./dropcap";
 
 export const stateQue = ['decrepit', 'enormous', 'blood-soaked', 'twinkling', 'sunken', 'carcass of the', 'glimering', 'grimy', 'bug infested', 'overgrown', 'corroded', 'ancient', 'battered', 'charming', 'shadow of the', 'cluttered', 'creepy'];
-export const placeQue = ['castle', 'fortress', 'dungeon', 'river', 'ocean', 'battleship', 'labratory', 'power-plant', 'hideout', 'memory', 'dreamscape', 'city', 'hanger', 'manhole opening', 'acid vat', 'pagoda', 'fruit cellar', 'spacecraft', 'landing-pad', 'water tower', 'patchwork farm', 'library', 'portal' ];
+export const placeQue = ['castle', 'fortress', 'dungeon', 'river', 'ocean', 'battleship', 'labratory', 'power-plant', 'hideout', 'memory', 'dreamscape', 'garden', 'city', 'hanger', 'manhole opening', 'acid vat', 'pagoda', 'fruit cellar', 'spacecraft', 'landing-pad', 'water tower', 'patchwork farm', 'library', 'portal' ];
 export const challengeQue = ['challenge', 'fight', 'battle', 'puzzle', 'labrynth', 'trial', 'dogfight', 'deathmatch', 'chessgame', 'monster', 'sadness', 'struggle', 'test', 'heartbreak', 'contest', 'skirmish', 'conspiracy', 'chase', 'head-to-head', 'caper' ];
 
 // Builds our generative prose
@@ -25,28 +25,29 @@ export function proseBuilder(R, title = false) {
     const yearLeader = `The year is ${R.random_int(1900,2021)}. `;
 
     const phrases = [
-      'Ain\'t it big enough for us both in this town?',
-      'All you had to do was throw the boxing match.',
-      'God it is strange to see you again.',
-      `I don't think we can ${wordSelector(R, ['bluff', 'Fonzie', 'shoot', 'sweet talk'])} our way out of this one.`,
-      'I wanna see the bright lights tonight',
-      'I used all the bullets on trick shots.',
-      'I used to be hip.',
-      'If heaven has an elevator, I hope our song is playing in it.',
-      'Once the relic unlocks, everything will be one.',
-      'Ten seconds \'til the volcano erupts.',
-      `The ${wordSelector(R, sentientThings)} has become sentient`,
-      `The rest of our ${wordSelector(R, ['cohorts', 'comrades', 'contemporaries', 'crew', 'friends', 'generation'])} have returned to the earth`,
-      `This is one hell of a ${wordSelector(R, ['jam', 'pickle'])}.`,
-      'This puzzle hasn\'t got any corners.',
-      'This was avoidable if you\'d returned my postcard.',
-      'This was the consequence of surrounding oursleves with yes men.',
-      `This ${wordSelector(R, word8)} will not be our conclusion...`,
-      `${wordSelector(R, ngmi)} gonna make it.`
+        'Ain\'t it big enough for us both in this town?',
+        'All you had to do was throw the boxing match.',
+        'God it is strange to see you again.',
+        `I don't think we can ${wordSelector(R, ['bluff', 'Fonzie', 'shoot', 'sweet talk'])} our way out of this one.`,
+        'I wanna see the bright lights tonight',
+        'I used all the bullets on trick shots.',
+        'I used to be hip.',
+        'If heaven has an elevator, I hope our song is playing in it.',
+        'Once the relic unlocks, everything will be one.',
+        'Ten seconds \'til the volcano erupts.',
+        `The ${wordSelector(R, sentientThings)} has become sentient`,
+        `The rest of our ${wordSelector(R, ['cohorts', 'comrades', 'contemporaries', 'crew', 'friends', 'generation'])} have returned to the earth`,
+        `This is one hell of a ${wordSelector(R, ['jam', 'pickle'])}.`,
+        'This puzzle hasn\'t got any corners.',
+        'This was avoidable if you\'d returned my postcard.',
+        'This was the consequence of surrounding oursleves with yes men.',
+        `This ${wordSelector(R, word8)} will not be our conclusion...`,
+        `${wordSelector(R, ngmi)} gonna make it.`,
+        'What a mess.'
     ]
 
-    const randomizer = R.random_between(0,1);
-    const useYear = R.random_between(0,1) > 0.9 ? yearLeader : '';
+    const randomizer = R.random_num(0,1);
+    const useYear = R.random_num(0,1) > 0.9 ? yearLeader : '';
     const capitalize = string => string[0].toUpperCase() + string.slice(1).toLowerCase();
     // `[Our] [solemn] [hero] [stands] [across from] the [decrepit] [castle], a [great] [challenge] [awaits] [him].`
     // `The [castle] is [great] and [decrepit]. The [villian] [awaits] [our] [solemn] [hero].`
@@ -54,12 +55,12 @@ export function proseBuilder(R, title = false) {
     // `[Our] [solemn] [hero] [ensnares] [your] [villian] deep in the [castle] the [challenge] ends.
     // return `${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} turns to the ${wordSelector(R,word2)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}. "${wordSelector(R,phrases)}" they ${wordSelector(R,word11)}.`
     if (!title) {
-      return randomizer > 0.8
-        ? `${useYear}${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,randomizer > 0.1 ? word2 : word2Alt)} ${wordSelector(R,word3)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} ${wordSelector(R,word10)}.`
-        : randomizer > 0.6 ? `${useYear}The ${wordSelector(R,word6)} is ${wordSelector(R,word7)} and ${wordSelector(R,word5.filter(e => e !== 'carcass of the' && e !== 'shadow of the'))}. The ${wordSelector(R,word2Alt)} ${wordSelector(R,word9)} ${wordSelector(R,word0)} ${wordSelector(R,word1)} ${wordSelector(R,word2)}.`
-        : randomizer > 0.4 ? `${useYear}A ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} and a ${wordSelector(R,word1)} ${wordSelector(R,word2)} pair, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} them.`
-        : randomizer > 0.2 ? `${useYear}${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2)} ${wordSelector(R,word9)} the ${wordSelector(R,word2Alt)}, ${wordSelector(R,word4)} the ${wordSelector(R,word6)} the ${wordSelector(R,word8.filter(word => word !== 'monster'))} ${wordSelector(R, ['appears to end', 'has just begun', 'comes to pass', 'ends'])}.`
-          : `${useYear}${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} turns to the ${wordSelector(R,word2)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}. "${wordSelector(R,phrases)}" they ${wordSelector(R,word11)}.`
+        return randomizer > 0.8
+            ? `${useYear}${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,randomizer > 0.1 ? word2 : word2Alt)} ${wordSelector(R,word3)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} ${wordSelector(R,word10)}.`
+            : randomizer > 0.6 ? `${useYear}The ${wordSelector(R,word6)} is ${wordSelector(R,word7)} and ${wordSelector(R,word5.filter(e => e !== 'carcass of the' && e !== 'shadow of the'))}. The ${wordSelector(R,word2Alt)} ${wordSelector(R,word9)} ${wordSelector(R,word0)} ${wordSelector(R,word1)} ${wordSelector(R,word2)}.`
+                : randomizer > 0.4 ? `${useYear}A ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} and a ${wordSelector(R,word1)} ${wordSelector(R,word2)} pair, a ${wordSelector(R,word7)} ${wordSelector(R,word8)} ${wordSelector(R,word9)} them.`
+                    : randomizer > 0.2 ? `${useYear}${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2)} ${wordSelector(R,word9)} the ${wordSelector(R,word2Alt)}, ${wordSelector(R,word4)} the ${wordSelector(R,word6)} the ${wordSelector(R,word8.filter(word => word !== 'monster'))} ${wordSelector(R, ['appears to end', 'has just begun', 'comes to pass', 'ends'])}.`
+                        : `${useYear}${capitalize(wordSelector(R,word0))} ${wordSelector(R,word1)} ${wordSelector(R,word2Alt)} turns to the ${wordSelector(R,word2)} ${wordSelector(R,word4)} the ${wordSelector(R,word5)} ${wordSelector(R,word6)}. "${wordSelector(R,phrases)}" they ${wordSelector(R,word11)}.`
     }
 
     return `${capitalize(wordSelector(R, word0))} ${wordSelector(R,word6)}`;
@@ -71,9 +72,9 @@ export function prose(ctx, config, x, y, maxWidth, color, fill, fontSize, fontSt
     ctx.font = `bold ${fontSize}px ${fontStyle}`;
     ctx.globalCompositeOperation = "source-over";
     if (capped) {
-      dropCapWrapText(ctx, config, x, y, maxWidth, color, fill, fontSize, fontStyle, align);
+        dropCapWrapText(ctx, config, x, y, maxWidth, color, fill, fontSize, fontStyle, align);
     } else {
-      wrapText(ctx, config.prose, x, y, maxWidth, fontSize);
+        wrapText(ctx, config.prose, x, y, maxWidth, fontSize);
     }
 }
 
@@ -104,177 +105,177 @@ export function prose(ctx, config, x, y, maxWidth, color, fill, fontSize, fontSt
 
 // // Prose Utilities
 export function getTextHeight(ctx, text, maxWidth, fontSize, fontStyle) {
-  // set fontsize for dropcap
-  ctx.font = `bold ${fontSize * 3}px ${fontStyle}`;
+    // set fontsize for dropcap
+    ctx.font = `bold ${fontSize * 3}px ${fontStyle}`;
 
-  // measure dropcap
-  const dropcap = text.charAt(0);
-  const dropCapMetrics = ctx.measureText(dropcap)
-  const dropcapWidth = dropCapMetrics.width;
-  const dropcapHeight =  dropCapMetrics.fontBoundingBoxAscent - dropCapMetrics.fontBoundingBoxDescent;
+    // measure dropcap
+    const dropcap = text.charAt(0);
+    const dropCapMetrics = ctx.measureText(dropcap)
+    const dropcapWidth = dropCapMetrics.width;
+    const dropcapHeight =  dropCapMetrics.fontBoundingBoxAscent - dropCapMetrics.fontBoundingBoxDescent;
 
-  // cut first character that will be in dropcap
-  text = text.substring(1);
-  // remove additional character if it is a space
-  if (text.charAt(0) === ' ') {
+    // cut first character that will be in dropcap
     text = text.substring(1);
-  }
-
-  // font size of rest
-  ctx.font = `bold ${fontSize}px ${fontStyle}`;
-
-  // cused for reseting font beginning after dropcap
-  const spacer = fontSize*1.15;
-  let spaceTally = 0;
-  let count = 0;
-
-  // words and vars
-  const words = text.split(' ');
-  let line = '';
-  let testWidth = '';
-  let repeater = true;
-  let repeater2 = true;
-  // add dropcap spacer
-  let x = dropcapWidth/2;
-
-  // filter through all the words
-  for(let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + ' ';
-    const metrics = ctx.measureText(testLine);
-    testWidth = metrics.width;
-    if (testWidth > maxWidth && n > 0) {
-      // set the dropcap, only once
-      if (repeater === true) {
-        ctx.font = `bold ${fontSize*3}px ${fontStyle}`;
-        repeater = false;
-        x = x+dropcapWidth*.15;
-      }
-      // set the text
-      ctx.font = `bold ${fontSize}px ${fontStyle}`;
-      count++
-      line = words[n] + ' ';
-      spaceTally += spacer;
-      // if the height of the lines is more than dropcap then reset starting point
-      if (spaceTally > dropcapHeight * 1.65 && repeater2) {
-        repeater2 = false;
-        x = x - dropcapWidth * 1.8;
-        maxWidth = maxWidth + dropcapWidth
-      }
+    // remove additional character if it is a space
+    if (text.charAt(0) === ' ') {
+        text = text.substring(1);
     }
-    else {
-      line = testLine;
+
+    // font size of rest
+    ctx.font = `bold ${fontSize}px ${fontStyle}`;
+
+    // cused for reseting font beginning after dropcap
+    const spacer = fontSize*1.15;
+    let spaceTally = 0;
+    let count = 0;
+
+    // words and vars
+    const words = text.split(' ');
+    let line = '';
+    let testWidth = '';
+    let repeater = true;
+    let repeater2 = true;
+    // add dropcap spacer
+    let x = dropcapWidth/2;
+
+    // filter through all the words
+    for(let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            // set the dropcap, only once
+            if (repeater === true) {
+                ctx.font = `bold ${fontSize*3}px ${fontStyle}`;
+                repeater = false;
+                x = x+dropcapWidth*.15;
+            }
+            // set the text
+            ctx.font = `bold ${fontSize}px ${fontStyle}`;
+            count++
+            line = words[n] + ' ';
+            spaceTally += spacer;
+            // if the height of the lines is more than dropcap then reset starting point
+            if (spaceTally > dropcapHeight * 1.65 && repeater2) {
+                repeater2 = false;
+                x = x - dropcapWidth * 1.8;
+                maxWidth = maxWidth + dropcapWidth
+            }
+        }
+        else {
+            line = testLine;
+        }
     }
-  }
-  count++
-  return {
-    dropcapWidth,
-    totalHeight: count*fontSize*1.1
-  }
+    count++
+    return {
+        dropcapWidth,
+        totalHeight: count*fontSize*1.1
+    }
 }
 
 export function dropCapWrapText(ctx, config, x, y, maxWidth, color, fill, fontSize, fontStyle, direction, measureOnly=false) {
-  let text = config.prose;
-  // set fontsize for dropcap
-  ctx.font = `bold ${fontSize * 3}px ${fontStyle}`;
+    let text = config.prose;
+    // set fontsize for dropcap
+    ctx.font = `bold ${fontSize * 3}px ${fontStyle}`;
 
-  // measure dropcap
-  const dropcap = text.charAt(0);
-  const dropCapMetrics = ctx.measureText(dropcap)
-  const dropcapWidth = dropCapMetrics.width;
-  const dropcapHeight =  dropCapMetrics.fontBoundingBoxAscent - dropCapMetrics.fontBoundingBoxDescent;
+    // measure dropcap
+    const dropcap = text.charAt(0);
+    const dropCapMetrics = ctx.measureText(dropcap)
+    const dropcapWidth = dropCapMetrics.width;
+    const dropcapHeight =  dropCapMetrics.fontBoundingBoxAscent - dropCapMetrics.fontBoundingBoxDescent;
 
-  // cut first character that will be in dropcap
-  text = text.substring(1);
-  // remove additional character if it is a space
-  if (text.charAt(0) === ' ') {
+    // cut first character that will be in dropcap
     text = text.substring(1);
-  }
+    // remove additional character if it is a space
+    if (text.charAt(0) === ' ') {
+        text = text.substring(1);
+    }
 
-  // font size of rest
-  ctx.font = `bold ${fontSize}px ${fontStyle}`;
+    // font size of rest
+    ctx.font = `bold ${fontSize}px ${fontStyle}`;
 
-  // cused for reseting font beginning after dropcap
-  const spacer = fontSize*1.15;
-  let spaceTally = 0;
-  let count = 0;
+    // cused for reseting font beginning after dropcap
+    const spacer = fontSize*1.15;
+    let spaceTally = 0;
+    let count = 0;
 
-  // words and vars
-  const words = text.split(/[ -]+/);
-  let line = '';
-  let testWidth = '';
-  let repeater = true;
-  let repeater2 = true;
-  x = x+dropcapWidth/1.25;
+    // words and vars
+    const words = text.split(/[ -]+/);
+    let line = '';
+    let testWidth = '';
+    let repeater = true;
+    let repeater2 = true;
+    x = x+dropcapWidth/1.25;
 
-  // filter through all the words
-  for(let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + ' ';
-    const metrics = ctx.measureText(testLine);
-    testWidth = metrics.width;
-    if (testWidth > maxWidth && n > 0) {
-      // set the dropcap, only once
-      if (repeater === true) {
-        ctx.font = `bold ${fontSize*3}px ${fontStyle}`;
-        repeater = false;
-        if (direction === 'left' && !measureOnly) {
-          buildType(ctx, x-dropcapWidth*1.55, y-dropcapHeight/4, fontSize, dropcapWidth, dropcapHeight, fill, color, dropcap, config.dropCap);
+    // filter through all the words
+    for(let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            // set the dropcap, only once
+            if (repeater === true) {
+                ctx.font = `bold ${fontSize*3}px ${fontStyle}`;
+                repeater = false;
+                if (direction === 'left' && !measureOnly) {
+                    buildType(ctx, x-dropcapWidth*1.55, y-dropcapHeight/4, fontSize, dropcapWidth, dropcapHeight, fill, color, dropcap, config.dropCap, config.randomizer);
+                }
+                x = x+dropcapWidth*.15;
+                y = y + fontSize * .1;
+            }
+            // set the text
+            ctx.font = `bold ${fontSize}px ${fontStyle}`;
+            if (!measureOnly){
+                ctx.fillText(line, x, y);
+            }
+            count++
+            line = words[n] + ' ';
+            y += spacer;
+            spaceTally += spacer;
+            // if the height of the lines is more than dropcap then reset starting point
+            if (spaceTally > dropcapHeight * 1.65 && repeater2) {
+                repeater2 = false;
+                x = x - dropcapWidth * 1.8;
+                maxWidth = maxWidth + dropcapWidth * 2
+            }
         }
-        x = x+dropcapWidth*.15;
-        y = y + fontSize * .1;
-      }
-      // set the text
-      ctx.font = `bold ${fontSize}px ${fontStyle}`;
-      if (!measureOnly){
-        ctx.fillText(line, x, y);
-      }
-      count++
-      line = words[n] + ' ';
-      y += spacer;
-      spaceTally += spacer;
-      // if the height of the lines is more than dropcap then reset starting point
-      if (spaceTally > dropcapHeight * 1.65 && repeater2) {
-        repeater2 = false;
-        x = x - dropcapWidth * 1.8;
-        maxWidth = maxWidth + dropcapWidth * 2
-      }
+        else {
+            line = testLine;
+        }
     }
-    else {
-      line = testLine;
+    count++
+    if(measureOnly){
+        return {
+            dropcapWidth,
+            totalHeight: count*fontSize*1.1
+        }
     }
-  }
-  count++
-  if(measureOnly){
-    return {
-      dropcapWidth,
-      totalHeight: count*fontSize*1.1
-    }
-  }
-  ctx.fillText(line, x, y);
+    ctx.fillText(line, x, y);
 }
 
 function wrapText(context, text, x, y, maxWidth, fontSize) {
 
-  const words = text.split(' ');
-  let line = '';
+    const words = text.split(' ');
+    let line = '';
 
-  for(let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + ' ';
-    const metrics = context.measureText(testLine);
-    const testWidth = metrics.width;
-    if (testWidth > maxWidth && n > 0) {
-      context.fillText(line, x, y);
-      line = words[n] + ' ';
-      y += fontSize*1.1;
+    for(let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += fontSize*1.1;
+        }
+        else {
+            line = testLine;
+        }
     }
-    else {
-      line = testLine;
-    }
-  }
-  context.fillText(line, x, y);
+    context.fillText(line, x, y);
 }
 
 function wordSelector(R, wordArray) {
-  return R.random_choice(wordArray);
+    return R.random_choice(wordArray);
 }
 
 // export function title(ctx, string, x, y, maxWidth, fontSize, align) {

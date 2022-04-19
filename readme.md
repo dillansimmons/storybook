@@ -1,5 +1,24 @@
-# Storybook
+# Storyboard
 Dillan Simmons (DSIMS) | AB hopeful factory project.
+
+## Notes
+
+### Things that suck / need completed
+- Need to set colors to mood better
+- Needs more abstraction, the really poor ones are
+    - battleship 
+    - library
+    - river
+- there are many that have no defining value
+- needs to be more definition when null is value
+- dropcaps feel clunky
+- chonk dropcap is especially sloppy
+- noise needs to be more carefully applied
+- novel + destroy look great
+- variable type (height / width)
+- hatch / texture type
+- less shapes without explicit randomness
+
 
 ## Using the project
 **The project still includes test code to make viewing traits easier, much code would be removed in prod.**
@@ -20,7 +39,7 @@ Dillan Simmons (DSIMS) | AB hopeful factory project.
 ## Project overview
 
 ### Influence
-Storybook is influenced heavily by film and book narrative and the feeling of starting or ending a story. Each piece includes generative prose and visuals in an attempt to recreate the inital grip of a story.
+Storyboard is influenced heavily by film and book narrative and the feeling of starting or ending a story. Each piece includes generative prose and visuals in an attempt to recreate the inital grip of a story.
 
 Ideas that drove this:
 - Generative poetry (Especially slotted works, ie Alison Knowles / etc.)

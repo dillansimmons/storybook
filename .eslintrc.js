@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
     env: {
         browser: true,
@@ -19,6 +20,7 @@ module.exports = {
         'guard-for-in': 'off',
         'id-blacklist': 'off',
         'id-match': 'off',
+        indent: ["error", 4],
         'import/order': 'off',
         'max-classes-per-file': 'off',
         'max-len': 'off',

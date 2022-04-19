@@ -22,9 +22,9 @@ export async function downloadSVG(canvas, config) {
     a.dataset.downloadurl = ['image/svg+xml', a.download, a.href].join(':');
     e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     a.dispatchEvent(e);
-  }
+}
 
-  function consoleTimer(seconds) {
+function consoleTimer(seconds) {
     let i = seconds;
     function startTimer() {
         const countdownTimer = setInterval( () => {
@@ -39,4 +39,4 @@ export async function downloadSVG(canvas, config) {
         }, 1000);
     }
     startTimer();
-  }
+}
