@@ -1,11 +1,13 @@
 import {randColor, gridWork, grow} from './helpers';
 
 
-export function drawMood(ctx,config,x,y,width,height,canvasBgHex){
+export async function drawMood(ctx,config,x,y,width,height,canvasBgHex){
+    ctx.rect(x,y,width,height);
+    ctx.clip();
     const halfWidth = width/2;
     const halfHeight = height/2;
     switch(config.mood.state){
-    // switch('decrepit'){
+    // switch('glimering'){
     case 'enormous':
         break;
     case 'blood-soaked':
@@ -34,15 +36,16 @@ export function drawMood(ctx,config,x,y,width,height,canvasBgHex){
         break;
     case 'carcass of the':
     case 'decrepit':
-        gridWork(ctx, width, height, halfWidth, halfHeight, 160, config, undefined, 'lined')
+        await gridWork(ctx, width, height, x, y, 100, config, undefined, 'lined')
         break;
     case 'twinkling':
     case 'glimering':
     case 'charming':
+        await gridWork(ctx, width, height, x, y, 100, config, undefined, 'twinkle')
         break;
     case 'grimy':
     case 'bug infested':
-        gridWork(ctx, width, height, halfWidth, halfHeight, width/(config.randomizer[1]*300), config, undefined, 'bug infested')
+        await gridWork(ctx, width, height, x, y, width/(config.randomizer[1]*300), config, undefined, 'bug infested')
         break;
     case 'overgrown':
         grow(ctx,config,x,y,width,height, 7*config.randomizer[1], 20*config.randomizer[2], height/1.5);
@@ -51,7 +54,7 @@ export function drawMood(ctx,config,x,y,width,height,canvasBgHex){
     case 'ancient':
     case 'battered':
     case 'creepy':
-        gridWork(ctx, width, height, halfWidth, halfHeight, 100, config, undefined, 'lined')
+        await gridWork(ctx, width, height, x, y, 100, config, undefined, 'lined')
         break;
     case 'shadow of the':
         ctx.beginPath();
@@ -67,7 +70,7 @@ export function drawMood(ctx,config,x,y,width,height,canvasBgHex){
         ctx.fill();
         ctx.closePath();            break;
     case 'cluttered':
-        gridWork(ctx, width, height, halfWidth, halfHeight, width/(config.randomizer[1]*100), config, undefined, 'cluttered')
+        await gridWork(ctx, width, height, x, y, width/(config.randomizer[1]*100), config, undefined, 'cluttered')
         break;
     }
 }

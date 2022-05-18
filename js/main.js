@@ -46,7 +46,7 @@ export function configBuilder(R) {
     const fontStyle = fontStyles[Math.floor(R.random_dec() * fontStyles.length)];
 
     const layouts = [
-        'computer',
+        // // NAH 'computer',
         'gallery',
         'novel',
         'sidebar',

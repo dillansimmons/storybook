@@ -1,13 +1,16 @@
 import { randColor, gridWork } from "./helpers";
 
-export function drawChallenge(ctx, config, x, y, width, height) {
+export async function drawChallenge(ctx, config, x, y, width, height) {
+
+    await gridWork(ctx, width, height, x, y, width / (config.randomizer[0] * 150), config, undefined, 'smudge')
+
     switch(config.mood.challenge) {
-    // switch ('monster') {
+    // switch ('puzzle') {
     case 'challenge':
     case 'puzzle':
     case 'labrynth':
     case 'chessgame':
-        gridWork(ctx, width, height, x - width/2, y - width/2, width / (config.randomizer[0] * 900), config, undefined, 'diamond')
+        await gridWork(ctx, width, height, x, y, width / (config.randomizer[0] * 450), config, undefined, 'diamond')
         break;
     case 'sadness':
     case 'heartbreak':
@@ -16,11 +19,13 @@ export function drawChallenge(ctx, config, x, y, width, height) {
     case 'contest':
     case 'skirmish':
     case 'head-to-head':
-    case 'fight':
+    case 'struggle':
+        break;
     case 'battle':
+        break;
+    case 'fight':
     case 'dogfight':
     case 'deathmatch':
-    case 'struggle':
         destroy(ctx, x, y, width, height, config);
         break;
         // Anything goes
@@ -48,8 +53,9 @@ export function drawChallenge(ctx, config, x, y, width, height) {
         ctx.stroke();
         ctx.closePath();
         break;
-    case 'test':
     case 'conspiracy':
+        break;
+    case 'test':
     case 'trial':
     case 'chase':
     case 'caper':

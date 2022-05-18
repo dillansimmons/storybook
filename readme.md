@@ -68,3 +68,15 @@ The prose is very variable and dynamic but basically consists of 3 main prompts 
 > A noseless kill bot and a plump heroic dog pair, a maddening fight lies ahead of them.
 
 I'd watch that.
+
+## Notes 
+- Bone looks good with serif
+
+## TODO
+- over abundance of battle (circle breaking)
+- dropcap should clip
+
+### Bugs
+- Line wraping breaks at certain sizes, especially sidebar (22, 25px font size)
+- O for bone is broken
+- T (lined with 5 is too much)

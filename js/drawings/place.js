@@ -1,6 +1,8 @@
 import { wave, randColor, gridWork, hatch, grow, weave } from './helpers';
 
-export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHex) {
+export async function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHex) {
+    ctx.rect(x,y,width,height);
+    ctx.clip();
     // place
     // 22 places (Abstraction is key)
     ctx.save();
@@ -13,21 +15,24 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
     const halfWidth = width/2;
     const halfHeight = height/2;
 
+    // ctx.rect(x,y,width,height);
+    // ctx.fill();
+
 
     ctx.beginPath();
-    // switch('dungeon') {
+    // switch('power-plant') {
     switch (config.mood.place) {
     // circle
     case 'acid vat':
     case 'manhole opening':
-        wave(ctx, config, x, y, width, height, 6 * config.randomizer[1], 200 * config.randomizer[0], randColor(config, 1));
+        await wave(ctx, config, x, y, width, height, 6 * config.randomizer[1], 200 * config.randomizer[0], randColor(config, 1));
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = randColor(config, config.scheme.length - 1);
         ctx.ellipse(x + halfWidth, y + height / 2 - height / 48, width / 3, height / 16, 0, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
-        ctx.restore();
+        // ctx.restore();
 
         if (config.mood.place === 'acid vat') {
             ctx.save();
@@ -43,7 +48,7 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
             ctx.clip();
             wave(ctx, config, x, y, width, height, 1, 25, randColor(config, 0));
             ctx.closePath();
-            ctx.restore();
+            // ctx.restore();
         }
 
         ctx.beginPath();
@@ -54,7 +59,7 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
         ctx.closePath();
         break;
     case 'power-plant':
-        gridWork(ctx, width, height, x - halfWidth, y - halfWidth, width / (config.randomizer[1] * 100), config, `#${config.scheme[Math.floor(config.randomizer[0] * config.scheme.length)]}`, 'power-plant')
+        await gridWork(ctx, width, height, x, y, width / (config.randomizer[1] * 10), config, `#${config.scheme[Math.floor(config.randomizer[0] * config.scheme.length)]}`, 'power-plant')
         break;
     case 'dungeon':
         ctx.beginPath();
@@ -110,9 +115,9 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
         )
         ctx.fill();
         ctx.clip();
-        hatch(ctx, config, x, y, width, height, 200, 1, `#${config.scheme[config.scheme.length - 1]}`);
+        await hatch(ctx, config, x, y, width, height, 200, 1, `#${config.scheme[config.scheme.length - 1]}`);
         ctx.closePath();
-        ctx.restore();
+        // ctx.restore();
         break;
     case 'battleship': // TBD: refine
         break;
@@ -152,7 +157,7 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
         }
         break;
     case 'spacecraft':
-        gridWork(ctx, width, height, x - halfWidth, y - halfWidth, width / (config.randomizer[0] * 25), config, undefined, 'diamond')
+        await gridWork(ctx, width, height,x, y, width / (config.randomizer[0] * 25), config, undefined, 'diamond')
         break;
     case 'landing-pad':
         ctx.beginPath();
@@ -201,7 +206,7 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
     case 'castle':
     case 'fortress':
         ctx.beginPath();
-        hatch(ctx, config, x, y, width, height, 1, 1, `#${config.scheme[config.scheme.length - 1]}`);
+        await hatch(ctx, config, x, y, width, height, 1, 1, `#${config.scheme[config.scheme.length - 1]}`);
         ctx.closePath();
 
         ctx.globalAlpha = 1;
@@ -273,9 +278,9 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
         );
         ctx.fill();
         ctx.clip();
-        wave(ctx, config, x, y, width, height, config.randomizer[0] * 10, config.randomizer[1] * 20);
+        await wave(ctx, config, x, y, width, height, config.randomizer[0] * 10, config.randomizer[1] * 20);
         ctx.closePath();
-        ctx.restore();
+        // ctx.restore();
         break;
         // underground / doors
     case 'hideout':
@@ -318,26 +323,14 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
         break;
         // city
     case 'city':
-        gridWork(ctx, width, height, x - halfWidth, y - halfWidth, width / (config.randomizer[1] * 100), config, `#${config.scheme[Math.floor(config.randomizer[0] * config.scheme.length)]}`, 'city')
+        await gridWork(ctx, width, height,x, y, width / (config.randomizer[1] * 100), config, `#${config.scheme[Math.floor(config.randomizer[0] * config.scheme.length)]}`, 'city')
         hatch(ctx, config, x - halfWidth, y - halfHeight, width, height, 1, 1);
         break;
-        // orderly interiors
     case 'labratory':
-        ctx.beginPath();
-        ctx.arc(
-            x + halfWidth,
-            y + halfHeight,
-            width / 2.5,
-            0,
-            2 * Math.PI,
-            false
-        );
-        ctx.clip();
-        hatch(ctx, config, x, y, width, height, 1, 1);
-        ctx.closePath();
+        await gridWork(ctx, width, height, x - width/2, y - width/2, width / (config.randomizer[0] * 900), config, undefined, 'orbs')
         break;
     case 'library':
-        gridWork(ctx, width, height, x - halfWidth, y - halfWidth, width / (config.randomizer[0] * 25), config, undefined, 'ladder');
+        await gridWork(ctx, width, height,x, y, width / (config.randomizer[0] * 25), config, undefined, 'ladder');
         break;
         // water
     case 'ocean':
@@ -354,51 +347,51 @@ export function drawPlace(ctx, config, x, y, width, height, fontSize, canvasBgHe
         break;
         // gate / opening
     case 'portal':
-        for (let i = config.scheme.length; i > 0; --i){
-            ctx.beginPath();
-            ctx.fillStyle = `#${config.scheme[i]}`
-            ctx.arc(
-                x + width/2,
-                y+height/2-(i*4),
-                width/(4*3)+(i*4),
-                0,
-                2 * Math.PI,
-                false
-            );
-            ctx.rect(
-                x + width/2-(width/(4*1.5))/2-(i*4),
-                y+height/2-(i*4),
-                width/(4*1.5)+(i*8),
-                height/2+(i*8)
-            )
-            ctx.fill();
-            ctx.closePath();
-        }
-        // ctx.globalAlpha = 0.1;
-        // for (let i = 0; i < 10; i++) {
+        // for (let i = config.scheme.length; i > 0; --i){
         //     ctx.beginPath();
-        //     ctx.fillStyle = `#${config.scheme[config.scheme.length - 1]}`;
-        //     ctx.moveTo(x + halfWidth, y + height / 10);
-        //     ctx.lineTo(x + (width / 5 * i), y + height);
-        //     ctx.lineTo(x + width - (width / 5 * i), y + height);
-        //     ctx.lineTo(x + halfWidth, y + height / 10);
-        //     ctx.fill();
-        //     ctx.closePath();
-
-        //     ctx.beginPath();
-        //     ctx.fillStyle = `#${config.scheme[config.scheme.length - 1]}`;
-        //     ctx.moveTo(x + halfWidth, y + height / 10);
-        //     ctx.lineTo(x + (width / 5 * i), y - height);
-        //     ctx.lineTo(x + width - (width / 5 * i), y - height);
-        //     ctx.lineTo(x + halfWidth, y + height / 10);
+        //     ctx.fillStyle = `#${config.scheme[i]}`
+        //     ctx.arc(
+        //         x + width/2,
+        //         y+height/2-(i*4),
+        //         width/(4*3)+(i*4),
+        //         0,
+        //         2 * Math.PI,
+        //         false
+        //     );
+        //     ctx.rect(
+        //         x + width/2-(width/(4*1.5))/2-(i*4),
+        //         y+height/2-(i*4),
+        //         width/(4*1.5)+(i*8),
+        //         height/2+(i*8)
+        //     )
         //     ctx.fill();
         //     ctx.closePath();
         // }
+        ctx.globalAlpha = 0.1;
+        for (let i = 0; i < 10; i++) {
+            ctx.beginPath();
+            ctx.fillStyle = `#${config.scheme[config.scheme.length - 1]}`;
+            ctx.moveTo(x + halfWidth, y + height / 10);
+            ctx.lineTo(x + (width / 5 * i), y + height);
+            ctx.lineTo(x + width - (width / 5 * i), y + height);
+            ctx.lineTo(x + halfWidth, y + height / 10);
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.fillStyle = `#${config.scheme[config.scheme.length - 1]}`;
+            ctx.moveTo(x + halfWidth, y + height / 10);
+            ctx.lineTo(x + (width / 5 * i), y - height);
+            ctx.lineTo(x + width - (width / 5 * i), y - height);
+            ctx.lineTo(x + halfWidth, y + height / 10);
+            ctx.fill();
+            ctx.closePath();
+        }
         break;
     default:
-        gridWork(ctx, width, height, x - halfWidth, y - halfWidth, width / (config.randomizer[0] * 300), config, undefined, 'anything')
+        await gridWork(ctx, width, height,x, y, width / (config.randomizer[0] * 300), config, undefined, 'anything')
         break;
     }
     ctx.closePath();
-    ctx.restore();
+    // ctx.restore();
 }

@@ -7,9 +7,10 @@ export const challengeQue = ['challenge', 'fight', 'battle', 'puzzle', 'labrynth
 // Builds our generative prose
 export function proseBuilder(R, title = false) {
     const word0 = ['the', 'our', 'your'] //'their'
-    const word1 = ['disguised', 'solemn', 'lonely', 'rage filled', 'tall', 'tiny', 'hungry', 'beefy', 'rum soaked', 'grizzled', 'plump', 'jolly', 'scruffy', 'unkept', 'injured', 'handsome', 'fancy', 'hard-boiled', 'noseless', 'ditzy', 'cool', 'religious', 'one-armed', 'tight-lipped', 'braniac' ]
-    const word2 = ['hero', 'warrior', 'muscle-man', 'commander', 'samarai', 'cosmonaut', 'soldier', 'wizard', 'academic', 'scholor', 'vixen', 'android', 'kiddo', 'detective', 'heroic dog', 'doctor', 'widow', 'pilot', 'diplomat', 'president', 'cowpoke', 'archaeologist', 'art dealer', 'japanese cat']
-    const word2Alt = ['villian', 'scoundral', 'criminal', 'ring leader', 'kill bot', 'brute', 'assasin', 'alien', 'serpant', 'demon', 'giant spider', 'wolfman', 'zombie', 'thug', 'prankster', 'jailbird', 'mad-scientist', 'bounty hunter', 'dictator', 'railroad tycoon', 'grave robber']
+    const superHeroThemes = ['bat themed ', 'cat themed ', 'muscle bound ', 'over the hill ', 'now vincible', ''] // ised by word2
+    const word1 = ['disguised', 'solemn', 'lonely', 'rage filled', 'tall', 'tiny', 'hungry', 'beefy', 'rum soaked', 'grizzled', 'plump', 'jolly', 'scruffy', 'unkept', 'injured', 'handsome', 'fancy', 'hard-boiled', 'noseless', 'ditzy', 'cool', 'religious', 'one-armed', 'tight-lipped', 'braniac', 'newly orphaned', 'renegade']
+    const word2 = ['hero', 'warrior', 'muscle-man', 'commander', 'samarai', 'cosmonaut', 'soldier', 'wizard', 'academic', 'scholor', 'vixen', 'android', 'kiddo', 'detective', 'heroic dog', 'doctor', 'widow', 'pilot', 'diplomat', 'president', 'cowpoke', 'archaeologist', 'art dealer', 'japanese cat', 'Texan', 'singer', `${wordSelector(R, superHeroThemes)}superhero`]
+    const word2Alt = ['villian', 'scoundral', 'criminal', 'ring leader', 'kill bot', 'brute', 'assasin', 'alien', 'serpant', 'demon', 'giant spider', 'wolfman', 'zombie', 'thug', 'prankster', 'jailbird', 'mad-scientist', 'bounty hunter', 'dictator', 'railroad tycoon', 'grave robber', 'used car dealer', 'tech bro']
     const word3 = ['dresses', 'undresses', 'eats their sushi', 'stands', 'crouches', 'hovers', 'stews', 'shrieks', 'contomplates', 'dreams', 'hallucinates', 'dozes off', 'brawls', 'awakes', 'limps', 'stretches', 'stumbles', 'grimaces', 'smiles', 'loads the revolver', 'scribbles a note']
     const word4 = ['across from', 'under', 'above', 'approaching', 'remembering', 'amongst', 'slinking towards', 'falling into', 'on the way to', 'journeying towards', 'walking from', 'peering at', 'searching', 'astonished by', 'frightened of' ]
     const word5 = stateQue;
@@ -20,7 +21,8 @@ export function proseBuilder(R, title = false) {
     const word10 = ['him', 'her', 'them'];
     const word11 = ['say', 'scream', 'whisper'];
     const ngmi = ['We\'re both', 'We\'re not', 'You\'re not']
-    const sentientThings = ['artwork', 'island', 'machine', 'sculptures', 'storm system']
+    const sentientThings = ['artwork', 'island', 'machine', 'sculpture', 'storm system']
+    const sadThings = [', the war', ' hearing the jukebox', ' when the church bells ring', ' when the fighting ends', ', this clean well-lit place']
 
     const yearLeader = `The year is ${R.random_int(1900,2021)}. `;
 
@@ -43,6 +45,7 @@ export function proseBuilder(R, title = false) {
         'This was the consequence of surrounding oursleves with yes men.',
         `This ${wordSelector(R, word8)} will not be our conclusion...`,
         `${wordSelector(R, ngmi)} gonna make it.`,
+        `It makes me sad${wordSelector(R, sadThings)}.`,
         'What a mess.'
     ]
 

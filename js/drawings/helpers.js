@@ -26,7 +26,7 @@ export function weave(context, from, to, frequency, amplitude, smoothness) {
     }
 }
 
-export function wave(ctx, config, x, y, width, height, freq, smooth, fill) {
+export async function wave(ctx, config, x, y, width, height, freq, smooth, fill) {
     const r1 = freq ? freq : config.randomizer[0] * 40;
     const r2 = smooth ? smooth : width / (120 * config.randomizer[0]);
     ctx.globalAlpha = 0.95;
@@ -52,10 +52,11 @@ export function wave(ctx, config, x, y, width, height, freq, smooth, fill) {
         );
         ctx.stroke();
         ctx.closePath();
+        // await new Promise(resolve => setTimeout(resolve, 0.25));
     }
 }
 
-export function grow(ctx, config, x, y, width, height, freq, smooth, stopGrow, fill) {
+export async function grow(ctx, config, x, y, width, height, freq, smooth, stopGrow, fill) {
     const r1 = freq ? freq : config.randomizer[0] * 40;
     const r2 = smooth ? smooth : width / (120 * config.randomizer[0]);
     ctx.globalAlpha = 0.95;
@@ -82,6 +83,7 @@ export function grow(ctx, config, x, y, width, height, freq, smooth, stopGrow, f
         ctx.closePath();
         const fill2 = randColor(config, i);
         bloomMaker(ctx, x + width / 100 * i, y + (config.randomizer[i] * stopGrow), width / 100 * config.randomizer[i], 'daisy', fill2)
+        // await new Promise(resolve => setTimeout(resolve, 0.25));
     }
 }
 
@@ -130,7 +132,7 @@ function bloomMaker(ctx, x, y, size, bloom, fill) {
     ctx.closePath();
 }
 
-export function hatch(ctx, config, x, y, width, height, freq, smooth, fill) {
+export async function hatch(ctx, config, x, y, width, height, freq, smooth, fill) {
     const r1 = freq ? freq : config.randomizer[0] * 40;
     const r2 = smooth ? smooth : width / (120 * config.randomizer[0]);
     ctx.globalAlpha = 0.95;
@@ -168,37 +170,44 @@ export function hatch(ctx, config, x, y, width, height, freq, smooth, fill) {
         );
         ctx.stroke();
         ctx.closePath();
+        // await new Promise(resolve => setTimeout(resolve, 0.25));
     }
 }
 
+//TODO: randomize points
+
 // resets new grid for noise in background
-export function gridWork(ctx, width, height, midX, midY, amplifier, config, fill, spec) {
+export async function gridWork(ctx, width, height, midX, midY, amplifier, config, fill, spec) {
     // the size of the dots based on config
-    const base = Math.floor(width / amplifier);
+    const base = Math.ceil(width / amplifier);
     // how many dots can go on the x axis
-    const columnCount = Math.floor(width);
+    const columnCount = Math.ceil(width / base);
     // how many dots can go on the y axis
-    const rowCount = Math.floor(height);
+    const rowCount = Math.ceil(height / base);
     // maxes
-    const heightMax = (rowCount * base);
-    const widthMax = (columnCount * base);
+    // const heightMax = (rowCount * base);
+    // const widthMax = (columnCount * base);
     // all the dots
     const allDots = columnCount * rowCount;
     // the x starting point: 1/6 the width
-    const cx = Math.ceil(midX - widthMax / 2);
+    const cx = midX - base;
     // a static of this cx / used for resets
     const cxStatic = cx;
     // the y starting point: 1/6 the height
-    const cy = Math.ceil(midY - heightMax / 2);
+    const cy = midY- base;
     // the row count / used for grid draw
     const row = 0;
 
-    gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, config, fill, spec);
+    await gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, config, fill, spec);
 }
 
 // lays out noise grid and peg grid
-function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, config, fill, spec) {
+async function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, config, fill, spec) {
+    console.log('run');
+    let points = [];
     const isLight = fill === '#FFFFFF' || fill === '#F9F4EF';
+    const blurArray = [1,2,3,4];
+
     // for all our available grid fill in our pegs
     for (let i = 0; i < allDots; i++) {
 
@@ -215,17 +224,35 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             row++
         }
 
+        points.push({x: cx, y: cy + row * base, start: i === columnCount * row});
+    }
+
+    console.log('rand');
+    // randomize points
+    for (let h = points.length; h >= 0; h--) {
+        const j = Math.floor(config.randomizer[h] * (h + 1));
+        [points[h], points[j]] = [points[j], points[h]];
+    }
+    // remove undefined
+    points = points.filter(x => x !== undefined);
+
+    for (let q = 0; q < points.length; q++) {
+        // await new Promise(resolve => setTimeout(resolve, 0));
+        // console.log(points[q]);
+
         ctx.beginPath();
-        ctx.shadowBlur = 2;
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
-        ctx.fillStyle = fill ? fill : randColor(config, i);
+        // ctx.shadowBlur = 2;
+        // ctx.shadowOffsetX = 2;
+        // ctx.shadowOffsetY = 2;
+        ctx.fillStyle = fill ? fill : randColor(config, q);
+        const xx = points[q].x;
+        const yy = points[q].y;
 
         switch (spec) {
         case 'city':
             ctx.rect(
-                cx - base * .75,
-                (cy + row * base) - base * .75,
+                xx - base * .75,
+                (yy) - base * .75,
                 (base * .5),
                 (base * .5)
             );
@@ -234,7 +261,7 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
         case 'ladder':
             ctx.globalAlpha = 0.8;
             ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, cx, cy + row * base);
+            ctx.setTransform(1, 0, 0, 1, xx, yy);
             ctx.rect(-base/2,+base/4,base/2*.75,base/4);
             ctx.rect(-base/2,-base/2,base/2*.75,base/4);
             ctx.rect(base/4*.5,+base/4,base/2*.75,base/4);
@@ -243,22 +270,41 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             ctx.closePath();
             break;
         case 'anything':
-            // // abstract : painting quality
-            ctx.globalAlpha = config.randomizer[i];
+            ctx.globalAlpha = config.randomizer[q];
             ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, cx, cy + row * base);
+            ctx.setTransform(1, 0, 0, 1, xx, yy);
             ctx.arc(0, base / 2, base / 2, 0, 2 * Math.PI);
             ctx.rect(0, 0, base, base);
             ctx.arc(base, base / 2, base / 2, 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();
             break;
-        case 'froth':
-            // // abstract : painting quality
+        case 'twinkle':
+            if (config.randomizer2[q] > .9) { continue }
+            ctx.globalAlpha = config.randomizer[q];
+            ctx.beginPath();
+            ctx.setTransform(1, 0, 0, 1, xx, yy);
+            ctx.rect(0-(base*2*config.randomizer[q]), 0-base/16, base*4*config.randomizer[q], base/8);
+            ctx.rect(0-base/16, 0-(base*2*config.randomizer[q]), base/8, base*4*config.randomizer[q]);
+            ctx.fill();
+            ctx.closePath();
+            break;
+        case 'smudge':
+            ctx.beginPath();
+            ctx.globalAlpha = 0.8;
+            ctx.shadowColor = randColor(config, q);
+            ctx.shadowBlur = base * blurArray[Math.floor(config.randomizer[q] * blurArray.length)];
+            ctx.shadowOffsetY = base*1000 // + (config.randomizer[i] < 0.5 ? base : -base);
+            ctx.rect(xx, (yy) - base*1000, base, base);
+            ctx.fill();
+            ctx.closePath();
+            break;
+        case 'orbs':
+            if (config.randomizer2[q] > 0.5) { continue }
             ctx.globalAlpha = 0.8;
             ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, cx, cy + row * base);
-            ctx.arc(base / 2, base / 2, base*2*config.randomizer[i], 0, 2 * Math.PI);
+            ctx.setTransform(1, 0, 0, 1, xx, yy);
+            ctx.arc(base / 9, base / 9, base*config.randomizer[q], 0, 2 * Math.PI);
             ctx.fill();
             ctx.closePath();
             break;
@@ -266,7 +312,7 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             // // abstract : painting quality
             ctx.globalAlpha = 0.8;
             ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, cx, cy + row * base);
+            ctx.setTransform(1, 0, 0, 1, xx, yy);
             ctx.rotate(90 * Math.PI / 360);
             ctx.rect(0, 0, base, base);
             ctx.fill();
@@ -274,12 +320,12 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             break;
         case 'bug infested':
             // Pilled : cluttered???
-            ctx.globalAlpha = config.randomizer[i];
-            ctx.setTransform(1, 0, 0, 1, cx, cy + row * base - ((base / 4) * .75));
+            ctx.globalAlpha = config.randomizer[q];
+            ctx.setTransform(1, 0, 0, 1, xx, yy - ((base / 4) * .75));
             ctx.rotate(45 * Math.PI / 360);
-            ctx.arc(0, (base * config.randomizer[i]) / 2, (base * config.randomizer[i]) / 2, 0, 2 * Math.PI);
-            ctx.rect(0, 0, (base * config.randomizer[i]), (base * config.randomizer[i]));
-            ctx.arc(0 + (base * config.randomizer[i]), (base * config.randomizer[i]) / 2, (base * config.randomizer[i]) / 2, 0, 2 * Math.PI);
+            ctx.arc(0, (base * config.randomizer[q]) / 2, (base * config.randomizer[q]) / 2, 0, 2 * Math.PI);
+            ctx.rect(0, 0, (base * config.randomizer[q]), (base * config.randomizer[q]));
+            ctx.arc(0 + (base * config.randomizer[q]), (base * config.randomizer[q]) / 2, (base * config.randomizer[q]) / 2, 0, 2 * Math.PI);
             ctx.fill();
             break;
         case 'cluttered':
@@ -289,22 +335,22 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             ctx.shadowOffsetX = config.randomizer[2] < 0.5 ? (base / 2) : -(base / 2);
             ctx.shadowOffsetY = config.randomizer[3] < 0.5 ? (base / 2) : -(base / 2);
             ctx.rect(
-                cx,
-                cy + row * base - ((base / 4) * .75),
-                config.randomizer[[i]] < 0.5
-                    ? base : config.randomizer[[i]] < 0.25
+                xx,
+                yy - ((base / 4) * .75),
+                config.randomizer[[q]] < 0.5
+                    ? base : config.randomizer[[q]] < 0.25
                         ? (base) : base * 1.5,
-                config.randomizer[[i]] < 0.5
-                    ? base : config.randomizer[i + 1 ? i + 1 : i - 1] < 0.25
+                config.randomizer[[q]] < 0.5
+                    ? base : config.randomizer[q + 1 ? q + 1 : q - 1] < 0.25
                         ? (base) : base * 1.5
             )
             ctx.fill();
             break;
         case 'power-plant':
             // bullets : nice architectural outputs
-            ctx.globalAlpha = config.randomizer[i];
+            ctx.globalAlpha = config.randomizer[q];
             ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, cx, cy + row * base);
+            ctx.setTransform(1, 0, 0, 1, xx, yy);
             ctx.arc(0, base / 4, base / 4, 0, 2 * Math.PI);
             ctx.rect(0, 0, base / 2, base / 2);
             // ctx.arc(base/2, base/4, base/4, 0, 2 * Math.PI);
@@ -312,31 +358,31 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             ctx.closePath();
             break;
         case 'dissapear':
-            ctx.fillStyle = isLight ? `hsla(0,0%,0%,${0.0000005 * i})` : `hsla(100,100%,100%,${0.0000005 * i})`;
+            ctx.fillStyle = isLight ? `hsla(0,0%,0%,${0.0000005 * q})` : `hsla(100,100%,100%,${0.0000005 * q})`;
             ctx.rect(
-                cx,
-                (cy + row * base),
+                xx,
+                (yy),
                 (base),
                 (base)
             );
 
             // color the peg
-            if (config.randomizer[i] > 0.5) {
+            if (config.randomizer[q] > 0.5) {
                 ctx.fill();
             }
             continue;
         case 'corroded':
-            if (config.randomizer[i] > 0.0005 * row) { continue }
+            if (config.randomizer[q] > 0.0005 * row) { continue }
             // if (config.randomizer[i] < 0.0005*row) { continue }
             ctx.strokeStyle = fill;
             ctx.lineWidth = base / 5;
-            if (config.randomizer2[i] > 0.5) {
-                ctx.moveTo(cx, cy + row * base);
-                ctx.lineTo(cx + ((config.randomizer2[i] > 0.5 ? -1 : 1) * base * 2), cy + row * base + ((config.randomizer2[i === 0 ? i : i - 1] > 0.5 ? -1 : 1) * base * 2));
+            if (config.randomizer2[q] > 0.5) {
+                ctx.moveTo(xx, yy);
+                ctx.lineTo(xx + ((config.randomizer2[q] > 0.5 ? -1 : 1) * base * 2), yy + ((config.randomizer2[q === 0 ? q : q - 1] > 0.5 ? -1 : 1) * base * 2));
             } else {
                 ctx.arc(
-                    cx,
-                    cy + row * base,
+                    xx,
+                    yy,
                     base / 4,
                     0,
                     2 * Math.PI,
@@ -346,33 +392,32 @@ function gridMaker(ctx, allDots, base, row, columnCount, cx, cxStatic, cy, confi
             ctx.stroke();
             break;
         case 'lined':
-            if (config.randomizer[i] > 0.0005 * row) { continue }
+            if (config.randomizer[q] > 0.0005 * row) { continue }
             // if (config.randomizer[i] < 0.0005*row) { continue }
             ctx.strokeStyle = fill;
             ctx.lineWidth = base / 5;
-            ctx.moveTo(cx, cy + row * base);
-            if (config.randomizer2[i] > 0.5) {
-                ctx.lineTo(cx + base * 8, cy + row * base + base * 8);
+            ctx.moveTo(xx, yy);
+            if (config.randomizer2[q] > 0.5) {
+                ctx.lineTo(xx + base * 8, yy + base * 8);
             }
             ctx.stroke();
             break;
         default:
             ctx.rect(
-                cx,
-                (cy + row * base),
+                xx,
+                (yy),
                 (base),
                 (base)
             );
 
             // color the peg
-            if (config.randomizer[i] > 0.5) {
+            if (config.randomizer[q] > 0.5) {
                 ctx.fill();
             }
             break;
         }
 
         ctx.closePath();
-
     }
 }
 
